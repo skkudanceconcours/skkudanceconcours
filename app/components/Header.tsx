@@ -3,7 +3,7 @@ import Navbar from "./Navbar";
 import { roboto } from "@/public/fonts/font";
 
 const Header = ():ReactNode => {
-
+    
 
     return <div className="w-screen h-32">
         <h1 className={`${roboto.className} text-2xl font-bold mt-12 ml-20`}>
