@@ -12,8 +12,8 @@ const Navbar = ({className}:{className?: string}):ReactNode => {
     const reception:boolean = path === '/reception';
     const notification:boolean = path === '/notification';
 
-    const className_li = 'relative w-1/3 h-24 p-3 flex justify-center items-end text-center text-xl cursor-pointer transition-colors duration-[400ms] after:content-[""] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:bg-black after:w-0 hover:after:w-full after:origin-left after:duration-150 after:ease-in'
-    const className_route_li = 'relative w-1/3  h-24 p-3 flex w-1/4 justify-center items-end text-center text-xl cursor-pointer transition-colors duration-[400ms] after:content-[""] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:bg-black after:w-full'
+    const className_li = 'relative w-1/3 h-24 p-3 flex justify-center items-end text-center text-xl cursor-pointer transition-colors duration-[400ms] after:content-[""] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:bg-black after:w-full after:opacity-0 hover:after:opacity-100 after:origin-left after:duration-150 after:ease-in'
+    const className_route_li = 'relative w-1/3 h-24 p-3 flex justify-center items-end text-center text-xl cursor-pointer transition-colors duration-[400ms] after:content-[""] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:bg-black after:w-full after:opacity-100'
     //#20CE88
     return <div className={`${className}`}>
         <ul className="w-1/3 flex gap-2 max-w-lg">
