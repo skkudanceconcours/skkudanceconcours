@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-import { anton } from "@/public/fonts/font";
+import { anton, raleway } from "@/public/fonts/font";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -15,9 +15,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
-      <body className={anton.className}>
+      <body className={raleway.className}>
         <Header />
         {children}
         <Footer />

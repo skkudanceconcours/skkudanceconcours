@@ -1,32 +1,39 @@
 import { ReactNode } from "react";
-import * as React from "react";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import React from "react";
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 
-type SelectionProps = {
+type SelectionProps<T> = {
     className?: string
-    value: any;
-    onChange: React.Dispatch<React.SetStateAction<any>>;
-    label: string;
-    options: string[];
+    value: T
+    onChange: React.Dispatch<React.SetStateAction<T>>
+    label: string
+    placeholder: string
+    options: T[]
+    disabled?: boolean
 }
 
-const Selection = ({className, value, onChange, label, options}:SelectionProps): ReactNode => {
+const Selection = <T,>({className, value, onChange, label, placeholder, options, disabled }:SelectionProps<T>): ReactNode => {
+  
   return (
-    <FormControl className={`${className}`} variant="outlined" sx={{ m: 1, minWidth: 120 }}>
+    <div className={`${className} w-fit my-8`}>
+    <FormControl className={`${className}`} variant="standard" sx={{ width: 160 }}>
       <InputLabel id="demo-simple-select-standard-label">{label}</InputLabel>
       <Select
-        labelId="demo-simple-select-standard-label"
-        id="demo-simple-select-standard"
-        value={value}
-        onChange={(event: SelectChangeEvent) => onChange(event.target.value)}
-        label={label}>
-        {options.map((option,idx) => <MenuItem key={idx} value={option}>{option}</MenuItem>)}
+        variant="standard"
+        labelId={label}
+        id={label}
+        value={value as string}
+        onChange={(event: SelectChangeEvent) => onChange(event.target.value as T)}
+        label={label}
+        placeholder={placeholder}
+        disabled={disabled}>
+        {(options as string[]).map((option,idx) => <MenuItem key={idx} value={option}>{option}</MenuItem>)}
       </Select>
     </FormControl>
+    </div>
   );
+
+
 };
 
 export default Selection;
