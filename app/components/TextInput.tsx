@@ -1,32 +1,35 @@
-import { ReactNode, RefObject } from "react";
+import React, { ForwardedRef, ReactNode } from "react";
 import { Box, FormHelperText, TextField } from "@mui/material";
 
 type TextInputProps = {
-  className?: string;
-  label: string;
-  ref?: RefObject<HTMLInputElement>;
-  error: boolean;
-  helperText?: string;
-  disabled?: boolean;
-  value?: string;
+  className?: string
+  label: string
+  error: boolean
+  helperText?: string
+  disabled?: boolean
+  value?: string
+  onChange?: () => void
 };
 
-const TextInput = ({ className, label, ref, error, helperText, disabled,  value }: TextInputProps): ReactNode => {
+const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(({ className, label, error, helperText, disabled, value, onChange }: TextInputProps, ref: ForwardedRef<HTMLInputElement>): ReactNode => {
   return (
-    <div className={`${className} w-fit my-8`}>
+    <div className={`${className} w-fit my-6`}>
       <Box sx={{ width: 160 }}>
         <TextField 
           variant = "standard"
           label = {label} 
-          ref = {ref} 
+          inputRef = {ref} 
           error = {error}
           disabled = {disabled}
           value = {value}
+          onChange = {onChange}
         />
         <FormHelperText className="text-[10px] absolute">{helperText}</FormHelperText>
       </Box>
     </div>
   );
-};
+});
+
+TextInput.displayName = "TextInput";
 
 export default TextInput;

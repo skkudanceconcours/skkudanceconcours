@@ -15,7 +15,7 @@ type SelectionProps<T> = {
 const Selection = <T,>({className, value, onChange, label, placeholder, options, disabled }:SelectionProps<T>): ReactNode => {
   
   return (
-    <div className={`${className} w-fit my-8`}>
+    <div className={`${className} w-fit my-6`}>
     <FormControl className={`${className}`} variant="standard" sx={{ width: 160 }}>
       <InputLabel id="demo-simple-select-standard-label">{label}</InputLabel>
       <Select
