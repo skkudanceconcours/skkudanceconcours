@@ -7,7 +7,7 @@ type TextInputProps = {
   error: boolean
   helperText?: string
   disabled?: boolean
-  value?: string
+  value?: string | null
   onChange?: () => void
 };
 
@@ -16,14 +16,13 @@ const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(({ classNam
     <div className={`${className} w-fit my-6`}>
       <Box sx={{ width: 160 }}>
         <TextField 
-          variant = "standard"
-          label = {label} 
-          inputRef = {ref} 
-          error = {error}
-          disabled = {disabled}
-          value = {value}
-          onChange = {onChange}
-        />
+          variant="standard"
+          label={!value && label}
+          inputRef={ref} 
+          error={error}
+          disabled={disabled}
+          defaultValue={value}
+          onChange={onChange}/>
         <FormHelperText className="text-[10px] absolute">{helperText}</FormHelperText>
       </Box>
     </div>
