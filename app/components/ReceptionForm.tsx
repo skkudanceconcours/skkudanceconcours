@@ -36,7 +36,7 @@ import {
 } from "@/template/options";
 import MusicInput from "./MusicInput";
 import Button from "./Button";
-import { Reception } from "@/template/reception";
+import { Reception } from "@/template/Reception";
 type ReceptionFormProps = {
   privacyConfirm:boolean;
 }
