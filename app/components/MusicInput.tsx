@@ -1,11 +1,13 @@
-import { ReactNode } from "react";
+import { ForwardedRef, ReactNode, forwardRef } from "react";
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import { ImCloudUpload } from "react-icons/im";
 type MusicInputProps = {
   className?: string
-  onChange: React.Dispatch<React.SetStateAction<File|null>>
+  onChange: (file:File) => void
+  fileName: string|null
+  error: boolean
 };
 const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
@@ -19,25 +21,29 @@ const VisuallyHiddenInput = styled("input")({
     width: 1,
   });
 
-const MusicInput = ({ className, onChange }: MusicInputProps): ReactNode => {
+const MusicInput = forwardRef<HTMLDivElement,MusicInputProps>(({ className, onChange, fileName, error }: MusicInputProps, ref: ForwardedRef<HTMLDivElement>): ReactNode => {
   return (
-    <div className={`${className} w-fit my-8`}>
+    <div className={`${className} w-fit my-8`} ref={ref}>
         <p className="text-[0.75rem] my-2 opacity-70">음원 제출</p>
       <Button
         component="label"
         role={undefined}
         variant="outlined"
         tabIndex={-1}
+        className={`${error && 'border-red-600 text-red-600'}`}
         startIcon={<ImCloudUpload/>}>
         파일 업로드
         <VisuallyHiddenInput 
           type="file" 
-          accept=".mp3"
+          accept="audio/mp3"
           onChange={(e) =>  onChange(e.currentTarget.files![0])}/>
       </Button>
+      <p className="p-2 text-sm">{fileName}</p>
     </div>
   );
-};
+});
+
+MusicInput.displayName = "MusicInput";
 
 export default MusicInput;
 

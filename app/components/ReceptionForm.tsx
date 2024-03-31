@@ -36,6 +36,7 @@ import {
 } from "@/template/options";
 import MusicInput from "./MusicInput";
 import Button from "./Button";
+import { Reception } from "@/template/reception";
 
 const ReceptionForm = (): ReactNode => {
   //useState
@@ -47,7 +48,7 @@ const ReceptionForm = (): ReactNode => {
   const [category, setCategory] = useState<category>("");
   const [musicOrPose, setMusicOrPose] = useState<musicOrPose>("");
   const [participantsList, setParticipantsList] = useState<string[]>([]);
-  const [musicFile, setMusicFile] = useState<File|null>(null);
+  const [musicFile, setMusicFile] = useState<File | null>(null);
   //useState_errors_textInputs
   const [nameError, setNameError] = useState<boolean>(false);
   const [birthError, setBirthError] = useState<boolean>(false);
@@ -56,19 +57,18 @@ const ReceptionForm = (): ReactNode => {
   const [schoolError, setSchoolError] = useState<boolean>(false);
   const [academyError, setAcademyError] = useState<boolean>(false);
   const [instructorNameError, setInstructorNameError] = useState<boolean>(false);
-  const [instructorContactError, setInstructorContactError] =
-    useState<boolean>(false);
+  const [instructorContactError, setInstructorContactError] = useState<boolean>(false);
   const [artTitleError, setArtTitleError] = useState<boolean>(false);
   //useState_errors_selections
-  const [individualOrGroupError, setIndividualOrGroupError] =
-    useState<boolean>(false);
+  const [individualOrGroupError, setIndividualOrGroupError] = useState<boolean>(false);
   const [genderError, setGenderError] = useState<boolean>(false);
   const [majorError, setMajorError] = useState<boolean>(false);
   const [gradeError, setGradeError] = useState<boolean>(false);
   const [categoryError, setCategoryError] = useState<boolean>(false);
   const [musicOrPoseError, setMusicOrPoseError] = useState<boolean>(false);
   const [participantError, setParticipantError] = useState<boolean>(false);
-  // const [error, setError] = useState<boolean>(false);
+  //useState_error_music
+  const [musicFileError, setMusicFileError] = useState<boolean>(false);
 
   //useRef_textInputs
   const nameRef = useRef<HTMLInputElement>(null);
@@ -88,6 +88,8 @@ const ReceptionForm = (): ReactNode => {
   const gradeRef = useRef<HTMLInputElement>(null);
   const categoryRef = useRef<HTMLInputElement>(null);
   const musicOrPoseRef = useRef<HTMLInputElement>(null);
+  //useRef_music
+  const musicFileRef = useRef<HTMLDivElement>(null);
 
   //variables
   const individual: boolean = individualOrGroup !== "단체";
@@ -96,7 +98,7 @@ const ReceptionForm = (): ReactNode => {
   const inputCheck = (
     ref: RefObject<HTMLInputElement>,
     setStateError: Dispatch<SetStateAction<boolean>>
-  ):boolean => {
+  ): boolean => {
     if (!ref.current) return false;
     const inputRef = ref as RefObject<HTMLInputElement>;
     if (ref.current.value.trim() === "" || ref.current.value === undefined) {
@@ -106,39 +108,68 @@ const ReceptionForm = (): ReactNode => {
     return false;
   };
 
-  const checkError = ():boolean => {
+  const checkError = (): boolean => {
     let error = false;
-    ([
-      [nameRef, setNameError],
-      [birthRef, setBirthError],
-      [contactRef, setContactError],
-      [emailRef, setEmailError],
-      [schoolRef, setSchoolError],
-      [academyRef, setAcademyError],
-      [instructorNameRef,setInstructorNameError],
-      [instructorContactRef,setInstructorContactError],
-      [artTitleRef,setArtTitleError],
-      [individualOrGroupRef,setIndividualOrGroupError],
-      [genderRef,setGenderError],
-      [majorRef, setMajorError],
-      [gradeRef,setGradeError],
-      [categoryRef,setCategoryError],
-      [musicOrPoseRef,setMusicOrPoseError],
-    ] as [RefObject<HTMLInputElement>,Dispatch<SetStateAction<boolean>>][])
-    .map(([element,setError]) => {
-      const res = inputCheck(element,setError);
+    (
+      [
+        [nameRef, setNameError],
+        [birthRef, setBirthError],
+        [contactRef, setContactError],
+        [emailRef, setEmailError],
+        [schoolRef, setSchoolError],
+        [academyRef, setAcademyError],
+        [instructorNameRef, setInstructorNameError],
+        [instructorContactRef, setInstructorContactError],
+        [artTitleRef, setArtTitleError],
+        [individualOrGroupRef, setIndividualOrGroupError],
+        [genderRef, setGenderError],
+        [majorRef, setMajorError],
+        [gradeRef, setGradeError],
+        [categoryRef, setCategoryError],
+        [musicOrPoseRef, setMusicOrPoseError],
+      ] as [RefObject<HTMLInputElement>, Dispatch<SetStateAction<boolean>>][]
+    ).map(([element, setError]) => {
+      const res = inputCheck(element, setError);
       error = error || res;
     });
+    //music file check
+    
+    if(musicFileRef.current){
+      console.log('musicFile:',musicFile)
+      if(musicFile === null){
+        setMusicFileError(true);
+        error = true;
+      }
+    }
+    
     return error;
   };
 
   const onSubmit = () => {
-    if(checkError() === true){
-      return;
+    if (checkError() === true) return;
+    const newReception: Reception = {
+      timestamp: new Date(),
+      individualOrGroup: individualOrGroup,
+      name: nameRef.current!.value.trim(),
+      gender: gender,
+      birth: birthRef.current!.value.trim(),
+      contact: contactRef.current!.value.trim(),
+      email: emailRef.current!.value.trim(),
+      school: schoolRef.current!.value.trim(),
+      academy: academyRef.current!.value.trim(),
+      instructorName: instructorNameRef.current!.value.trim(),
+      instructorContact: instructorContactRef.current!.value.trim(),
+      major: major,
+      grade: grade,
+      category: category,
+      artTitle: artTitleRef.current!.value,
+      musicFile: musicFile,
+      musicOrPose: musicOrPose ?? null,
+      participants: participantsList.length === 0 ? null : participantsList
     }
-    else{
-      console.log('submit');
-    }
+    console.log(newReception);
+    
+
   };
 
   const onAddParticipant = (e: any) => {
@@ -166,9 +197,10 @@ const ReceptionForm = (): ReactNode => {
         <div>
           <Selection
             value={individualOrGroup}
-            onChange={(value:string) => {
+            onChange={(value: string) => {
               setIndividualOrGroup(value as individualOrGroup);
-              setIndividualOrGroupError(false)}}
+              setIndividualOrGroupError(false);
+            }}
             label={"개인/단체 선택"}
             placeholder="개인/단체 선택"
             error={individualOrGroupError}
@@ -189,31 +221,36 @@ const ReceptionForm = (): ReactNode => {
               />
               <Selection
                 value={gender}
-                onChange={(value:string) => {
+                onChange={(value: string) => {
                   setGender(value as gender);
-                  setGenderError(false)}}
+                  setGenderError(false);
+                }}
                 label={"성별"}
                 placeholder="성별 선택"
                 error={genderError}
                 options={genderOption}
                 ref={genderRef}
               />
-              <TextInput 
-                label="생년월일" 
-                error={birthError} 
+              <TextInput
+                label="생년월일"
+                error={birthError}
                 ref={birthRef}
-                onChange={() => setBirthError(false)} />
+                onChange={() => setBirthError(false)}
+                helperText="*(2024-01-01)"
+              />
               <TextInput
                 label="참가자 연락처"
                 error={contactError}
                 ref={contactRef}
                 onChange={() => setContactError(false)}
+                helperText="*(010-1234-5678)"
               />
-              <TextInput 
-                label="이메일" 
-                error={emailError} 
+              <TextInput
+                label="이메일"
+                error={emailError}
                 ref={emailRef}
-                onChange={() => setEmailError(false)} />
+                onChange={() => setEmailError(false)}
+              />
             </div>
             <div className="p-8 flex flex-col">
               <label className="text-xl">추가 정보</label>
@@ -243,6 +280,7 @@ const ReceptionForm = (): ReactNode => {
                 error={instructorContactError}
                 ref={instructorContactRef}
                 onChange={() => setInstructorContactError(false)}
+                helperText="*(010-1234-5678)"
               />
             </div>
           </div>
@@ -250,9 +288,10 @@ const ReceptionForm = (): ReactNode => {
         <div>
           <Selection
             value={major}
-            onChange={(value:string) => {
+            onChange={(value: string) => {
               setMajor(value as major);
-              setMajorError(false)}}
+              setMajorError(false);
+            }}
             label={"전공 선택"}
             placeholder="전공 선택"
             error={majorError}
@@ -266,9 +305,10 @@ const ReceptionForm = (): ReactNode => {
               {individual && (
                 <Selection
                   value={grade}
-                  onChange={(value:string) => {
+                  onChange={(value: string) => {
                     setGrade(value as grade);
-                    setGradeError(false)}}
+                    setGradeError(false);
+                  }}
                   label={"학년 선택"}
                   placeholder="학년 선택"
                   options={major === "발레" ? gradeOption1 : gradeOption2}
@@ -279,22 +319,24 @@ const ReceptionForm = (): ReactNode => {
               )}
               <Selection
                 value={category}
-                onChange={(value:string) => {
+                onChange={(value: string) => {
                   setCategory(value as category);
-                  setCategoryError(false)}}
+                  setCategoryError(false);
+                }}
                 label={"부문 선택"}
                 placeholder="부문 선택"
                 error={categoryError}
                 options={
                   individual
-                    ? (grade === "초등부 저학년(3학년)" || grade === "초등부 저학년(4학년)")
+                    ? grade === "초등부 저학년(3학년)" ||
+                      grade === "초등부 저학년(4학년)"
                       ? categoryOption2
                       : major === "한국무용"
                       ? categoryOption1
                       : major === "발레"
                       ? categoryOption3
                       : categoryOption4
-                    : major === "한국무용" || major === "현대무용"
+                    : major === "한국무용" || major === "컨템포러리댄스"
                     ? categoryOption5
                     : categoryOption6
                 }
@@ -313,11 +355,11 @@ const ReceptionForm = (): ReactNode => {
                   category === "즉흥<기초실기 A,B & 즉흥>"
                 }
                 value={
-                  (category === "즉흥" ||
+                  category === "즉흥" ||
                   category === "즉흥<Movement Phrase 1 & 즉흥>" ||
-                  category === "즉흥<기초실기 A,B & 즉흥>")
-                    ? "즉흥" : null
-                    
+                  category === "즉흥<기초실기 A,B & 즉흥>"
+                    ? "즉흥"
+                    : null
                 }
                 onChange={() => setArtTitleError(false)}
               />
@@ -326,24 +368,29 @@ const ReceptionForm = (): ReactNode => {
                   ((major === "한국무용" && category === "전통(재구성)") ||
                     (major === "발레" &&
                       category === "고전<기초실기 A,B & Variation>") ||
-                    (major === "현대무용" &&
-                      (grade === "초등부 저학년(3학년)" || grade === "초등부 저학년(4학년)"))))) && (
-                <>
-                  <Selection
-                    value={musicOrPose}
-                    onChange={(value:string) => {
-                      setMusicOrPose(value as musicOrPose);
-                      setMusicOrPoseError(false)}}
-                    label={"음악/포즈 선택"}
-                    placeholder={"음악/포즈 선택"}
-                    error={musicOrPoseError}
-                    options={musicOrPoseOption}
-                    ref={musicOrPoseRef}
-                  />
-                  <MusicInput 
-                    onChange={setMusicFile}/>
-                </>
+                    (major === "컨템포러리댄스" &&
+                      (grade === "초등부 저학년(3학년)" ||
+                        grade === "초등부 저학년(4학년)"))))) && (
+                <Selection
+                  value={musicOrPose}
+                  onChange={(value: string) => {
+                    setMusicOrPose(value as musicOrPose);
+                    setMusicOrPoseError(false);
+                  }}
+                  label={"음악/포즈 선택"}
+                  placeholder={"음악/포즈 선택"}
+                  error={musicOrPoseError}
+                  options={musicOrPoseOption}
+                  ref={musicOrPoseRef}
+                />
               )}
+              {!((major === '한국무용' && category === '즉흥') ||
+               (major === '발레' && category === '즉흥<기초실기 A,B & 즉흥>' ) ||
+               (major === '컨템포러리댄스')) && 
+              <MusicInput onChange={(file:File) => {
+                setMusicFile(file)
+                setMusicFileError(false)
+              }} fileName={musicFile ? musicFile.name : null} error={musicFileError} ref={musicFileRef} />}
             </div>
             {!individual && (
               <div className="p-8 flex flex-col">

@@ -40,7 +40,7 @@ const Selection = forwardRef<HTMLInputElement, SelectionProps>(
           variant="standard"
           sx={{ width: 160 }}
         >
-          <InputLabel id="demo-simple-select-standard-label">
+          <InputLabel id="demo-simple-select-standard-label" error={error}>
             {label}
           </InputLabel>
           <Select
