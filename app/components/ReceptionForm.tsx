@@ -37,8 +37,11 @@ import {
 import MusicInput from "./MusicInput";
 import Button from "./Button";
 import { Reception } from "@/template/reception";
+type ReceptionFormProps = {
+  privacyConfirm:boolean;
+}
 
-const ReceptionForm = (): ReactNode => {
+const ReceptionForm = ({privacyConfirm}:ReceptionFormProps): ReactNode => {
   //useState
   const [individualOrGroup, setIndividualOrGroup] =
     useState<individualOrGroup>("");
@@ -69,6 +72,8 @@ const ReceptionForm = (): ReactNode => {
   const [participantError, setParticipantError] = useState<boolean>(false);
   //useState_error_music
   const [musicFileError, setMusicFileError] = useState<boolean>(false);
+  //useState_error_privacy
+  const [privacyConfirmError,setPrivacyConfirmError] = useState<boolean>(false);
 
   //useRef_textInputs
   const nameRef = useRef<HTMLInputElement>(null);
@@ -90,6 +95,9 @@ const ReceptionForm = (): ReactNode => {
   const musicOrPoseRef = useRef<HTMLInputElement>(null);
   //useRef_music
   const musicFileRef = useRef<HTMLDivElement>(null);
+
+  //useEffects
+  useEffect(()=>setPrivacyConfirmError(false),[privacyConfirm])
 
   //variables
   const individual: boolean = individualOrGroup !== "단체";
@@ -140,6 +148,11 @@ const ReceptionForm = (): ReactNode => {
         setMusicFileError(true);
         error = true;
       }
+    }
+
+    if(privacyConfirm === false){
+      setPrivacyConfirmError(true);
+      error = true;
     }
     
     return error;
@@ -425,6 +438,7 @@ const ReceptionForm = (): ReactNode => {
       <Button className="w-40 self-center" onClick={onSubmit}>
         접수하기
       </Button>
+      <p className="mt-4 h-8 text-center text-red-500">{privacyConfirmError && '*개인정보 수집 및 이용 동의가 필요합니다'}</p>
     </div>
   );
 };
