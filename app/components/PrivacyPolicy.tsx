@@ -8,7 +8,7 @@ const PrivacyPolicy = ({setPrivacyConfirm}:PrivacyPolicyProps):ReactNode => {
     return <div className="w-full mt-20 flex flex-col items-center">
         <div className="w-4/5">
             <p className="p-2">개인정보 수집 및 이용 동의<em className="text-red-400">*</em></p>
-            <div className="w-full h-24 p-2 border-[1px] overflow-scroll leading-6 border-black border-solid">
+            <div className="w-full h-20 p-2 border-[1px] overflow-scroll leading-6 border-black border-solid">
                 <h1 className="font-bold">개인정보 수집에 대한 동의</h1>
                 <br/>
                 <h1 className="font-bold">개인정보 수집 및 이용 목적</h1>
@@ -27,12 +27,12 @@ const PrivacyPolicy = ({setPrivacyConfirm}:PrivacyPolicyProps):ReactNode => {
                 귀하는 본 안내에 따른 개인정보 수집·이용에 대하여 동의를 거부할 권리가 있습니다. 다만, 귀하가 개인정보 동의를 거부하시는 경우에 경연대회 접수가 불가함을 알려드립니다.
             </div>
             <div className="p-2 items-center">
-                위 사항을 확인했고 개인정보 수집 및 이용에 동의합니다.
                 <input 
-                  className="ml-1" 
+                  className="mr-2" 
                   type="checkbox"
                   onChange={({ target: { checked } }) => setPrivacyConfirm(checked)}
-                />
+                  />
+                  위 사항을 확인했고 개인정보 수집 및 이용에 동의합니다.
             </div>
         </div>
     </div>
