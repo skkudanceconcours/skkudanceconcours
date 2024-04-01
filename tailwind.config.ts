@@ -11,6 +11,9 @@ const config: Config = {
       backgroundImage: {
         
       },
+      fontFamily: {
+        HSBombaram: ['var(--font-HSBombaram']
+      }
     },
   },
   plugins: [],
