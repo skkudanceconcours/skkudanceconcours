@@ -38,10 +38,10 @@ import MusicInput from "./MusicInput";
 import Button from "./Button";
 import { Reception } from "@/template/Reception";
 type ReceptionFormProps = {
-  privacyConfirm:boolean;
-}
+  privacyConfirm: boolean;
+};
 
-const ReceptionForm = ({privacyConfirm}:ReceptionFormProps): ReactNode => {
+const ReceptionForm = ({ privacyConfirm }: ReceptionFormProps): ReactNode => {
   //useState
   const [individualOrGroup, setIndividualOrGroup] =
     useState<individualOrGroup>("");
@@ -59,11 +59,14 @@ const ReceptionForm = ({privacyConfirm}:ReceptionFormProps): ReactNode => {
   const [emailError, setEmailError] = useState<boolean>(false);
   const [schoolError, setSchoolError] = useState<boolean>(false);
   const [academyError, setAcademyError] = useState<boolean>(false);
-  const [instructorNameError, setInstructorNameError] = useState<boolean>(false);
-  const [instructorContactError, setInstructorContactError] = useState<boolean>(false);
+  const [instructorNameError, setInstructorNameError] =
+    useState<boolean>(false);
+  const [instructorContactError, setInstructorContactError] =
+    useState<boolean>(false);
   const [artTitleError, setArtTitleError] = useState<boolean>(false);
   //useState_errors_selections
-  const [individualOrGroupError, setIndividualOrGroupError] = useState<boolean>(false);
+  const [individualOrGroupError, setIndividualOrGroupError] =
+    useState<boolean>(false);
   const [genderError, setGenderError] = useState<boolean>(false);
   const [majorError, setMajorError] = useState<boolean>(false);
   const [gradeError, setGradeError] = useState<boolean>(false);
@@ -73,7 +76,8 @@ const ReceptionForm = ({privacyConfirm}:ReceptionFormProps): ReactNode => {
   //useState_error_music
   const [musicFileError, setMusicFileError] = useState<boolean>(false);
   //useState_error_privacy
-  const [privacyConfirmError,setPrivacyConfirmError] = useState<boolean>(false);
+  const [privacyConfirmError, setPrivacyConfirmError] =
+    useState<boolean>(false);
 
   //useRef_textInputs
   const nameRef = useRef<HTMLInputElement>(null);
@@ -97,7 +101,7 @@ const ReceptionForm = ({privacyConfirm}:ReceptionFormProps): ReactNode => {
   const musicFileRef = useRef<HTMLDivElement>(null);
 
   //useEffects
-  useEffect(()=>setPrivacyConfirmError(false),[privacyConfirm])
+  useEffect(() => setPrivacyConfirmError(false), [privacyConfirm]);
 
   //variables
   const individual: boolean = individualOrGroup !== "단체";
@@ -141,20 +145,20 @@ const ReceptionForm = ({privacyConfirm}:ReceptionFormProps): ReactNode => {
       error = error || res;
     });
     //music file check
-    
-    if(musicFileRef.current){
-      console.log('musicFile:',musicFile)
-      if(musicFile === null){
+
+    if (musicFileRef.current) {
+      console.log("musicFile:", musicFile);
+      if (musicFile === null) {
         setMusicFileError(true);
         error = true;
       }
     }
 
-    if(privacyConfirm === false){
+    if (privacyConfirm === false) {
       setPrivacyConfirmError(true);
       error = true;
     }
-    
+
     return error;
   };
 
@@ -178,11 +182,9 @@ const ReceptionForm = ({privacyConfirm}:ReceptionFormProps): ReactNode => {
       artTitle: artTitleRef.current!.value,
       musicFile: musicFile,
       musicOrPose: musicOrPose ?? null,
-      participants: participantsList.length === 0 ? null : participantsList
-    }
+      participants: participantsList.length === 0 ? null : participantsList,
+    };
     console.log(newReception);
-    
-
   };
 
   const onAddParticipant = (e: any) => {
@@ -397,13 +399,22 @@ const ReceptionForm = ({privacyConfirm}:ReceptionFormProps): ReactNode => {
                   ref={musicOrPoseRef}
                 />
               )}
-              {!((major === '한국무용' && category === '즉흥') ||
-               (major === '발레' && category === '즉흥<기초실기 A,B & 즉흥>' ) ||
-               (major === '컨템포러리댄스')) && 
-              <MusicInput onChange={(file:File) => {
-                setMusicFile(file)
-                setMusicFileError(false)
-              }} fileName={musicFile ? musicFile.name : null} error={musicFileError} ref={musicFileRef} />}
+              {!(
+                (major === "한국무용" && category === "즉흥") ||
+                (major === "발레" &&
+                  category === "즉흥<기초실기 A,B & 즉흥>") ||
+                major === "컨템포러리댄스"
+              ) && (
+                <MusicInput
+                  onChange={(file: File) => {
+                    setMusicFile(file);
+                    setMusicFileError(false);
+                  }}
+                  fileName={musicFile ? musicFile.name : null}
+                  error={musicFileError}
+                  ref={musicFileRef}
+                />
+              )}
             </div>
             {!individual && (
               <div className="p-8 flex flex-col">
@@ -438,7 +449,9 @@ const ReceptionForm = ({privacyConfirm}:ReceptionFormProps): ReactNode => {
       <Button className="w-40 self-center" onClick={onSubmit}>
         접수하기
       </Button>
-      <p className="mt-4 h-8 text-center text-red-500">{privacyConfirmError && '*개인정보 수집 및 이용 동의가 필요합니다'}</p>
+      <p className="mt-4 h-8 text-center text-red-500">
+        {privacyConfirmError && "*개인정보 수집 및 이용 동의가 필요합니다"}
+      </p>
     </div>
   );
 };

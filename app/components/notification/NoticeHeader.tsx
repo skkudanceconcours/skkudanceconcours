@@ -21,8 +21,8 @@ const NoticeHeader = (): ReactNode => {
     // console.log(searchInput);
   }, []);
   return (
-    <div className="relative flex min-h-[30%] w-4/5 flex-col items-center justify-start bg-blue-400">
-      <p className="flex h-3/5 w-full items-center justify-start bg-red-400 text-5xl font-semibold">
+    <div className="relative flex min-h-[30%] w-4/5  flex-col items-center justify-start bg-blue-400">
+      <p className="flex h-3/5 w-full items-end justify-start bg-red-400 text-5xl font-semibold">
         공지사항
       </p>
       <div className="relative flex h-1/5 w-full items-center justify-between">
