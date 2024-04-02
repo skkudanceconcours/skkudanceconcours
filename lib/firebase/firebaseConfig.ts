@@ -2,17 +2,16 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 // import { getAnalytics } from "firebase/analytics";
 
-
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyD-cOI8qzAq4eaoW1j1EhRuT1by8pn1FfI",
-  authDomain: "skkudanceconcours.firebaseapp.com",
-  projectId: "skkudanceconcours",
-  storageBucket: "skkudanceconcours.appspot.com",
-  messagingSenderId: "187468832932",
-  appId: "1:187468832932:web:d5260b81c99f9ceff98631",
-  measurementId: "G-6J8LM6E8H7"
+  apiKey: process.env.NEXT_PUBLIC_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
+  appId: process.env.NEXT_PUBLIC_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
