@@ -1,16 +1,21 @@
-import { quicksand, raleway } from "@/public/fonts/font";
+import { nanumgothic, quicksand, raleway } from "@/public/fonts/font";
 import { ReactNode } from "react";
 import AdminLogin from "./AdminLogin";
 
 const Footer = ():ReactNode => {
 
 
-    return <div className="w-screen h-40 flex flex-col items-center relative">
-        <p className="text-2xl m-4">성균관대학교 무용학과</p>
-        <a>성균관대학교 무용학과</a>
-        <a className={`${quicksand.className} underline`} href="https://skkudance.kr" target="_blank">(skkudance.kr)</a>
-    
-        <AdminLogin/>
+    return <div className={`${nanumgothic.className} w-screen my-8 flex flex-col items-center relative leading-6 text-gray-600 text-[0.8rem]`}>
+        <p>COPYRIGHT ⓒ School of Art,</p>
+        <p>Sungkyunkwan University(SKKU) All Rights Reserved</p>
+        <p>(03063) 서울특별시 종로구 성균관로 25-2</p>
+        <p>성균관대학교 인문사회과학캠퍼스</p>
+        <p>수선관 별관 6층 62601호</p>
+        <br/><br/>
+        <p>Production. 성균관대학교 예술대학 무용학과 공연문의. 02-760-0604</p>
+        <p>성균관대학교 예술대학 무용학과 (skkudance.kr)</p>
+        <p>Design by. SKKUDANCE</p>
+        {/* <AdminLogin/> */}
     </div>
 }
 
