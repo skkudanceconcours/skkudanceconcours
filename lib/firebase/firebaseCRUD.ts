@@ -1,4 +1,4 @@
-import { Reception } from "@/template/reception";
+import { Reception } from "@/template/Reception";
 import { db } from "../firebase/firebaseConfig";
 // type
 import { NoticeType } from "@/template/notice";
@@ -12,9 +12,12 @@ import {
   addDoc,
   Timestamp,
 } from "firebase/firestore";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
+const storage = getStorage();
 const getCollection = (collectionName: "notices" | "reception" | "test") =>
   collection(db, collectionName);
+const getStorageRef = (refName:string) => ref(storage,refName);
 
 //Create
 //임 시
