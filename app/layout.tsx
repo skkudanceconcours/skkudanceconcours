@@ -4,6 +4,7 @@ import "./globals.css";
 import { anton, raleway } from "@/public/fonts/font";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import { NextUIProvider } from "@nextui-org/react";
 
 export const metadata: Metadata = {
   title: "성균관대학교 무용학과 콩쿨",
@@ -19,9 +20,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={raleway.className}>
+        
         <Header />
         {children}
         <Footer />
+        
       </body>
     </html>
   );

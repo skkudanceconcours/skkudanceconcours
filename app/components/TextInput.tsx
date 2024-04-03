@@ -1,30 +1,33 @@
+import { Input } from "@nextui-org/react";
 import React, { ForwardedRef, ReactNode } from "react";
-import { Box, FormHelperText, TextField } from "@mui/material";
 
 type TextInputProps = {
   className?: string
   label: string
   error: boolean
-  helperText?: string
+  description?: string
   disabled?: boolean
-  value?: string | null
+  value?: string | undefined
+  clearable?: boolean
   onChange?: () => void
 };
 
-const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(({ className, label, error, helperText, disabled, value, onChange }: TextInputProps, ref: ForwardedRef<HTMLInputElement>): ReactNode => {
+const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(({ className, label, error, description, disabled, value, clearable, onChange }: TextInputProps, ref: ForwardedRef<HTMLInputElement>): ReactNode => {
   return (
-    <div className={`${className} w-fit my-6`}>
-      <Box sx={{ width: 160 }}>
-        <TextField 
-          variant="standard"
-          label={!value && label}
-          inputRef={ref} 
-          error={error}
-          disabled={disabled}
-          defaultValue={value}
-          onChange={onChange}/>
-        <FormHelperText className="text-[10px] absolute">{helperText}</FormHelperText>
-      </Box>
+    <div className={`${className} w-52 h-20 my-6`}>
+      <Input
+        isClearable={clearable ?? true}
+        type="text"
+        label={label}
+        variant="underlined"
+        description={description}
+        value={value}
+        className="max-w-xs"
+        isInvalid = {value ? false : error}
+        isDisabled = {disabled}
+        onChange={onChange}
+        ref={ref}
+    />
     </div>
   );
 });
