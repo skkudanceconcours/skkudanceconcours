@@ -3,21 +3,23 @@ import React, { ForwardedRef, ReactNode } from "react";
 
 type TextInputProps = {
   className?: string
-  label: string
-  error: boolean
+  label?: string
+  error?: boolean
   description?: string
   disabled?: boolean
   value?: string | undefined
   clearable?: boolean
+  autoFocus?: boolean
+  password?: boolean
   onChange?: () => void
 };
 
-const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(({ className, label, error, description, disabled, value, clearable, onChange }: TextInputProps, ref: ForwardedRef<HTMLInputElement>): ReactNode => {
+const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(({ className, label, error, description, disabled, value, clearable, autoFocus, password, onChange }: TextInputProps, ref: ForwardedRef<HTMLInputElement>): ReactNode => {
   return (
     <div className={`${className} w-52 h-20 my-6`}>
       <Input
         isClearable={clearable ?? true}
-        type="text"
+        type={password ? 'password' : 'text'}
         label={label}
         variant="underlined"
         description={description}
@@ -27,6 +29,8 @@ const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(({ classNam
         isDisabled = {disabled}
         onChange={onChange}
         ref={ref}
+        autoFocus={autoFocus}
+        
     />
     </div>
   );

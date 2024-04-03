@@ -17,7 +17,7 @@ export type Reception = {
     grade: grade
     category: category
     artTitle: string | null
-    musicFile: File | null
+    musicFileURL: string | null
     musicOrPose: musicOrPose | null
     participants: string[] | null
 }

@@ -3,9 +3,16 @@ import { db } from "../firebase/firebaseConfig";
 // type
 import { NoticeType } from "@/template/notice";
 // firebase
-import { collection, getDocs, addDoc } from "firebase/firestore";
+import { collection, getDocs, addDoc, doc } from "firebase/firestore";
+// storage
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
-const getCollection = (collectionName: "notice"|"reception"|"test") => collection(db, collectionName);
+type CollectionName = "notice"|"reception"|"test";
+const storage = getStorage();
+
+const getCollection = (collectionName: CollectionName) => collection(db, collectionName);
+const getDocRef = (collectionName: CollectionName, docId: string) => doc(db, collectionName, docId);
+const getStorageRef = (objectName: string) => ref(storage,objectName);
 
 //Create
 //임 시
@@ -17,6 +24,24 @@ export const setNotices = async (notice: NoticeType) => {
     console.log(error)
   }
 };
+
+export const uploadMP3File = async (fileName:string, file:File|null): Promise<string | null> => {
+  if(!file) return null;
+  const fileRef = getStorageRef(fileName);
+  const metadata = {
+    contentType: 'audio/mpeg',
+  };
+  let fileURL:string;
+  try{
+    await uploadBytes(fileRef,file,metadata);
+    fileURL = await getDownloadURL(fileRef);
+    console.log(fileURL);
+    return fileURL;
+  } catch (error){
+    console.log(error);
+    return null;
+  }
+}
 
 export const submitReception = async (reception: Reception) =>{
   try{

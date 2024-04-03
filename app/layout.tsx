@@ -18,13 +18,12 @@ export default function RootLayout({
 }>) {
 
   return (
-    <html lang="en">
-      <body className={raleway.className}>
-        
+    <html className="relative" lang="en">
+      <body className={`${raleway.className}`}>
         <Header />
         {children}
         <Footer />
-        
+        <div id="modal-root"></div>
       </body>
     </html>
   );

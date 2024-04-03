@@ -38,8 +38,8 @@ import MusicInput from "./MusicInput";
 import { Button } from "@nextui-org/react";
 import { Reception } from "@/template/Reception";
 import PrivacyPolicy from "./PrivacyPolicy";
-import { submitReception, submitTest } from "@/lib/firebase/firebaseCRUD";
-// import SubmitLottie from "@/public/lottie/SubmitLottie";
+import { submitReception, submitTest, uploadMP3File } from "@/lib/firebase/firebaseCRUD";
+import SubmitLottie from "@/public/lottie/SubmitLottie";
 
 
 const ReceptionForm = (): ReactNode => {
@@ -167,10 +167,14 @@ const ReceptionForm = (): ReactNode => {
       setPrivacyConfirmError(true);
       return;
     }
-
+    console.log('no error')
     setLoading(true);
+
+    const currentTime: Date = new Date();
+    const fileURL:string|null = await uploadMP3File(`${nameRef.current!.value.trim()}${currentTime.toString()}`,musicFile);
+
     const newReception: Reception = {
-      timestamp: new Date(),
+      timestamp: currentTime,
       individualOrGroup: individualOrGroup,
       name: nameRef.current!.value.trim(),
       gender: gender,
@@ -186,7 +190,7 @@ const ReceptionForm = (): ReactNode => {
       grade: grade,
       category: category,
       artTitle: artTitleRef.current!.value,
-      musicFile: musicFile,
+      musicFileURL: fileURL,
       musicOrPose: musicOrPose ? musicOrPose : null,
       participants: participantsList,
     };
@@ -195,12 +199,14 @@ const ReceptionForm = (): ReactNode => {
       setShowAnimation(true);
       setTimeout(()=>{
         window && window.location.reload();
-      },2000)
+        scrollRef.current?.scrollIntoView()
+      },2000);
     }
     else{
       console.log('submission failed');
     }
     setLoading(false);
+    
   };
 
   const onAddParticipant = (e: any) => {
@@ -258,7 +264,7 @@ const ReceptionForm = (): ReactNode => {
                   setGender(value as gender);
                   setGenderError(false);
                 }}
-                label={"성별"}
+                label="성별"
                 placeholder="성별 선택"
                 error={genderError}
                 options={genderOption}
@@ -272,7 +278,7 @@ const ReceptionForm = (): ReactNode => {
                 description="*예) 2024-01-01"
               />
               {!individual && <TextInput
-                label="대표자 학년"
+                label="학년"
                 error={leaderGradeError}
                 ref={leaderGradeRef}
                 onChange={() => setLeaderGradeError(false)}
@@ -483,7 +489,7 @@ const ReceptionForm = (): ReactNode => {
         onClick={onSubmit}
         isLoading={loading}
         color={'primary'}
-        // startContent={showAnimation && <SubmitLottie/>}
+        startContent={showAnimation && <SubmitLottie/>}
         >
         접수하기
       </Button>

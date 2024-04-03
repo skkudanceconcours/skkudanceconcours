@@ -1,14 +1,10 @@
-'use client'
 import submitLottie from '@/public/lottie/submitLottie.json';
-import Lottie from "lottie-react";
-import { ReactNode, useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
+import { ReactNode } from 'react';
+const Lottie = dynamic(()=> import('lottie-react'));
 
 const SubmitLottie = ():ReactNode => {
-    const [clientSide,setClientSide] = useState<boolean>(false);  
     return (
-        clientSide ?
-        <Lottie animationData={submitLottie}/>
-        : <></>
-      );
+        <Lottie animationData={submitLottie}/>);
 }
 export default SubmitLottie;

@@ -1,9 +1,8 @@
 import { nanumgothic, quicksand, raleway } from "@/public/fonts/font";
 import { ReactNode } from "react";
-import AdminLogin from "./AdminLogin";
+import Login from "./LoginPage";
 
 const Footer = ():ReactNode => {
-
 
     return <div className={`${nanumgothic.className} w-screen my-8 flex flex-col items-center relative leading-6 text-gray-600 text-[0.8rem]`}>
         <p>COPYRIGHT ⓒ School of Art,</p>
@@ -15,7 +14,7 @@ const Footer = ():ReactNode => {
         <p>Production. 성균관대학교 예술대학 무용학과 공연문의. 02-760-0604</p>
         <p>성균관대학교 예술대학 무용학과 (skkudance.kr)</p>
         <p>Design by. SKKUDANCE</p>
-        {/* <AdminLogin/> */}
+        <Login/>
     </div>
 }
 
