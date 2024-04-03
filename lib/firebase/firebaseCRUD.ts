@@ -1,4 +1,4 @@
-import { Reception } from "@/template/Reception";
+import { Reception } from "@/template/reception";
 import { db } from "../firebase/firebaseConfig";
 // type
 import { NoticeType } from "@/template/notice";
@@ -13,14 +13,14 @@ import {
   Timestamp,
 } from "firebase/firestore";
 
-const getCollection = (collectionName: "notice" | "reception" | "test") =>
+const getCollection = (collectionName: "notices" | "reception" | "test") =>
   collection(db, collectionName);
 
 //Create
 //임 시
 export const setNotices = async (notice: NoticeType) => {
   try {
-    const res = await addDoc(getCollection("notice"), {
+    const res = await addDoc(getCollection("notices"), {
       notice,
     });
   } catch (error) {
@@ -45,7 +45,6 @@ export const submitTest = async () => {
     console.log(error);
   }
 };
-const PAGE_NOTICE_SIZE = 5;
 
 function sortNotices(data: NoticeType[]): NoticeType[] {
   return data.sort((a, b) => {
@@ -63,7 +62,7 @@ function sortNotices(data: NoticeType[]): NoticeType[] {
 //Read All
 export const ReadAllData = async (collectionName: string) => {
   try {
-    const res = await getDocs(getCollection("notice"));
+    const res = await getDocs(getCollection("notices"));
     if (res.size) {
       const allDocs: NoticeType[] = [];
       res.forEach((doc) => {
