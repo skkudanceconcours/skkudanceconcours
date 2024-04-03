@@ -1,63 +1,40 @@
-import React, { ReactNode, useEffect, useState } from "react";
+"use client";
+import React, { ReactNode } from "react";
+import { useRouter } from "next/navigation";
 // Types
 import { NoticeType } from "@/template/notice";
-// firebase
-import { ReadAllData } from "@/lib/firebase/firebaseCRUD";
-import { DocumentData } from "firebase/firestore";
+// components
+import Notice from "./Notice";
+// Images & Icons
+import Pagination from "@mui/material/Pagination";
+import Box from "@mui/material/Box";
 
-const Notice = ({
-  contents,
-  num,
-  timestamp,
-  title,
-  viewCount,
-  important,
-}: NoticeType): ReactNode => {
-  const month: String = String(timestamp.toDate().getMonth() + 1).padStart(
-    2,
-    "0",
-  ); // 월을 가져와서 두 자리 수로 만듭니다.
-  const day: String = String(timestamp.toDate().getDate()).padStart(2, "0"); // 일을 가져와서 두 자리 수로 만듭니다.
-  const dateString: string = `${month}-${day}`;
-
-  // dyanmic_styles
-  const is_imp = important
-    ? "flex w-full items-center bg-blue-400 font-bold"
-    : "flex w-full items-center bg-red-400";
-  return (
-    <div className={is_imp}>
-      <div className="flex h-5 w-[12%] items-center justify-center">
-        {important ? "공지" : num}
-      </div>
-      <div className="flex h-5 w-[64%] items-center justify-center">
-        {title}
-      </div>
-      <div className="flex h-5 w-[12%] items-center justify-center">
-        {viewCount}
-      </div>
-      <div className="flex h-5 w-[12%] items-center justify-center">
-        {dateString}
-      </div>
-    </div>
-  );
-};
-
-function sortNotices(data: NoticeType[]): NoticeType[] {
-  return data.sort((a, b) => {
-    if (a.important && !b.important) {
-      return -1;
-    }
-    if (!a.important && b.important) {
-      return 1;
-    }
-
-    return b.timestamp.toMillis() - a.timestamp.toMillis();
-  });
+interface NoticeBodyProps {
+  totalData: NoticeType[];
+  totalPages: number;
+  page_number: number;
+  DATA_PER_PAGE: number;
 }
 
-const NoticeBody = () => {
-  // useState
-  const [noticeData, setNoticeData] = useState<NoticeType[]>([]);
+const NoticeBody = ({
+  totalData,
+  totalPages,
+  page_number,
+  DATA_PER_PAGE,
+}: NoticeBodyProps): ReactNode => {
+  // Def
+  const router = useRouter();
+  // Constants
+  let noticeData: NoticeType[] = [];
+  // if (totalData.length > 0) {
+  const startIndex = (page_number - 1) * DATA_PER_PAGE;
+  const endIndex =
+    startIndex + DATA_PER_PAGE > totalData.length
+      ? totalData.length
+      : startIndex + DATA_PER_PAGE;
+  noticeData = totalData.slice(startIndex, endIndex);
+
+  // Notices
   let cnt = 0;
   const notices = noticeData.map((notice) => {
     !notice.important && cnt++;
@@ -73,22 +50,22 @@ const NoticeBody = () => {
       />
     );
   });
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await ReadAllData("notices");
-        const sorted_data: NoticeType[] = sortNotices(data as NoticeType[]);
-        setNoticeData(sorted_data);
-      } catch (error) {
-        console.log(`error fetching data: ${error}`);
-      }
-    };
-    fetchData();
-  }, []);
+
+  function routePageHandler(e: React.ChangeEvent<unknown>, value: number) {
+    router.push(`/notification?page=${value}`);
+  }
 
   return (
     <div className="relative w-4/5 rounded-md border-2 border-solid border-black">
       {notices}
+      {/* <Pagination /> */}
+      <Box display="flex" justifyContent="center" alignItems="center">
+        <Pagination
+          count={totalPages}
+          shape="rounded"
+          onChange={routePageHandler}
+        />
+      </Box>
     </div>
   );
 };
