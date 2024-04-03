@@ -33,11 +33,13 @@ import {
   individualOrGroupOption,
   majorOption,
   musicOrPoseOption,
-} from "@/template/options";
+} from "@/template/SelectOptions";
 import MusicInput from "./MusicInput";
 import { Button } from "@nextui-org/react";
 import { Reception } from "@/template/Reception";
 import PrivacyPolicy from "./PrivacyPolicy";
+import { submitReception, submitTest } from "@/lib/firebase/firebaseCRUD";
+// import SubmitLottie from "@/public/lottie/SubmitLottie";
 
 
 const ReceptionForm = (): ReactNode => {
@@ -58,15 +60,13 @@ const ReceptionForm = (): ReactNode => {
   const [contactError, setContactError] = useState<boolean>(false);
   const [emailError, setEmailError] = useState<boolean>(false);
   const [schoolError, setSchoolError] = useState<boolean>(false);
+  const [leaderGradeError,setLeaderGradeError] = useState<boolean>(false);
   const [academyError, setAcademyError] = useState<boolean>(false);
-  const [instructorNameError, setInstructorNameError] =
-    useState<boolean>(false);
-  const [instructorContactError, setInstructorContactError] =
-    useState<boolean>(false);
+  const [instructorNameError, setInstructorNameError] = useState<boolean>(false);
+  const [instructorContactError, setInstructorContactError] = useState<boolean>(false);
   const [artTitleError, setArtTitleError] = useState<boolean>(false);
   //useState_errors_selections
-  const [individualOrGroupError, setIndividualOrGroupError] =
-    useState<boolean>(false);
+  const [individualOrGroupError, setIndividualOrGroupError] = useState<boolean>(false);
   const [genderError, setGenderError] = useState<boolean>(false);
   const [majorError, setMajorError] = useState<boolean>(false);
   const [gradeError, setGradeError] = useState<boolean>(false);
@@ -76,8 +76,9 @@ const ReceptionForm = (): ReactNode => {
   //useState_error_music
   const [musicFileError, setMusicFileError] = useState<boolean>(false);
   //useState_error_privacy
- 
   const [privacyConfirmError,setPrivacyConfirmError] = useState<boolean>(false);
+  //useState_animation
+  const [showAnimation,setShowAnimation] = useState<boolean>(false);
 
   //useRef_textInputs
   const nameRef = useRef<HTMLInputElement>(null);
@@ -86,6 +87,7 @@ const ReceptionForm = (): ReactNode => {
   const emailRef = useRef<HTMLInputElement>(null);
   const schoolRef = useRef<HTMLInputElement>(null);
   const academyRef = useRef<HTMLInputElement>(null);
+  const leaderGradeRef = useRef<HTMLInputElement>(null);
   const instructorNameRef = useRef<HTMLInputElement>(null);
   const instructorContactRef = useRef<HTMLInputElement>(null);
   const artTitleRef = useRef<HTMLInputElement>(null);
@@ -134,6 +136,7 @@ const ReceptionForm = (): ReactNode => {
       [contactRef, setContactError],
       [emailRef, setEmailError],
       [schoolRef, setSchoolError],
+      [leaderGradeRef, setLeaderGradeError],
       [academyRef, setAcademyError],
       [instructorNameRef, setInstructorNameError],
       [instructorContactRef, setInstructorContactError],
@@ -148,26 +151,24 @@ const ReceptionForm = (): ReactNode => {
 
     //music file check
     if(musicFileRef.current && !musicFile){
-      // console.log('musicFile:',musicFile)
-      if(musicFile === null){
-        setMusicFileError(true);
-        error = true;
-      }
+      console.log('music error')
+      setMusicFileError(true);
+      error = true;   
     }
-
-    if (privacyConfirm === false) {
-      setPrivacyConfirmError(true);
-      error = true;
-    }
-
     return error;
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (checkError()) {
       scrollRef.current?.scrollIntoView({behavior:'smooth'});
       return;
     }
+    if (privacyConfirm === false) {
+      setPrivacyConfirmError(true);
+      return;
+    }
+
+    setLoading(true);
     const newReception: Reception = {
       timestamp: new Date(),
       individualOrGroup: individualOrGroup,
@@ -177,6 +178,7 @@ const ReceptionForm = (): ReactNode => {
       contact: contactRef.current!.value.trim(),
       email: emailRef.current!.value.trim(),
       school: schoolRef.current!.value.trim(),
+      leaderGrade: leaderGradeRef.current ? leaderGradeRef.current.value.trim() : null,
       academy: academyRef.current!.value.trim(),
       instructorName: instructorNameRef.current!.value.trim(),
       instructorContact: instructorContactRef.current!.value.trim(),
@@ -185,10 +187,20 @@ const ReceptionForm = (): ReactNode => {
       category: category,
       artTitle: artTitleRef.current!.value,
       musicFile: musicFile,
-      musicOrPose: musicOrPose ?? null,
-      participants: participantsList.length === 0 ? null : participantsList,
+      musicOrPose: musicOrPose ? musicOrPose : null,
+      participants: participantsList,
     };
-    console.log(newReception);
+    const res = await submitReception(newReception);
+    if(res){
+      setShowAnimation(true);
+      setTimeout(()=>{
+        window && window.location.reload();
+      },2000)
+    }
+    else{
+      console.log('submission failed');
+    }
+    setLoading(false);
   };
 
   const onAddParticipant = (e: any) => {
@@ -257,14 +269,21 @@ const ReceptionForm = (): ReactNode => {
                 error={birthError}
                 ref={birthRef}
                 onChange={() => setBirthError(false)}
-                description="*(2024-01-01)"
+                description="*예) 2024-01-01"
               />
+              {!individual && <TextInput
+                label="대표자 학년"
+                error={leaderGradeError}
+                ref={leaderGradeRef}
+                onChange={() => setLeaderGradeError(false)}
+                description="*예) 중학교 1학년"
+              />}
               <TextInput
                 label="참가자 연락처"
                 error={contactError}
                 ref={contactRef}
                 onChange={() => setContactError(false)}
-                description="*(010-1234-5678)"
+                description="*예) 010-1234-5678"
               />
               <TextInput
                 label="이메일"
@@ -301,7 +320,7 @@ const ReceptionForm = (): ReactNode => {
                 error={instructorContactError}
                 ref={instructorContactRef}
                 onChange={() => setInstructorContactError(false)}
-                description="*(010-1234-5678)"
+                description="*예) 010-1234-5678"
               />
             </div>
           </div>
@@ -362,7 +381,7 @@ const ReceptionForm = (): ReactNode => {
                     : categoryOption6
                 }
                 ref={categoryRef}
-                disabled={individual && (major === "" || grade === "")}
+                disabled={individual ? (!major  || !grade ) : !major }
                 width={250}
               />
               <TextInput
@@ -370,11 +389,13 @@ const ReceptionForm = (): ReactNode => {
                 error={artTitleError}
                 ref={artTitleRef}
                 disabled={
-                  major === "" ||
-                  grade === "" ||
-                  category === "즉흥" ||
-                  category === "즉흥<Movement Phrase 1 & 즉흥>" ||
-                  category === "즉흥<기초실기 A,B & 즉흥>"
+                  individual &&
+                    (major === "" ||
+                    grade === "" ||
+                    category === "즉흥" ||
+                    category === "즉흥<Movement Phrase 1 & 즉흥>" ||
+                    category === "즉흥<기초실기 A,B & 즉흥>")
+                  
                 }
                 value={
                   (category === "즉흥" ||
@@ -462,6 +483,7 @@ const ReceptionForm = (): ReactNode => {
         onClick={onSubmit}
         isLoading={loading}
         color={'primary'}
+        // startContent={showAnimation && <SubmitLottie/>}
         >
         접수하기
       </Button>

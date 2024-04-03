@@ -2,7 +2,7 @@ import React, { ReactNode, useEffect, useState } from "react";
 // Types
 import { NoticeType } from "@/template/notice";
 // firebase
-import { ReadAllData } from "@/lib/firebase/firebaseCRUD";
+import { getAllNotices } from "@/lib/firebase/firebaseCRUD";
 import { DocumentData } from "firebase/firestore";
 
 const Notice = ({
@@ -76,7 +76,7 @@ const NoticeBody = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await ReadAllData("notices");
+        const data = await getAllNotices();
         const sorted_data: NoticeType[] = sortNotices(data as NoticeType[]);
         setNoticeData(sorted_data);
       } catch (error) {

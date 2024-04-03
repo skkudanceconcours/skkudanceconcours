@@ -1,21 +1,45 @@
+import { Reception } from "@/template/Reception";
 import { db } from "../firebase/firebaseConfig";
 // type
 import { NoticeType } from "@/template/notice";
 // firebase
 import { collection, getDocs, addDoc } from "firebase/firestore";
 
+const getCollection = (collectionName: "notice"|"reception"|"test") => collection(db, collectionName);
+
 //Create
 //임 시
 export const setNotices = async (notice: NoticeType) => {
-  const res = await addDoc(collection(db, "notices"), {
-    notice,
-  });
+  try{
+    const res = await addDoc(getCollection('notice'), {
+      notice,
+    }) }catch(error){
+    console.log(error)
+  }
 };
 
+export const submitReception = async (reception: Reception) =>{
+  try{
+    const res = await addDoc(getCollection('reception'), {reception} )
+    return res
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const submitTest = async () =>{
+  try{
+    const res = await addDoc(getCollection('test'), { abc:123 } )
+    return res
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 //Read
-export const ReadAllData = async (collectionName: string) => {
+export const getAllNotices = async () => {
   try {
-    const res = await getDocs(collection(db, collectionName));
+    const res = await getDocs(getCollection('notice'));
     if (res.size) {
       // get the data out if res is not empty
       const allDocs: NoticeType[] = [];

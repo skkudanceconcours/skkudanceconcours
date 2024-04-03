@@ -9,6 +9,7 @@ export type Reception = {
     contact: string
     email: string
     school: string
+    leaderGrade: string | null
     academy: string
     instructorName: string
     instructorContact: string

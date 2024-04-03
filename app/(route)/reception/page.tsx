@@ -1,5 +1,5 @@
 import ReceptionForm from "@/app/components/ReceptionForm";
-import { ReactNode, useState } from "react"
+import { ReactNode } from "react"
 
 const ReceptionPage = ():ReactNode =>{
 
