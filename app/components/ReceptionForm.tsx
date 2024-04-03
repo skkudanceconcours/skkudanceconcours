@@ -35,16 +35,14 @@ import {
   musicOrPoseOption,
 } from "@/template/options";
 import MusicInput from "./MusicInput";
-import Button from "./Button";
+import { Button } from "@nextui-org/react";
 import { Reception } from "@/template/Reception";
-type ReceptionFormProps = {
-  privacyConfirm:boolean;
-}
+import PrivacyPolicy from "./PrivacyPolicy";
 
-const ReceptionForm = ({privacyConfirm}:ReceptionFormProps): ReactNode => {
+
+const ReceptionForm = (): ReactNode => {
   //useState
-  const [individualOrGroup, setIndividualOrGroup] =
-    useState<individualOrGroup>("");
+  const [individualOrGroup, setIndividualOrGroup] = useState<individualOrGroup>("");
   const [gender, setGender] = useState<gender>("");
   const [major, setMajor] = useState<major>("");
   const [grade, setGrade] = useState<grade>("");
@@ -52,6 +50,8 @@ const ReceptionForm = ({privacyConfirm}:ReceptionFormProps): ReactNode => {
   const [musicOrPose, setMusicOrPose] = useState<musicOrPose>("");
   const [participantsList, setParticipantsList] = useState<string[]>([]);
   const [musicFile, setMusicFile] = useState<File | null>(null);
+  const [privacyConfirm,setPrivacyConfirm] = useState<boolean>(false);
+  const [loading,setLoading] = useState<boolean>(false);
   //useState_errors_textInputs
   const [nameError, setNameError] = useState<boolean>(false);
   const [birthError, setBirthError] = useState<boolean>(false);
@@ -73,6 +73,7 @@ const ReceptionForm = ({privacyConfirm}:ReceptionFormProps): ReactNode => {
   //useState_error_music
   const [musicFileError, setMusicFileError] = useState<boolean>(false);
   //useState_error_privacy
+ 
   const [privacyConfirmError,setPrivacyConfirmError] = useState<boolean>(false);
 
   //useRef_textInputs
@@ -95,55 +96,56 @@ const ReceptionForm = ({privacyConfirm}:ReceptionFormProps): ReactNode => {
   const musicOrPoseRef = useRef<HTMLInputElement>(null);
   //useRef_music
   const musicFileRef = useRef<HTMLDivElement>(null);
+  //useRef_scroll
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   //useEffects
-  useEffect(()=>setPrivacyConfirmError(false),[privacyConfirm])
+  useEffect(()=>setPrivacyConfirmError(false),[privacyConfirm]);
 
   //variables
   const individual: boolean = individualOrGroup !== "단체";
 
   //functions
-  const inputCheck = (
-    ref: RefObject<HTMLInputElement>,
-    setStateError: Dispatch<SetStateAction<boolean>>
-  ): boolean => {
-    if (!ref.current) return false;
-    const inputRef = ref as RefObject<HTMLInputElement>;
-    if (ref.current.value.trim() === "" || ref.current.value === undefined) {
-      setStateError(true);
-      return true;
-    }
-    return false;
-  };
-
   const checkError = (): boolean => {
     let error = false;
-    (
-      [
-        [nameRef, setNameError],
-        [birthRef, setBirthError],
-        [contactRef, setContactError],
-        [emailRef, setEmailError],
-        [schoolRef, setSchoolError],
-        [academyRef, setAcademyError],
-        [instructorNameRef, setInstructorNameError],
-        [instructorContactRef, setInstructorContactError],
-        [artTitleRef, setArtTitleError],
-        [individualOrGroupRef, setIndividualOrGroupError],
-        [genderRef, setGenderError],
-        [majorRef, setMajorError],
-        [gradeRef, setGradeError],
-        [categoryRef, setCategoryError],
-        [musicOrPoseRef, setMusicOrPoseError],
-      ] as [RefObject<HTMLInputElement>, Dispatch<SetStateAction<boolean>>][]
-    ).map(([element, setError]) => {
-      const res = inputCheck(element, setError);
-      error = error || res;
-    });
-    //music file check
     
-    if(musicFileRef.current){
-      console.log('musicFile:',musicFile)
+    ([
+      [individualOrGroupRef,individualOrGroup, setIndividualOrGroupError],
+      [genderRef,gender,setGenderError],
+      [majorRef,major, setMajorError],
+      [gradeRef,grade, setGradeError],
+      [categoryRef,category, setCategoryError],
+      [musicOrPoseRef,musicOrPose, setMusicOrPoseError],
+    ] as [RefObject<HTMLInputElement>, string, Dispatch<SetStateAction<boolean>>][]
+    ).forEach(([ref,element,setError]) => {
+      console.log(element)
+      if (ref.current && !element) {
+        setError(true);
+        error = true
+      };
+    });
+      
+    ([
+      [nameRef, setNameError],
+      [birthRef, setBirthError],
+      [contactRef, setContactError],
+      [emailRef, setEmailError],
+      [schoolRef, setSchoolError],
+      [academyRef, setAcademyError],
+      [instructorNameRef, setInstructorNameError],
+      [instructorContactRef, setInstructorContactError],
+      [artTitleRef, setArtTitleError],
+    ] as [RefObject<HTMLInputElement>, Dispatch<SetStateAction<boolean>>][]
+    ).forEach(([ref, setError]) => {
+      if (ref.current && !ref.current.value) {
+        setError(true);
+        error = true
+      };
+    });
+
+    //music file check
+    if(musicFileRef.current && !musicFile){
+      // console.log('musicFile:',musicFile)
       if(musicFile === null){
         setMusicFileError(true);
         error = true;
@@ -159,7 +161,10 @@ const ReceptionForm = ({privacyConfirm}:ReceptionFormProps): ReactNode => {
   };
 
   const onSubmit = () => {
-    if (checkError() === true) return;
+    if (checkError()) {
+      scrollRef.current?.scrollIntoView({behavior:'smooth'});
+      return;
+    }
     const newReception: Reception = {
       timestamp: new Date(),
       individualOrGroup: individualOrGroup,
@@ -206,11 +211,13 @@ const ReceptionForm = ({privacyConfirm}:ReceptionFormProps): ReactNode => {
 
   return (
     <div className="flex flex-col">
+      <div ref={scrollRef}></div>
       <form className={`pt-10 flex gap-20 ${quicksand.className}`}>
         <div>
           <Selection
             value={individualOrGroup}
             onChange={(value: string) => {
+              console.log('value:',value)
               setIndividualOrGroup(value as individualOrGroup);
               setIndividualOrGroupError(false);
             }}
@@ -229,7 +236,7 @@ const ReceptionForm = ({privacyConfirm}:ReceptionFormProps): ReactNode => {
                 label="참가자 이름"
                 error={nameError}
                 ref={nameRef}
-                helperText={!individual ? "(대표자 이름 외 00명)" : ""}
+                description={!individual ? "(대표자 이름 외 00명)" : ""}
                 onChange={() => setNameError(false)}
               />
               <Selection
@@ -249,14 +256,14 @@ const ReceptionForm = ({privacyConfirm}:ReceptionFormProps): ReactNode => {
                 error={birthError}
                 ref={birthRef}
                 onChange={() => setBirthError(false)}
-                helperText="*(2024-01-01)"
+                description="*(2024-01-01)"
               />
               <TextInput
                 label="참가자 연락처"
                 error={contactError}
                 ref={contactRef}
                 onChange={() => setContactError(false)}
-                helperText="*(010-1234-5678)"
+                description="*(010-1234-5678)"
               />
               <TextInput
                 label="이메일"
@@ -272,14 +279,14 @@ const ReceptionForm = ({privacyConfirm}:ReceptionFormProps): ReactNode => {
                 label="학교명"
                 error={schoolError}
                 ref={schoolRef}
-                helperText="*(홈스쿨링은 '홈스쿨링'으로 기재)"
+                description="*(홈스쿨링은 '홈스쿨링'으로 기재)"
                 onChange={() => setSchoolError(false)}
               />
               <TextInput
                 label="학원명"
                 error={academyError}
                 ref={academyRef}
-                helperText="*(없을 경우, '없음'으로 기재)"
+                description="*(없을 경우, '없음'으로 기재)"
                 onChange={() => setAcademyError(false)}
               />
               <TextInput
@@ -293,7 +300,7 @@ const ReceptionForm = ({privacyConfirm}:ReceptionFormProps): ReactNode => {
                 error={instructorContactError}
                 ref={instructorContactRef}
                 onChange={() => setInstructorContactError(false)}
-                helperText="*(010-1234-5678)"
+                description="*(010-1234-5678)"
               />
             </div>
           </div>
@@ -327,7 +334,7 @@ const ReceptionForm = ({privacyConfirm}:ReceptionFormProps): ReactNode => {
                   options={major === "발레" ? gradeOption1 : gradeOption2}
                   error={gradeError}
                   ref={gradeRef}
-                  disabled={major === ""}
+                  disabled={major == ""}
                 />
               )}
               <Selection
@@ -355,6 +362,7 @@ const ReceptionForm = ({privacyConfirm}:ReceptionFormProps): ReactNode => {
                 }
                 ref={categoryRef}
                 disabled={individual && (major === "" || grade === "")}
+                width={250}
               />
               <TextInput
                 label="작품 제목"
@@ -368,12 +376,15 @@ const ReceptionForm = ({privacyConfirm}:ReceptionFormProps): ReactNode => {
                   category === "즉흥<기초실기 A,B & 즉흥>"
                 }
                 value={
-                  category === "즉흥" ||
+                  (category === "즉흥" ||
                   category === "즉흥<Movement Phrase 1 & 즉흥>" ||
-                  category === "즉흥<기초실기 A,B & 즉흥>"
+                  category === "즉흥<기초실기 A,B & 즉흥>")
                     ? "즉흥"
-                    : null
+                    : undefined
                 }
+                clearable={(category === "즉흥" ||
+                category === "즉흥<Movement Phrase 1 & 즉흥>" ||
+                category === "즉흥<기초실기 A,B & 즉흥>") && false}
                 onChange={() => setArtTitleError(false)}
               />
               {(!individual ||
@@ -417,7 +428,7 @@ const ReceptionForm = ({privacyConfirm}:ReceptionFormProps): ReactNode => {
                 ))}
                 <TextInput
                   label={"참가자 추가"}
-                  helperText="*이름/학교/학년 (클릭해서 삭제 가능)"
+                  description="*이름/학교/학년 (클릭해서 삭제 가능)"
                   ref={participantRef}
                   onChange={() => setParticipantError(false)}
                   error={participantError}
@@ -435,7 +446,13 @@ const ReceptionForm = ({privacyConfirm}:ReceptionFormProps): ReactNode => {
           </div>
         </div>
       </form>
-      <Button className="w-40 self-center" onClick={onSubmit}>
+      <PrivacyPolicy setPrivacyConfirm={setPrivacyConfirm}/>
+      <Button 
+        className="w-40 self-center" 
+        onClick={onSubmit}
+        isLoading={loading}
+        color={'primary'}
+        >
         접수하기
       </Button>
       <p className="mt-4 h-8 text-center text-red-500">{privacyConfirmError && '*개인정보 수집 및 이용 동의가 필요합니다'}</p>

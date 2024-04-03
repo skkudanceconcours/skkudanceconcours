@@ -1,12 +1,7 @@
-import { ForwardedRef, ReactNode, Ref, forwardRef } from "react";
+import { ChangeEvent, ForwardedRef,ReactNode, RefObject, forwardRef } from "react";
+
+import {NextUIProvider, Select, SelectItem } from "@nextui-org/react";
 import React from "react";
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-} from "@mui/material";
 
 type SelectionProps = {
   className?: string;
@@ -17,6 +12,7 @@ type SelectionProps = {
   options: string[];
   error: boolean;
   disabled?: boolean;
+  width?:number;
 };
 
 const Selection = forwardRef<HTMLInputElement, SelectionProps>(
@@ -30,41 +26,38 @@ const Selection = forwardRef<HTMLInputElement, SelectionProps>(
       options,
       error,
       disabled,
+      width
     }: SelectionProps,
     ref: ForwardedRef<HTMLInputElement>
   ): ReactNode => {
     return (
-      <div className={`${className} w-fit my-6`} ref={ref}>
-        <FormControl
-          className={`${className}`}
-          variant="standard"
-          sx={{ width: 160 }}
-        >
-          <InputLabel id="demo-simple-select-standard-label" error={error}>
-            {label}
-          </InputLabel>
-          <Select
-            variant="standard"
-            labelId={label}
-            id={label}
-            value={value as string}
-            onChange={(event: SelectChangeEvent) =>
-              onChange(event.target.value)
-            }
-            label={label}
-            placeholder={placeholder}
-            error={error}
-            disabled={disabled}
-            inputRef={ref}
-          >
-            {(options as string[]).map((option, idx) => (
-              <MenuItem key={idx} value={option}>
-                {option}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
+      
+      <NextUIProvider>
+    <div className={`${className} w-52 h-20 my-6`}>
+      <Select 
+        label={label}
+        variant="underlined"
+        style={{width: width || "13rem"}}
+        isInvalid = {error}
+        value={value}
+        placeholder={placeholder}
+        isDisabled={disabled}
+        ref={ref as RefObject<HTMLSelectElement>}
+        onChange={(e:ChangeEvent<HTMLSelectElement>) =>{
+          console.log(e.target.value)
+          onChange(e.target.value)
+        }}  
+        
+      >
+        {options.map((option) => (
+          <SelectItem key={option} value={option}>
+            {option}
+          </SelectItem>
+        ))}
+      </Select>
+    </div>
+    </NextUIProvider>
+
     );
   }
 );
