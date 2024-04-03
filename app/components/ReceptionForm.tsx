@@ -59,11 +59,14 @@ const ReceptionForm = (): ReactNode => {
   const [emailError, setEmailError] = useState<boolean>(false);
   const [schoolError, setSchoolError] = useState<boolean>(false);
   const [academyError, setAcademyError] = useState<boolean>(false);
-  const [instructorNameError, setInstructorNameError] = useState<boolean>(false);
-  const [instructorContactError, setInstructorContactError] = useState<boolean>(false);
+  const [instructorNameError, setInstructorNameError] =
+    useState<boolean>(false);
+  const [instructorContactError, setInstructorContactError] =
+    useState<boolean>(false);
   const [artTitleError, setArtTitleError] = useState<boolean>(false);
   //useState_errors_selections
-  const [individualOrGroupError, setIndividualOrGroupError] = useState<boolean>(false);
+  const [individualOrGroupError, setIndividualOrGroupError] =
+    useState<boolean>(false);
   const [genderError, setGenderError] = useState<boolean>(false);
   const [majorError, setMajorError] = useState<boolean>(false);
   const [gradeError, setGradeError] = useState<boolean>(false);
@@ -100,7 +103,7 @@ const ReceptionForm = (): ReactNode => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   //useEffects
-  useEffect(()=>setPrivacyConfirmError(false),[privacyConfirm]);
+  useEffect(() => setPrivacyConfirmError(false), [privacyConfirm]);
 
   //variables
   const individual: boolean = individualOrGroup !== "단체";
@@ -152,11 +155,11 @@ const ReceptionForm = (): ReactNode => {
       }
     }
 
-    if(privacyConfirm === false){
+    if (privacyConfirm === false) {
       setPrivacyConfirmError(true);
       error = true;
     }
-    
+
     return error;
   };
 
@@ -183,11 +186,9 @@ const ReceptionForm = (): ReactNode => {
       artTitle: artTitleRef.current!.value,
       musicFile: musicFile,
       musicOrPose: musicOrPose ?? null,
-      participants: participantsList.length === 0 ? null : participantsList
-    }
+      participants: participantsList.length === 0 ? null : participantsList,
+    };
     console.log(newReception);
-    
-
   };
 
   const onAddParticipant = (e: any) => {
@@ -408,13 +409,22 @@ const ReceptionForm = (): ReactNode => {
                   ref={musicOrPoseRef}
                 />
               )}
-              {!((major === '한국무용' && category === '즉흥') ||
-               (major === '발레' && category === '즉흥<기초실기 A,B & 즉흥>' ) ||
-               (major === '컨템포러리댄스')) && 
-              <MusicInput onChange={(file:File) => {
-                setMusicFile(file)
-                setMusicFileError(false)
-              }} fileName={musicFile ? musicFile.name : null} error={musicFileError} ref={musicFileRef} />}
+              {!(
+                (major === "한국무용" && category === "즉흥") ||
+                (major === "발레" &&
+                  category === "즉흥<기초실기 A,B & 즉흥>") ||
+                major === "컨템포러리댄스"
+              ) && (
+                <MusicInput
+                  onChange={(file: File) => {
+                    setMusicFile(file);
+                    setMusicFileError(false);
+                  }}
+                  fileName={musicFile ? musicFile.name : null}
+                  error={musicFileError}
+                  ref={musicFileRef}
+                />
+              )}
             </div>
             {!individual && (
               <div className="p-8 flex flex-col">
@@ -455,7 +465,9 @@ const ReceptionForm = (): ReactNode => {
         >
         접수하기
       </Button>
-      <p className="mt-4 h-8 text-center text-red-500">{privacyConfirmError && '*개인정보 수집 및 이용 동의가 필요합니다'}</p>
+      <p className="mt-4 h-8 text-center text-red-500">
+        {privacyConfirmError && "*개인정보 수집 및 이용 동의가 필요합니다"}
+      </p>
     </div>
   );
 };
