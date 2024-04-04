@@ -17,8 +17,8 @@ import {
   major,
   musicOrPose,
 } from "@/template/inputTypes";
-import Selection from "./Selection";
-import TextInput from "./TextInput";
+import Selection from "./nextUI/Selection";
+import TextInput from "./nextUI/TextInput";
 import { quicksand } from "@/public/fonts/font";
 import {
   categoryOption1,

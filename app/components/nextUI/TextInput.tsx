@@ -14,7 +14,7 @@ type TextInputProps = {
   onChange?: () => void
 };
 
-const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(({ className, label, error, description, disabled, value, clearable, autoFocus, password, onChange }: TextInputProps, ref: ForwardedRef<HTMLInputElement>): ReactNode => {
+const NextTextInput = React.forwardRef<HTMLInputElement, TextInputProps>(({ className, label, error, description, disabled, value, clearable, autoFocus, password, onChange }: TextInputProps, ref: ForwardedRef<HTMLInputElement>): ReactNode => {
   return (
     <div className={`${className} w-52 h-20 my-6`}>
       <Input
@@ -36,6 +36,6 @@ const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(({ classNam
   );
 });
 
-TextInput.displayName = "TextInput";
+NextTextInput.displayName = "TextInput";
 
-export default TextInput;
+export default NextTextInput;

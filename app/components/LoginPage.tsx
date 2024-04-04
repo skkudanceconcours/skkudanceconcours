@@ -2,14 +2,17 @@
 import Portal from "@/app/components/ModalPortal";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import { RxCross1 } from "react-icons/rx";
-import TextInput from "./TextInput";
+import TextInput from "./nextUI/TextInput";
 import { nanumgothic } from "@/public/fonts/font";
 import { Button } from "@nextui-org/react";
+import useLoginStore from "@/lib/zustand/store";
 
 
 const Login = ():ReactNode => {
     const [openLogin, setOpenLogin] = useState<boolean>(false);
     const passwordRef = useRef<HTMLInputElement>(null);
+    const { loginState, login, logout } = useLoginStore();
+    const loggedIn = loginState === 'admin';
     const [error,setError] = useState<boolean>(false);
     
     const onLogin = () => {
@@ -17,7 +20,7 @@ const Login = ():ReactNode => {
         const input = passwordRef.current.value;
         if(input === process.env.NEXT_PUBLIC_ADMIN_PW) {
             //TODO
-            //set global variable to login state
+            login();
             setOpenLogin(false);
         };
         setError(true);
@@ -39,13 +42,13 @@ const Login = ():ReactNode => {
               className="w-40 self-center" 
               onClick={onLogin}
               color={!error ? 'primary' : 'danger'}>
-                로그인
+                관리자 로그인
             </Button>
           </div>
       </main>
     </Portal>}
     <p className="cursor-pointer"
-          onClick={()=>setOpenLogin(true)}>관리자 로그인</p>
+          onClick={()=>setOpenLogin(true)}>{loggedIn ? '로그아웃' : '로그인'}</p>
     </>)
 }
 

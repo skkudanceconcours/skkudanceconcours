@@ -1,6 +1,6 @@
 'use client';
 import { Dispatch, ReactNode, SetStateAction } from "react";
-import Accordian from "./Accordian";
+import Accordian from "./nextUI/Accordian";
 import { 개인정보수집동의 } from "@/public/policies/개인정보수집동의";
 import { Checkbox } from "@nextui-org/react";
 import { 개인정보처리방침 } from "@/public/policies/개인정보처리방침";

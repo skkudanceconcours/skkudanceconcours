@@ -15,7 +15,7 @@ type SelectionProps = {
   width?:number;
 };
 
-const Selection = forwardRef<HTMLInputElement, SelectionProps>(
+const NextSelection = forwardRef<HTMLInputElement, SelectionProps>(
   (
     {
       className,
@@ -62,6 +62,6 @@ const Selection = forwardRef<HTMLInputElement, SelectionProps>(
   }
 );
 
-Selection.displayName = "Selection";
+NextSelection.displayName = "Selection";
 
-export default Selection;
+export default NextSelection;

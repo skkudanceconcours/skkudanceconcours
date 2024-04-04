@@ -5,7 +5,7 @@ type AccordianProps = {
     contents: [string,string][]
     defaultExpadedKeys?: string[]
 }
-const Accordian = ({contents,defaultExpadedKeys}:AccordianProps) :ReactNode => {
+const NextAccordian = ({contents,defaultExpadedKeys}:AccordianProps) :ReactNode => {
 
     return(
     <NextUIProvider> 
@@ -30,4 +30,4 @@ const Accordian = ({contents,defaultExpadedKeys}:AccordianProps) :ReactNode => {
     </NextUIProvider>)
 }
 
-export default Accordian;
+export default NextAccordian;
