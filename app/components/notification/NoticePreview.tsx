@@ -28,16 +28,16 @@ const NoticePreview = ({
 
   // dyanmic_styles
   const is_imp = important
-    ? "flex w-full items-center font-bold"
-    : "flex w-full items-center";
+    ? "flex h-[5vh] w-full items-center font-bold border-b-1 border-solid border-[#e8e8e8] bg-[#fbfbfb]"
+    : "flex h-[5vh] w-full items-center border-b-1 border-solid border-[#e8e8e8] hover:bg-[#fbfbfb]";
 
   return (
     <div className={is_imp}>
-      <div className="flex h-10 w-[12%] items-center justify-center">
+      <div className="flex w-[12%] items-center justify-center">
         {important ? "공지" : num}
       </div>
       <div
-        className="flex h-10 w-[64%] items-center justify-center  hover:underline"
+        className="flex w-[64%] items-center justify-center  hover:underline"
         onClick={() => {
           const queryData: NoticeViewType = {
             contents,
@@ -52,14 +52,15 @@ const NoticePreview = ({
           href={{
             pathname: "/notification/details",
           }}
+          scroll={false}
         >
           {title}
         </Link>
       </div>
-      <div className="flex h-10 w-[12%] items-center justify-center">
+      <div className="flex w-[12%] items-center justify-center">
         {viewCount}
       </div>
-      <div className="flex h-10 w-[12%] items-center justify-center">
+      <div className="flex w-[12%] items-center justify-center">
         {dateString}
       </div>
     </div>

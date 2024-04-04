@@ -13,7 +13,7 @@ import headerBackground from "@/public/images/sub_header_bg_ballet.jpg";
 // firebase
 import { ReadAllData } from "@/lib/firebase/firebaseCRUD";
 
-const DATA_PER_PAGE = 8;
+const DATA_PER_PAGE = 10;
 
 const NotificationPage = (): ReactNode => {
   // useState
@@ -55,19 +55,3 @@ const NotificationPage = (): ReactNode => {
 };
 
 export default NotificationPage;
-
-// 데이터 만들기
-// useEffect(() => {
-//   const arr = [
-//     5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
-//   ];
-//   arr.forEach((elmt) =>
-//     setNotices({
-//       contents: `내용${elmt}`,
-//       timestamp: Timestamp.now(),
-//       title: `공지${elmt}`,
-//       viewCount: 1000 + elmt,
-//       important: false,
-//     }),
-//   );
-// }, []);

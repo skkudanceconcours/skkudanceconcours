@@ -19,10 +19,6 @@ interface NoticeBodyProps {
   DATA_PER_PAGE: number;
 }
 
-function routePageHandler(e: React.ChangeEvent<unknown>, value: number) {
-  router.push(`/notification?page=${value}`);
-}
-
 const NoticeBody = ({
   totalData,
   totalPages,
@@ -36,7 +32,7 @@ const NoticeBody = ({
   // dyanmic_styles
   const searchClassName = focused
     ? "relative flex h-4/5 w-[20%] items-center justify-center rounded-md border-2 border-solid border-black duration-200"
-    : "relative flex h-4/5 w-[10%] items-center justify-center rounded-md border-2 border-solid border-black duration-200";
+    : "relative flex h-4/5 w-[10%] items-center justify-center rounded-md duration-200";
   // Def
   const router = useRouter();
   // Constants
@@ -56,7 +52,7 @@ const NoticeBody = ({
     return (
       <NoticePreview
         key={notice.id}
-        num={idx}
+        num={totalData.length - idx + 1}
         contents={notice.contents}
         timestamp={notice.timestamp}
         title={notice.title}
@@ -67,10 +63,16 @@ const NoticeBody = ({
     );
   });
 
+  // Functions
+  function routePageHandler(e: React.ChangeEvent<unknown>, value: number) {
+    router.push(`/notification?page=${value}`, { scroll: false });
+  }
   return (
     <div className="relative flex w-4/5 flex-col items-center justify-start">
       <div className="relative flex h-[5vh] w-full items-center justify-between">
-        <div>Total 20건 1페이지</div>
+        <div>
+          Total {totalData.length}건 {page_number}페이지
+        </div>
         <div className={searchClassName}>
           <IoIosSearch style={{ margin: "0 10px 0 10px" }} />
           <input
@@ -102,12 +104,17 @@ const NoticeBody = ({
           작성일
         </span>
       </div>
-      <div className="relative w-4/5 rounded-md">
+      <div className="relative w-full">
         {notices}
-        {/* <Pagination /> */}
-        <Box display="flex" justifyContent="center" alignItems="center">
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          marginTop="1rem"
+        >
           <Pagination
             count={totalPages}
+            defaultPage={page_number}
             shape="rounded"
             onChange={routePageHandler}
           />
