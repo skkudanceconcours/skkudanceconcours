@@ -39,8 +39,8 @@ const NotificationPage = (): ReactNode => {
     }
   }, []);
   return (
-    <main className="relative flex min-h-screen w-full flex-col items-center justify-start">
-      <div className="relative flex h-[70vh] min-h-[40%] w-full items-center justify-center bg-yellow-300 text-5xl">
+    <main className="relative flex min-h-screen w-full flex-col items-center justify-start pt-24">
+      <div className="relative flex h-[50vh] min-h-[40%] w-full items-center justify-center bg-yellow-300 text-5xl">
         <Image src={headerBackground} alt="header" layout="fill" />
       </div>
       <NoticeHeader />
