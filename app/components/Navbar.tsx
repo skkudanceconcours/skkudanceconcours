@@ -10,7 +10,8 @@ const Navbar = ({ className }: { className?: string }): ReactNode => {
   const { loginState } = useLoginStore();
   const loggedIn = loginState === 'admin';
   const home: boolean = path === "/";
-  const notification: boolean = path === "/notification?page-1";
+  const notification: boolean =
+    path === "/notification" || path === "/notification/details";
   const receptionAdmin: boolean = path === "/receptionadmin";
 
   const className_li =

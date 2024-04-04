@@ -13,21 +13,23 @@ import headerBackground from "@/public/images/sub_header_bg_ballet.jpg";
 // firebase
 import { ReadAllData } from "@/lib/firebase/firebaseCRUD";
 
-const DATA_PER_PAGE = 8;
+const DATA_PER_PAGE = 10;
 
 const NotificationPage = (): ReactNode => {
-  // useState
+  // ------------------------------useState------------------------------
   const [totalData, setTotalData] = useState<NoticeType[]>([]);
   const [totalPages, setTotalPages] = useState<number>(0);
-  // Constants
+  const [filteredData, setFilteredData] = useState<NoticeType[]>([]);
+  // ------------------------------Constants------------------------------
   const page_number: number = parseInt(useSearchParams().get("page") as string);
-  // Data Fetch
+  // ------------------------------Data Fetch------------------------------
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await ReadAllData("notices");
         if (data) {
           setTotalData(data); // 전체 데이터
+          setFilteredData(data);
           setTotalPages(Math.ceil(data.length / DATA_PER_PAGE)); // 전체 페이지 개수
         }
       } catch (error) {
@@ -36,38 +38,38 @@ const NotificationPage = (): ReactNode => {
     };
     if (page_number) {
       fetchData();
+      console.log("Fetched Datas");
     }
   }, []);
+
+  // ------------------------------Filter------------------------------
+  const findMatches = (wordToMatch: string): NoticeType[] => {
+    // Filter using all Data
+    return totalData.filter((input) => {
+      const regex = new RegExp(wordToMatch, "giu");
+      return input.title.match(regex);
+    });
+  };
+  const filterData = (searchInput: string) => {
+    !searchInput
+      ? setFilteredData(totalData) // 원상복구
+      : setFilteredData(findMatches(searchInput)); // 검색
+  };
   return (
-    <main className="relative flex min-h-screen w-full flex-col items-center justify-start">
-      <div className="relative flex h-[70vh] min-h-[40%] w-full items-center justify-center bg-yellow-300 text-5xl">
+    <main className="relative flex min-h-screen w-full flex-col items-center justify-start pt-24">
+      <div className="relative flex h-[50vh] min-h-[40%] w-full items-center justify-center bg-yellow-300 text-5xl">
         <Image src={headerBackground} alt="header" layout="fill" />
       </div>
       <NoticeHeader />
       <NoticeBody
-        totalData={totalData}
+        filteredData={filteredData}
         totalPages={totalPages}
         page_number={page_number}
         DATA_PER_PAGE={DATA_PER_PAGE}
+        filterData={filterData}
       />
     </main>
   );
 };
 
 export default NotificationPage;
-
-// 데이터 만들기
-// useEffect(() => {
-//   const arr = [
-//     5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
-//   ];
-//   arr.forEach((elmt) =>
-//     setNotices({
-//       contents: `내용${elmt}`,
-//       timestamp: Timestamp.now(),
-//       title: `공지${elmt}`,
-//       viewCount: 1000 + elmt,
-//       important: false,
-//     }),
-//   );
-// }, []);

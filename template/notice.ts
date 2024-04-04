@@ -9,3 +9,10 @@ export type NoticeType = {
   viewCount: number;
   important: boolean;
 };
+
+export type NoticeViewType = {
+  contents: string;
+  timestamp: Date;
+  title: string;
+  viewCount: number;
+};
