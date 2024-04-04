@@ -13,19 +13,22 @@ import Box from "@mui/material/Box";
 import NoticePreview from "./NoticePreview";
 
 interface NoticeBodyProps {
-  totalData: NoticeType[];
+  filteredData: NoticeType[];
   totalPages: number;
   page_number: number;
   DATA_PER_PAGE: number;
+  filterData: (searchInput: string) => void;
 }
 
 const NoticeBody = ({
-  totalData,
+  filteredData,
   totalPages,
   page_number,
   DATA_PER_PAGE,
+  filterData,
 }: NoticeBodyProps): ReactNode => {
   // useState
+
   const [focused, setFocused] = useState<boolean>(false);
   const [searchInput, setSearchInput] = useState<string>("");
   const { noticeState, setnoticeState } = useContext(noticeContext);
@@ -40,38 +43,47 @@ const NoticeBody = ({
 
   const startIndex = (page_number - 1) * DATA_PER_PAGE;
   const endIndex =
-    startIndex + DATA_PER_PAGE > totalData.length
-      ? totalData.length
+    startIndex + DATA_PER_PAGE > filteredData.length
+      ? filteredData.length
       : startIndex + DATA_PER_PAGE;
-  noticeData = totalData.slice(startIndex, endIndex);
+  noticeData = filteredData.slice(startIndex, endIndex);
 
   // Notices
   let idx = startIndex;
-  const notices = noticeData.map((notice) => {
-    idx++;
-    return (
-      <NoticePreview
-        key={notice.id}
-        num={totalData.length - idx + 1}
-        contents={notice.contents}
-        timestamp={notice.timestamp}
-        title={notice.title}
-        viewCount={notice.viewCount}
-        important={notice.important}
-        updateNoticeCTX={(data: NoticeViewType) => setnoticeState(data)}
-      />
-    );
-  });
+
+  const notices = noticeData.length ? (
+    noticeData.map((notice) => {
+      idx++;
+      return (
+        <NoticePreview
+          key={notice.id}
+          id={notice.id}
+          num={filteredData.length - idx + 1}
+          contents={notice.contents}
+          timestamp={notice.timestamp}
+          title={notice.title}
+          viewCount={notice.viewCount}
+          important={notice.important}
+          updateNoticeCTX={(data: NoticeViewType) => setnoticeState(data)}
+        />
+      );
+    })
+  ) : (
+    <div className="flex h-[5vh] w-full items-center border-b-1 border-solid">
+      등록된 글이 없습니다
+    </div>
+  );
 
   // Functions
   function routePageHandler(e: React.ChangeEvent<unknown>, value: number) {
     router.push(`/notification?page=${value}`, { scroll: false });
   }
+
   return (
     <div className="relative flex w-4/5 flex-col items-center justify-start">
       <div className="relative flex h-[5vh] w-full items-center justify-between">
         <div>
-          Total {totalData.length}건 {page_number}페이지
+          Total {filteredData.length}건 {page_number}페이지
         </div>
         <div className={searchClassName}>
           <IoIosSearch style={{ margin: "0 10px 0 10px" }} />
@@ -86,6 +98,9 @@ const NoticeBody = ({
             }}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setSearchInput(e.target.value)
+            }
+            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) =>
+              e.key === "Enter" && filterData(searchInput)
             }
           />
         </div>

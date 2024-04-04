@@ -1,17 +1,20 @@
 "use client";
 import React, { ReactNode } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 // type
 import { NoticeType, NoticeViewType } from "@/template/notice";
-import { update } from "firebase/database";
+// firebase
+import { updateViewCount } from "@/lib/firebase/firebaseCRUD";
 
 interface NoticePreviewProps extends NoticeType {
   updateNoticeCTX: (data: NoticeViewType) => void;
 }
 
 const NoticePreview = ({
-  contents,
+  id,
   num,
+  contents,
   timestamp,
   title,
   viewCount,
@@ -19,6 +22,7 @@ const NoticePreview = ({
   updateNoticeCTX,
 }: NoticePreviewProps): ReactNode => {
   // 선언
+  const router = useRouter();
   const month: String = String(timestamp.toDate().getMonth() + 1).padStart(
     2,
     "0",
@@ -36,26 +40,23 @@ const NoticePreview = ({
       <div className="flex w-[12%] items-center justify-center">
         {important ? "공지" : num}
       </div>
-      <div
-        className="flex w-[64%] items-center justify-center  hover:underline"
-        onClick={() => {
-          const queryData: NoticeViewType = {
-            contents,
-            timestamp: timestamp.toDate(),
-            title,
-            viewCount,
-          };
-          updateNoticeCTX(queryData);
-        }}
-      >
-        <Link
-          href={{
-            pathname: "/notification/details",
+      <div className="flex w-[64%] items-center justify-center  hover:underline">
+        <div
+          onClick={() => {
+            const queryData: NoticeViewType = {
+              contents,
+              timestamp: timestamp.toDate(),
+              title,
+              viewCount: ++viewCount, // 백엔드에 업데이트 되기 전에 Client에서 미리 표시
+            };
+
+            router.push("/notification/details", { scroll: false });
+            updateViewCount(id as string);
+            updateNoticeCTX(queryData);
           }}
-          scroll={false}
         >
           {title}
-        </Link>
+        </div>
       </div>
       <div className="flex w-[12%] items-center justify-center">
         {viewCount}

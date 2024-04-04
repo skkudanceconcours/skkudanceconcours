@@ -11,13 +11,16 @@ import {
   limit,
   addDoc,
   Timestamp,
+  updateDoc,
+  doc,
+  increment,
 } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 const storage = getStorage();
 const getCollection = (collectionName: "notices" | "reception" | "test") =>
   collection(db, collectionName);
-const getStorageRef = (refName:string) => ref(storage,refName);
+const getStorageRef = (refName: string) => ref(storage, refName);
 
 //Create
 //임 시
@@ -31,23 +34,26 @@ export const setNotices = async (notice: NoticeType) => {
   }
 };
 
-export const uploadMP3File = async (fileName:string, file:File|null): Promise<string | null> => {
-  if(!file) return null;
+export const uploadMP3File = async (
+  fileName: string,
+  file: File | null,
+): Promise<string | null> => {
+  if (!file) return null;
   const fileRef = getStorageRef(fileName);
   const metadata = {
-    contentType: 'audio/mpeg',
+    contentType: "audio/mpeg",
   };
-  let fileURL:string;
-  try{
-    await uploadBytes(fileRef,file,metadata);
+  let fileURL: string;
+  try {
+    await uploadBytes(fileRef, file, metadata);
     fileURL = await getDownloadURL(fileRef);
     console.log(fileURL);
     return fileURL;
-  } catch (error){
+  } catch (error) {
     console.log(error);
     return null;
   }
-}
+};
 
 export const submitReception = async (reception: Reception) => {
   try {
@@ -67,6 +73,8 @@ export const submitTest = async () => {
   }
 };
 
+//Read All
+
 function sortNotices(data: NoticeType[]): NoticeType[] {
   return data.sort((a, b) => {
     if (a.important && !b.important) {
@@ -80,7 +88,6 @@ function sortNotices(data: NoticeType[]): NoticeType[] {
   });
 }
 
-//Read All
 export const ReadAllData = async (collectionName: string) => {
   try {
     const res = await getDocs(getCollection("notices"));
@@ -105,6 +112,16 @@ export const ReadAllData = async (collectionName: string) => {
 };
 
 // Update
+export const updateViewCount = async (id: string) => {
+  try {
+    const res = await updateDoc(doc(db, "notices", id), {
+      "notice.viewCount": increment(1),
+    });
+    console.log("증가 잘됨");
+  } catch (error) {
+    console.log("Error updating view Count", error);
+  }
+};
 
 // Delete
 
