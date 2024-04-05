@@ -20,16 +20,16 @@ export default function RootLayout({
 }>) {
   return (
     <html className="relative" lang="en">
-      <body className={`${raleway.className}`}>
+      <body className={`${raleway.className} flex flex-col`}>
         <LoginStateProvider>
-        <NoticeProvider>
-          <NextUIProviders>
-            <Header />
-            {children}
-            <Footer />
-            <div id="modal-root"></div>
-          </NextUIProviders>
-        </NoticeProvider>
+          <NoticeProvider>
+            <NextUIProviders>
+              <Header />
+              {children}
+              <Footer />
+              <div id="modal-root"></div>
+            </NextUIProviders>
+          </NoticeProvider>
         </LoginStateProvider>
       </body>
     </html>

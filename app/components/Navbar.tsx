@@ -15,13 +15,13 @@ const Navbar = ({ className }: { className?: string }): ReactNode => {
   const receptionAdmin: boolean = path === "/receptionadmin";
 
   const className_li =
-    'relative flex-1 h-24 p-3 flex justify-center items-end text-center text-xl cursor-pointer transition-colors duration-[400ms] after:content-[""] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:bg-black after:w-full after:opacity-0 hover:after:opacity-100 after:origin-left after:duration-150 after:ease-in';
+    'relative flex-1 h- 20 lg:h-24 p-6 flex justify-center items-end text-center lg:text-xl cursor-pointer transition-colors duration-[400ms] after:content-[""] after:absolute after:left-0 after:bottom-3 after:h-[3px] after:bg-black after:w-full after:opacity-0 hover:after:opacity-100 after:origin-left after:duration-150 after:ease-in';
   const className_route_li =
-    'relative flex-1 w-max h-24 p-3 flex justify-center items-end text-center text-xl cursor-pointer transition-colors duration-[400ms] after:content-[""] after:absolute after:left-0 after:bottom-0 after:h-[3px] after:bg-black after:w-full after:opacity-100';
+    'relative flex-1 w-max h- 20 lg:h-24 p-6 flex justify-center items-end text-center lg:text-xl cursor-pointer transition-colors duration-[400ms] after:content-[""] after:absolute after:left-0 after:bottom-3 after:h-[3px] after:bg-black after:w-full after:opacity-100';
     //#20CE88
   return (
     <div className={`${className} relative z-10`}>
-      <ul className="flex w-1/3 max-w-lg gap-2">
+      <ul className="flex w-full lg:w-1/3 lg:max-w-lg gap-2">
         <li
           className={`${home ? className_route_li : className_li} `}
           onClick={() => router.push("/")}

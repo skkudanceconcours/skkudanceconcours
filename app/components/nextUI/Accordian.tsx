@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import {Accordion, AccordionItem, NextUIProvider} from "@nextui-org/react";
+import {Accordion, AccordionItem } from "@nextui-org/react";
 
 type AccordianProps = {
     contents: [string,string][]
@@ -8,7 +8,6 @@ type AccordianProps = {
 const NextAccordian = ({contents,defaultExpadedKeys}:AccordianProps) :ReactNode => {
 
     return(
-    <NextUIProvider> 
       <div className="w-[60rem] self-center mb-2">
         <Accordion
           variant="shadow"
@@ -26,8 +25,7 @@ const NextAccordian = ({contents,defaultExpadedKeys}:AccordianProps) :ReactNode 
             {content}
           </AccordionItem>})}
         </Accordion>
-      </div>
-    </NextUIProvider>)
+      </div>)
 }
 
 export default NextAccordian;

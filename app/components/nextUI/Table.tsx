@@ -112,7 +112,6 @@ const NextTable = ({ receptions } : TableProps): ReactNode => {
 
 
   return (
-    <NextUIProvider>
       <Table
         aria-label="receptions"
         className="h-full max-h-screen overflow-y-scroll"
@@ -134,7 +133,6 @@ const NextTable = ({ receptions } : TableProps): ReactNode => {
           )}
         </TableBody>
       </Table>
-    </NextUIProvider>
   );
 };
 export default NextTable;

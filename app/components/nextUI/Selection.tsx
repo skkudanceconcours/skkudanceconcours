@@ -31,8 +31,7 @@ const NextSelection = forwardRef<HTMLInputElement, SelectionProps>(
     ref: ForwardedRef<HTMLInputElement>
   ): ReactNode => {
     return (
-      
-      <NextUIProvider>
+
     <div className={`${className} w-52 h-20 my-6`}>
       <Select 
         label={label}
@@ -56,7 +55,6 @@ const NextSelection = forwardRef<HTMLInputElement, SelectionProps>(
         ))}
       </Select>
     </div>
-    </NextUIProvider>
 
     );
   }
