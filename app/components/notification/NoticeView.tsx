@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 // Types
 import { NoticeViewType } from "@/template/notice";
 
-const NoticeView = ( {contents, title, timeStamp, viewCount}  : NoticeViewType): ReactNode => {
+const NoticeView = ( {contents, title, viewCount}  : NoticeViewType): ReactNode => {
 
   // const formattedDate: string = data.timestamp
   //   ? `${data.timestamp.getFullYear().toString().slice(-2)}-${(data.timestamp.getMonth() + 1).toString().padStart(2, "0")}-${data.timestamp.getDate().toString().padStart(2, "0")} ${data.timestamp.getHours().toString().padStart(2, "0")}:${data.timestamp.getMinutes().toString().padStart(2, "0")}`

@@ -1,8 +1,6 @@
-"use client";
 // react & next
 import Image from "next/image";
-import { ReactNode, useState, useEffect, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { ReactNode } from "react";
 // components
 import NoticeHeader from "@/app/components/notification/NoticeHeader";
 import NoticeBody from "@/app/components/notification/NoticeBody";
@@ -15,48 +13,13 @@ import { getAllNotices } from "@/lib/firebase/firebaseCRUD";
 
 const DATA_PER_PAGE = 10;
 
-const NotificationPage = (): ReactNode => {
+const NotificationPage = async (): Promise<ReactNode> => {
   // useState
-  const [totalData, setTotalData] = useState<NoticeType[]>([]);
-  const [totalPages, setTotalPages] = useState<number>(0);
-  const [filteredData, setFilteredData] = useState<NoticeType[]>([]);
-  // constants
-  const page_number: number = parseInt(useSearchParams().get("page") as string);
-  // useEffects
-  // data fetch
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        console.log("fetchData");
-        const data = await getAllNotices();
-        if (data) {
-          setTotalData(data); // 전체 데이터
-          setFilteredData(data);
-          setTotalPages(Math.ceil(data.length / DATA_PER_PAGE)); // 전체 페이지 개수
-        }
-      } catch (error) {
-        console.log(`error fetching data: ${error}`);
-      }
-    };
-    if (page_number) {
-      fetchData();
-      console.log("Fetched Datas");
-    }
-  }, []);
+  // const [totalData, setTotalData] = useState<NoticeType[]>([]);
+  // const [totalPages, setTotalPages] = useState<number>(0);
+  // const [filteredData, setFilteredData] = useState<NoticeType[]>([]);
+  const { data, totalPages } = await fetchData();
 
-  // filter
-  const findMatches = (wordToMatch: string): NoticeType[] => {
-    // Filter using all Data
-    return totalData.filter((input) => {
-      const regex = new RegExp(wordToMatch, "giu");
-      return input.title.match(regex);
-    });
-  };
-  const filterData = (searchInput: string) => {
-    !searchInput
-      ? setFilteredData(totalData) // 원상복구
-      : setFilteredData(findMatches(searchInput)); // 검색
-  };
   return (
       <main className="relative flex min-h-screen w-full flex-col items-center justify-start">
         <div className="relative flex h-[50vh] min-h-[40%] w-full items-center justify-center bg-yellow-300 text-5xl">
@@ -64,14 +27,25 @@ const NotificationPage = (): ReactNode => {
         </div>
         <NoticeHeader />
         <NoticeBody
-          filteredData={filteredData}
+          data={data}
           totalPages={totalPages}
-          page_number={page_number}
           DATA_PER_PAGE={DATA_PER_PAGE}
-          filterData={filterData}
         />
       </main>
   );
+};
+
+const fetchData = async (): Promise<{data:NoticeType[], totalPages: number}> => {
+  try {
+    console.log("fetchData");
+    const data = await getAllNotices();
+    if (data) {
+      return { data:data, totalPages: Math.ceil(data.length / DATA_PER_PAGE)}
+    }
+  } catch (error) {
+    console.log(`error fetching data: ${error}`);
+  }
+  return { data: [], totalPages: 0}
 };
 
 export default NotificationPage;

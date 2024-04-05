@@ -1,6 +1,6 @@
 "use client";
 import React, { ReactNode, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 // Types
 import { NoticeType, NoticeViewType } from "@/template/notice";
 // Images & Icons
@@ -12,33 +12,50 @@ import NoticePreview from "./NoticePreview";
 import useNoticeStore from "@/lib/zustand/noticeStore";
 
 interface NoticeBodyProps {
-  filteredData: NoticeType[];
+  data: NoticeType[];
   totalPages: number;
-  page_number: number;
   DATA_PER_PAGE: number;
-  filterData: (searchInput: string) => void;
 }
 
 const NoticeBody = ({
-  filteredData,
+  data,
   totalPages,
-  page_number,
   DATA_PER_PAGE,
-  filterData,
 }: NoticeBodyProps): ReactNode => {
-  // useState
 
+  // useState
   const [focused, setFocused] = useState<boolean>(false);
   const [searchInput, setSearchInput] = useState<string>("");
+  const [filteredData, setFilteredData] = useState<NoticeType[]>(data);
   const { setNoticeState } = useNoticeStore();
-  // dyanmic_styles
+
+  // dynamic_styles
   const searchClassName = focused
     ? "relative flex h-4/5 w-[20%] items-center justify-center rounded-md border-2 border-solid border-black duration-200"
     : "relative flex h-4/5 w-[10%] items-center justify-center rounded-md duration-200";
-  // Def
+
+  // useRouter
   const router = useRouter();
-  // Constants
+
+  // constants
   let noticeData: NoticeType[] = [];
+  const page_number: number = parseInt(useSearchParams().get("page") as string);
+
+  // functions
+  // filter
+  const findMatches = (wordToMatch: string): NoticeType[] => {
+    // Filter using all Data
+    return data.filter((input) => {
+      const regex = new RegExp(wordToMatch, "giu");
+      return input.title.match(regex);
+    });
+  };
+
+  const filterData = (searchInput: string) => {
+    !searchInput
+      ? setFilteredData(data) // 원상복구
+      : setFilteredData(findMatches(searchInput)); // 검색
+  };
 
   const startIndex = (page_number - 1) * DATA_PER_PAGE;
   const endIndex =
@@ -57,7 +74,7 @@ const NoticeBody = ({
         <NoticePreview
           key={notice.id}
           id={notice.id}
-          num={filteredData.length - idx + 1}
+          num={data.length - idx + 1}
           contents={notice.contents}
           timeStamp={notice.timeStamp}
           title={notice.title}
