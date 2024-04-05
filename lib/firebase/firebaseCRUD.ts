@@ -1,4 +1,4 @@
-import { Reception } from "@/template/Reception";
+import { Reception } from "@/template/reception";
 import { db } from "../firebase/firebaseConfig";
 // type
 import { NoticeType } from "@/template/notice";
@@ -84,26 +84,22 @@ function sortNotices(data: NoticeType[]): NoticeType[] {
       return 1;
     }
 
-    return b.timestamp.toMillis() - a.timestamp.toMillis();
+    return b.timeStamp.getSeconds() - a.timeStamp.getSeconds();
   });
 }
 
-export const ReadAllData = async (collectionName: string) => {
+export const getAllNotices = async () => {
   try {
-    const res = await getDocs(getCollection("notices"));
-    if (res.size) {
-      const allDocs: NoticeType[] = [];
-      res.forEach((doc) => {
-        allDocs.push({
-          ...(doc.data().notice as NoticeType),
-          id: doc.id,
-        });
-      });
-      const sorted_arr = sortNotices(allDocs);
-      return sorted_arr;
-    } else {
-      throw new Error("Could not fetch document");
-    }
+    console.log('getAllNotices');
+    const res = await getDocs(getCollection('notices'));
+    // console.log(res.docs[0].data().reception)
+    const datas:NoticeType[] = res.docs.map(doc => {
+      const { timestamp } = doc.data().notice;
+      return { ...doc.data().notice, timeStamp: timestamp.toDate() }
+    });
+    const sorted_arr = sortNotices(datas);
+    return sorted_arr;
+    
   } catch (error) {
     console.log(error);
 
@@ -142,4 +138,4 @@ export const updateViewCount = async (id: string) => {
 
 // Delete
 
-// 예씨 데이터 넣기
+// 예시 데이터 넣기

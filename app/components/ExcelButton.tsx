@@ -1,5 +1,5 @@
 'use client';
-import { Reception } from "@/template/Reception";
+import { Reception } from "@/template/reception";
 import { Button } from "@nextui-org/react";
 import { ReactNode } from "react";
 

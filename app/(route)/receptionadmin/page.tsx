@@ -21,7 +21,7 @@ const ReceptionAdmin = async (): Promise<ReactNode> => {
   );
 };
 
-export const getReceptionData = async () => {
+const getReceptionData = async () => {
   const receptions = await getAllReception();
   receptions.sort((item1,item2) => item2.timestamp.getTime() - item1.timestamp.getTime());
   return receptions;

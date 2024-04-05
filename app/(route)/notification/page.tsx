@@ -1,7 +1,7 @@
 "use client";
 // react & next
 import Image from "next/image";
-import { ReactNode, useState, useEffect } from "react";
+import { ReactNode, useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 // components
 import NoticeHeader from "@/app/components/notification/NoticeHeader";
@@ -11,22 +11,24 @@ import { NoticeType } from "@/template/notice";
 // img & icons
 import headerBackground from "@/public/images/sub_header_bg_ballet.jpg";
 // firebase
-import { ReadAllData } from "@/lib/firebase/firebaseCRUD";
+import { getAllNotices } from "@/lib/firebase/firebaseCRUD";
 
 const DATA_PER_PAGE = 10;
 
 const NotificationPage = (): ReactNode => {
-  // ------------------------------useState------------------------------
+  // useState
   const [totalData, setTotalData] = useState<NoticeType[]>([]);
   const [totalPages, setTotalPages] = useState<number>(0);
   const [filteredData, setFilteredData] = useState<NoticeType[]>([]);
-  // ------------------------------Constants------------------------------
+  // constants
   const page_number: number = parseInt(useSearchParams().get("page") as string);
-  // ------------------------------Data Fetch------------------------------
+  // useEffects
+  // data fetch
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await ReadAllData("notices");
+        console.log("fetchData");
+        const data = await getAllNotices();
         if (data) {
           setTotalData(data); // 전체 데이터
           setFilteredData(data);
@@ -42,7 +44,7 @@ const NotificationPage = (): ReactNode => {
     }
   }, []);
 
-  // ------------------------------Filter------------------------------
+  // filter
   const findMatches = (wordToMatch: string): NoticeType[] => {
     // Filter using all Data
     return totalData.filter((input) => {
@@ -56,19 +58,19 @@ const NotificationPage = (): ReactNode => {
       : setFilteredData(findMatches(searchInput)); // 검색
   };
   return (
-    <main className="relative flex min-h-screen w-full flex-col items-center justify-start">
-      <div className="relative flex h-[50vh] min-h-[40%] w-full items-center justify-center bg-yellow-300 text-5xl">
-        <Image src={headerBackground} alt="header" layout="fill" />
-      </div>
-      <NoticeHeader />
-      <NoticeBody
-        filteredData={filteredData}
-        totalPages={totalPages}
-        page_number={page_number}
-        DATA_PER_PAGE={DATA_PER_PAGE}
-        filterData={filterData}
-      />
-    </main>
+      <main className="relative flex min-h-screen w-full flex-col items-center justify-start">
+        <div className="relative flex h-[50vh] min-h-[40%] w-full items-center justify-center bg-yellow-300 text-5xl">
+          <Image src={headerBackground} alt="header" layout="fill" />
+        </div>
+        <NoticeHeader />
+        <NoticeBody
+          filteredData={filteredData}
+          totalPages={totalPages}
+          page_number={page_number}
+          DATA_PER_PAGE={DATA_PER_PAGE}
+          filterData={filterData}
+        />
+      </main>
   );
 };
 

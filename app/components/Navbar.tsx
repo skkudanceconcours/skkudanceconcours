@@ -1,5 +1,5 @@
 "use client";
-import useLoginStore from "@/lib/zustand/store";
+import useLoginStore from "@/lib/zustand/loginStore";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { ReactNode } from "react";

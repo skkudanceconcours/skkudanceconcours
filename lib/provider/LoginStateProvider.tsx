@@ -1,5 +1,5 @@
 'use client';
-import useLoginStore from "@/lib/zustand/store";
+import useLoginStore from "@/lib/zustand/loginStore";
 import { Path } from "@/template/paths";
 import { redirect, usePathname } from "next/navigation";
 import { ReactNode, useEffect } from "react";
