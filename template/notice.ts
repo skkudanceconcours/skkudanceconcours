@@ -1,10 +1,8 @@
-import { Timestamp } from "firebase/firestore";
-
 export type NoticeType = {
   id?: string;
   num?: number;
   contents: string;
-  timestamp: Timestamp;
+  timeStamp: Date;
   title: string;
   viewCount: number;
   important: boolean;
@@ -12,7 +10,7 @@ export type NoticeType = {
 
 export type NoticeViewType = {
   contents: string;
-  timestamp: Date;
+  timeStamp: Date;
   title: string;
   viewCount: number;
 };

@@ -11,7 +11,7 @@ import { NoticeType } from "@/template/notice";
 // img & icons
 import headerBackground from "@/public/images/sub_header_bg_ballet.jpg";
 // firebase
-import { ReadAllData } from "@/lib/firebase/firebaseCRUD";
+import { getAllNotices } from "@/lib/firebase/firebaseCRUD";
 
 const DATA_PER_PAGE = 10;
 
@@ -26,7 +26,8 @@ const NotificationPage = (): ReactNode => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await ReadAllData("notices");
+        console.log('fetchData');
+        const data = await getAllNotices();
         if (data) {
           setTotalData(data); // 전체 데이터
           setFilteredData(data);

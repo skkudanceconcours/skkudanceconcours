@@ -1,16 +1,15 @@
 "use client";
-import React, { ReactNode, useState, useContext, useEffect } from "react";
+import React, { ReactNode, useState } from "react";
 import { useRouter } from "next/navigation";
 // Types
 import { NoticeType, NoticeViewType } from "@/template/notice";
-// context
-import { noticeContext } from "@/lib/context/notice-context";
 // Images & Icons
 import { IoIosSearch } from "react-icons/io";
 import Pagination from "@mui/material/Pagination";
 import Box from "@mui/material/Box";
 // components
 import NoticePreview from "./NoticePreview";
+import useNoticeStore from "@/lib/zustand/noticeStore";
 
 interface NoticeBodyProps {
   filteredData: NoticeType[];
@@ -31,7 +30,7 @@ const NoticeBody = ({
 
   const [focused, setFocused] = useState<boolean>(false);
   const [searchInput, setSearchInput] = useState<string>("");
-  const { noticeState, setnoticeState } = useContext(noticeContext);
+  const { setNoticeState } = useNoticeStore();
   // dyanmic_styles
   const searchClassName = focused
     ? "relative flex h-4/5 w-[20%] items-center justify-center rounded-md border-2 border-solid border-black duration-200"
@@ -60,11 +59,11 @@ const NoticeBody = ({
           id={notice.id}
           num={filteredData.length - idx + 1}
           contents={notice.contents}
-          timestamp={notice.timestamp}
+          timeStamp={notice.timeStamp}
           title={notice.title}
           viewCount={notice.viewCount}
           important={notice.important}
-          updateNoticeCTX={(data: NoticeViewType) => setnoticeState(data)}
+          updateNoticeCTX={(data: NoticeViewType) => setNoticeState(data)}
         />
       );
     })

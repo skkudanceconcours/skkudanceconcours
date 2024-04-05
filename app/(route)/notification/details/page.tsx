@@ -6,13 +6,13 @@ import { NoticeViewType } from "@/template/notice";
 import { Timestamp } from "firebase/firestore";
 // img & icons
 import headerBackground from "@/public/images/sub_header_bg_ballet.jpg";
-// context
-import { noticeContext } from "@/lib/context/notice-context";
+import useNoticeStore from "@/lib/zustand/noticeStore";
+
 // components
 import NoticeHeader from "@/app/components/notification/NoticeHeader";
 import NoticeView from "@/app/components/notification/NoticeView";
-const page = (): ReactNode => {
-  const { noticeState, setnoticeState } = useContext(noticeContext);
+const DetailsPage = (): ReactNode => {
+  const { contents, title, timeStamp, viewCount ,setNoticeState } = useNoticeStore();
 
   return (
     <main className="relative flex min-h-screen w-full flex-col items-center justify-start">
@@ -20,9 +20,9 @@ const page = (): ReactNode => {
         <Image src={headerBackground} alt="header" layout="fill" />
       </div>
       <NoticeHeader />
-      <NoticeView data={noticeState} />
+      <NoticeView contents={contents} timeStamp={timeStamp} title={title} viewCount={viewCount}  />
     </main>
   );
 };
 
-export default page;
+export default DetailsPage;

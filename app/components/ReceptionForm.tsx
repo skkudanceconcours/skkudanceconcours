@@ -33,10 +33,10 @@ import {
   individualOrGroupOption,
   majorOption,
   musicOrPoseOption,
-} from "@/template/SelectOptions";
+} from "@/template/selectOptions";
 import MusicInput from "./MusicInput";
 import { Button } from "@nextui-org/react";
-import { Reception } from "@/template/Reception";
+import { Reception } from "@/template/reception";
 import PrivacyPolicy from "./PrivacyPolicy";
 import { submitReception, submitTest, uploadMP3File } from "@/lib/firebase/firebaseCRUD";
 import SubmitLottie from "@/public/lottie/SubmitLottie";

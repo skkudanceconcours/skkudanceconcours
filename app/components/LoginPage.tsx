@@ -5,7 +5,7 @@ import { RxCross1 } from "react-icons/rx";
 import TextInput from "./nextUI/TextInput";
 import { nanumgothic } from "@/public/fonts/font";
 import { Button } from "@nextui-org/react";
-import useLoginStore from "@/lib/zustand/store";
+import useLoginStore from "@/lib/zustand/loginStore";
 
 
 const Login = ():ReactNode => {
