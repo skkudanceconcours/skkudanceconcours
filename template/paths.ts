@@ -1,0 +1,1 @@
+export type Path = '/'|'/notification'|'/reception'|'/receptionadmin';

@@ -10,10 +10,10 @@ import {
   NextUIProvider,
   User,
 } from "@nextui-org/react";
-import { IoPersonSharp } from "react-icons/io5";
 import { ReactNode, useCallback } from "react";
 
 const columns = [
+  { name: "날짜", uid:"time"},
   { name: "개인/단체", uid: "individualOrGroup" },
   { name: "참가자(대표자) 정보", uid: "personalInfo" },
   { name: "학교명", uid: "schoolName" },
@@ -26,11 +26,8 @@ const columns = [
   { name: "참가자 명단", uid: "participants" },
 ];
 
-type TableProps = {
-//   receptionList: Reception[];
-};
-
 type Columnkey =
+  | "time"
   | "individualOrGroup"
   | "personalInfo"
   | "schoolName"
@@ -42,35 +39,18 @@ type Columnkey =
   | "musicURL"
   | "participants";
 
-const dummyData: Reception[] = [
-  {
-    timestamp: new Date(),
-    individualOrGroup: "개인",
-    name: "정정환",
-    gender: "남자",
-    birth: "2000-05-13",
-    contact: "010-9025-8656",
-    email: "wjdwjdghks00@naver.com",
-    school: "성균관대",
-    leaderGrade: null,
-    academy: "없음",
-    instructorName: "지도자",
-    instructorContact: "010-9025-8656",
-    major: "발레",
-    grade: "중등부 고학년(3학년)",
-    category: "규정<Movement Phrase 1,2>",
-    artTitle: "백조의 호수",
-    musicFileURL: "fsnkgsngngnegnegneg.com",
-    musicOrPose: "음악 먼저",
-    participants: [],
-  },
-];
-const NextTable = ({}: TableProps): ReactNode => {
+
+type TableProps = {
+  receptions: Reception[]
+}
+const NextTable = ({ receptions } : TableProps): ReactNode => {
 
   const renderCell = useCallback(
     (reception: Reception, columnKey: Columnkey) => {
         
       switch (columnKey) {
+        case "time":
+          return <p className="w-12">{reception.timestamp.toDateString()}</p>;
         case "individualOrGroup":
           return reception.individualOrGroup;
         case "personalInfo":
@@ -84,7 +64,7 @@ const NextTable = ({}: TableProps): ReactNode => {
                 <p>{reception.grade || reception.leaderGrade}</p>
                 <p>{reception.contact}</p>
             </div>}
-            avatarProps={<IoPersonSharp/>}
+            avatarProps={{src:"https://t4.ftcdn.net/jpg/00/65/77/27/360_F_65772719_A1UV5kLi5nCEWI0BNLLiFaBPEkUbv5Fv.jpg"}}
                 />
               
           );
@@ -99,7 +79,7 @@ const NextTable = ({}: TableProps): ReactNode => {
                 <p className="font-bold text-sm text-black">{reception.instructorName}</p>
                 <p>{reception.instructorContact}</p>
               </div>}
-              avatarProps={<IoPersonSharp/>}
+              avatarProps={{src:"https://t4.ftcdn.net/jpg/00/65/77/27/360_F_65772719_A1UV5kLi5nCEWI0BNLLiFaBPEkUbv5Fv.jpg"}}
               />
           );
         case "part":
@@ -115,7 +95,12 @@ const NextTable = ({}: TableProps): ReactNode => {
         case "music/pose":
           return reception.musicOrPose;
         case "musicURL":
-          return reception.musicFileURL;
+          return <div className="w-32 overflow-x-auto flex flex-wrap">
+          <a
+           className="cursor-pointer underline"
+           target="_blank"
+           href={reception.musicFileURL ?? undefined}>{reception.musicFileURL}</a>
+           </div>;
         case "participants":
           return( <div>
             {reception.participants?.map(participant => <p key={participant}>{participant}</p>)}
@@ -125,19 +110,20 @@ const NextTable = ({}: TableProps): ReactNode => {
     [],
   );
 
+
   return (
     <NextUIProvider>
       <Table
         aria-label="receptions"
-        className="relative max-h-screen overflow-y-scroll"
+        className="h-full max-h-screen overflow-y-scroll"
       >
         <TableHeader columns={columns}>
-          {(column) => (
+          {column => (
             <TableColumn key={column.uid}>{column.name}</TableColumn>
           )}
         </TableHeader>
-        <TableBody items={dummyData}>
-          {(item) => (
+        <TableBody items={receptions}>
+          {item => (
             <TableRow key={item.timestamp.toISOString() }>
               {(columnKey) => (
                 <TableCell>

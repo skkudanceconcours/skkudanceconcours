@@ -111,8 +111,20 @@ export const ReadAllData = async (collectionName: string) => {
   }
 };
 
-export const getAllReception = async () => {
-  
+export const getAllReception = async (): Promise<Reception[]> => {
+  try{
+    const res = await getDocs(getCollection('reception'));
+    // console.log(res.docs[0].data().reception)
+    const datas:Reception[] = res.docs.map(doc => {
+      const { timestamp } = doc.data().reception;
+      return { ...doc.data().reception, timestamp: timestamp.toDate()}
+    });
+    // console.log(datas)
+    return datas;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
 }
 
 

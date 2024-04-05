@@ -460,7 +460,7 @@ const ReceptionForm = (): ReactNode => {
                   <p
                     className="mt-6 relative cursor-pointer"
                     onClick={() => onRemoveParticipant(participant)}
-                    key={idx}
+                    key={participant}
                   >{`${idx + 1}. ${participant}`}</p>
                 ))}
                 <TextInput

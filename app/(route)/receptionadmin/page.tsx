@@ -1,25 +1,30 @@
-'use client';
+import ExcelButton from "@/app/components/ExcelButton";
 import NextTable from "@/app/components/nextUI/Table";
-import useLoginStore from "@/lib/zustand/store";
-import { redirect, useRouter } from "next/navigation";
-import { ReactNode, useEffect } from "react";
+import { getAllReception } from "@/lib/firebase/firebaseCRUD";
+import { ReactNode } from "react";
 
-const ReceptionAdmin = ():ReactNode => {
+const ReceptionAdmin = async (): Promise<ReactNode> => {
+  const receptionData = await getReceptionData();
 
-    //useEffect
-    useEffect(()=>{
-      if(sessionStorage.getItem('loginState') !== process.env.NEXT_PUBLIC_ADMIN_PW){
-        redirect('/');
-      }
-    },[]);
-
-    return <main className="w-screen h-screen pt-24">
-        <div className="w-full h-full p-4 relative">
-            <p>콩쿨 접수 현황</p>
-            <NextTable />
-            
-        </div>
+  return (
+    <main className="relative h-screen w-screen flex flex-col items-center pt-24 mb-72">
+        <h1 className="relative flex h-[15vh] mt-20 w-4/5 flex-col justify-center text-5xl font-semibold">
+          콩쿨 접수 현황
+        </h1>
+      
+        <NextTable receptions={receptionData} />
+      <div className="w-full p-4 px-8 flex justify-between relative z-10">
+        <div className="">총 {receptionData.length}개의 접수</div>
+        <ExcelButton receptions={receptionData}/>
+      </div>
     </main>
-}
+  );
+};
+
+export const getReceptionData = async () => {
+  const receptions = await getAllReception();
+  receptions.sort((item1,item2) => item2.timestamp.getTime() - item1.timestamp.getTime());
+  return receptions;
+};
 
 export default ReceptionAdmin;
