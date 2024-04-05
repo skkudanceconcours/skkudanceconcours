@@ -231,7 +231,7 @@ const ReceptionForm = (): ReactNode => {
   return (
     <div className="flex flex-col">
       <div ref={scrollRef}></div>
-      <form className={`pt-10 flex gap-20 ${quicksand.className}`}>
+      <form className={`flex gap-20 ${quicksand.className}`}>
         <div>
           <Selection
             value={individualOrGroup}

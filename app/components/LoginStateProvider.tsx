@@ -6,7 +6,7 @@ import { ReactNode, useEffect } from "react";
 
 const LoginStateProvider = ({children}:{children:ReactNode}):ReactNode => {
     const path = usePathname() as Path;
-    const { login } = useLoginStore();
+    const { loginState,login } = useLoginStore();
     useEffect(() => {
       const key = sessionStorage.getItem('loginState');
       if (key === process.env.NEXT_PUBLIC_ADMIN_PW){
@@ -15,7 +15,7 @@ const LoginStateProvider = ({children}:{children:ReactNode}):ReactNode => {
       else{
         if(path === '/receptionadmin') redirect('/');
       }
-    },[]);
+    },[loginState]);
     return children;
 }
 

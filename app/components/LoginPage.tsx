@@ -27,6 +27,18 @@ const Login = ():ReactNode => {
         setError(true);
     }
 
+    useEffect(()=>{
+      window?.addEventListener('keydown', e => {
+        // console.log(e.code);
+        if(e.code === 'Escape'){
+          setOpenLogin(false);
+        }
+        else if(e.code === 'Enter'){
+          onLogin();
+        }
+      })
+    })
+
     return (<>{openLogin && <Portal>
       <main className="absolute left-0 top-0 w-full h-full bg-[rgba(255,255,255,0.8)] z-20">
         <RxCross1 className="fixed w-10 h-10 top-8 right-8 cursor-pointer z-30"
@@ -56,7 +68,7 @@ const Login = ():ReactNode => {
           sessionStorage.removeItem('loginState');
           window.scrollTo(0,0);
         };
-        }}>{loggedIn ? '로그아웃' : '로그인'}</p>
+        }}>{loggedIn ? '로그아웃' : '관리자 로그인'}</p>
     </>)
 }
 
