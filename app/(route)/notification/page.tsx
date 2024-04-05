@@ -27,7 +27,6 @@ const NotificationPage = (): ReactNode => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log("fetchData");
         const data = await getAllNotices();
         if (data) {
           setTotalData(data); // 전체 데이터
@@ -42,7 +41,7 @@ const NotificationPage = (): ReactNode => {
       fetchData();
       console.log("Fetched Datas");
     }
-  }, []);
+  }, [totalData, totalPages, filteredData]);
 
   // filter
   const findMatches = (wordToMatch: string): NoticeType[] => {
@@ -58,19 +57,19 @@ const NotificationPage = (): ReactNode => {
       : setFilteredData(findMatches(searchInput)); // 검색
   };
   return (
-      <main className="relative flex min-h-screen w-full flex-col items-center justify-start">
-        <div className="relative flex h-[50vh] min-h-[40%] w-full items-center justify-center bg-yellow-300 text-5xl">
-          <Image src={headerBackground} alt="header" layout="fill" />
-        </div>
-        <NoticeHeader />
-        <NoticeBody
-          filteredData={filteredData}
-          totalPages={totalPages}
-          page_number={page_number}
-          DATA_PER_PAGE={DATA_PER_PAGE}
-          filterData={filterData}
-        />
-      </main>
+    <main className="relative flex min-h-screen w-full flex-col items-center justify-start">
+      <div className="relative flex h-[50vh] min-h-[40%] w-full items-center justify-center bg-yellow-300 text-5xl">
+        <Image src={headerBackground} alt="header" layout="fill" />
+      </div>
+      <NoticeHeader />
+      <NoticeBody
+        filteredData={filteredData}
+        totalPages={totalPages}
+        page_number={page_number}
+        DATA_PER_PAGE={DATA_PER_PAGE}
+        filterData={filterData}
+      />
+    </main>
   );
 };
 

@@ -90,16 +90,14 @@ function sortNotices(data: NoticeType[]): NoticeType[] {
 
 export const getAllNotices = async () => {
   try {
-    console.log('getAllNotices');
-    const res = await getDocs(getCollection('notices'));
+    const res = await getDocs(getCollection("notices"));
     // console.log(res.docs[0].data().reception)
-    const datas:NoticeType[] = res.docs.map(doc => {
+    const datas: NoticeType[] = res.docs.map((doc) => {
       const { timestamp } = doc.data().notice;
-      return { ...doc.data().notice, timeStamp: timestamp.toDate() }
+      return { ...doc.data().notice, timeStamp: timestamp.toDate() };
     });
     const sorted_arr = sortNotices(datas);
     return sorted_arr;
-    
   } catch (error) {
     console.log(error);
 
@@ -108,12 +106,12 @@ export const getAllNotices = async () => {
 };
 
 export const getAllReception = async (): Promise<Reception[]> => {
-  try{
-    const res = await getDocs(getCollection('reception'));
+  try {
+    const res = await getDocs(getCollection("reception"));
     // console.log(res.docs[0].data().reception)
-    const datas:Reception[] = res.docs.map(doc => {
+    const datas: Reception[] = res.docs.map((doc) => {
       const { timestamp } = doc.data().reception;
-      return { ...doc.data().reception, timestamp: timestamp.toDate()}
+      return { ...doc.data().reception, timestamp: timestamp.toDate() };
     });
     // console.log(datas)
     return datas;
@@ -121,8 +119,7 @@ export const getAllReception = async (): Promise<Reception[]> => {
     console.log(error);
     return [];
   }
-}
-
+};
 
 // Update
 export const updateViewCount = async (id: string) => {
