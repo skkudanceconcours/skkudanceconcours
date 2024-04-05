@@ -7,6 +7,7 @@ import Footer from "./components/Footer";
 // context
 import { NoticeProvider } from "@/lib/context/notice-context";
 import { NextUIProviders } from "@/lib/context/nextui-context";
+import LoginStateProvider from "./components/LoginStateProvider";
 export const metadata: Metadata = {
   title: "성균관대학교 무용학과 콩쿨",
   description: "성균관대학교 무용학과 콩쿨 웹사이트",
@@ -20,6 +21,7 @@ export default function RootLayout({
   return (
     <html className="relative" lang="en">
       <body className={`${raleway.className}`}>
+        <LoginStateProvider>
         <NoticeProvider>
           <NextUIProviders>
             <Header />
@@ -28,6 +30,7 @@ export default function RootLayout({
             <div id="modal-root"></div>
           </NextUIProviders>
         </NoticeProvider>
+        </LoginStateProvider>
       </body>
     </html>
   );

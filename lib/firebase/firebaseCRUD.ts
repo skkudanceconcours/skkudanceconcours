@@ -73,7 +73,7 @@ export const submitTest = async () => {
   }
 };
 
-//Read All
+//Read
 
 function sortNotices(data: NoticeType[]): NoticeType[] {
   return data.sort((a, b) => {
@@ -110,6 +110,11 @@ export const ReadAllData = async (collectionName: string) => {
     console.log(`error Occured on firebaseCRUD: ${error}`);
   }
 };
+
+export const getAllReception = async () => {
+  
+}
+
 
 // Update
 export const updateViewCount = async (id: string) => {

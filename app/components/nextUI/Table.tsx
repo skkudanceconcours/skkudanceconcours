@@ -20,8 +20,9 @@ const columns = [
   { name: "학원명", uid: "academyName" },
   { name: "지도자 정보", uid: "instructorInfo" },
   { name: "부문", uid: "part" },
-  { name: "음악 제목", uid: "artTitle" },
+  { name: "작품 제목", uid: "artTitle" },
   { name: "음악/포즈", uid: "music/pose" },
+  { name: "음악 다운로드", uid: "musicURL"},
   { name: "참가자 명단", uid: "participants" },
 ];
 
@@ -38,6 +39,7 @@ type Columnkey =
   | "part"
   | "artTitle"
   | "music/pose"
+  | "musicURL"
   | "participants";
 
 const dummyData: Reception[] = [
@@ -64,16 +66,24 @@ const dummyData: Reception[] = [
   },
 ];
 const NextTable = ({}: TableProps): ReactNode => {
+
   const renderCell = useCallback(
     (reception: Reception, columnKey: Columnkey) => {
+        
       switch (columnKey) {
         case "individualOrGroup":
           return reception.individualOrGroup;
         case "personalInfo":
           return (
-            <User 
-            name={reception.name} 
-            description={"fnsnesjgbjgb"}
+            <User name
+            description={<div className="flex flex-col ml-1 gap-1">
+                <p className="font-bold text-sm text-black">{reception.name}</p>
+                <p>{reception.gender}</p>
+                <p>{reception.birth}</p>
+                <p>{reception.email}</p>
+                <p>{reception.grade || reception.leaderGrade}</p>
+                <p>{reception.contact}</p>
+            </div>}
             avatarProps={<IoPersonSharp/>}
                 />
               
@@ -84,21 +94,28 @@ const NextTable = ({}: TableProps): ReactNode => {
           return reception.academy;
         case "instructorInfo":
           return (
-            <User name={reception.instructorName}>
-              {reception.instructorContact}
-            </User>
+            <User name
+              description={<div className="flex flex-col ml-1 gap-1">
+                <p className="font-bold text-sm text-black">{reception.instructorName}</p>
+                <p>{reception.instructorContact}</p>
+              </div>}
+              avatarProps={<IoPersonSharp/>}
+              />
           );
         case "part":
           return (
-            <div>
-              <p>학년: {reception.grade}</p>
-              <p>부문: {reception.category}</p>
+            <div className="flex flex-col gap-1">
+              <p>{reception.major}</p>
+              <p>{reception.grade}</p>
+              <p>{reception.category}</p>
             </div>
           );
         case "artTitle":
           return reception.artTitle;
         case "music/pose":
           return reception.musicOrPose;
+        case "musicURL":
+          return reception.musicFileURL;
         case "participants":
           return( <div>
             {reception.participants?.map(participant => <p key={participant}>{participant}</p>)}
@@ -121,7 +138,7 @@ const NextTable = ({}: TableProps): ReactNode => {
         </TableHeader>
         <TableBody items={dummyData}>
           {(item) => (
-            <TableRow key={item.timestamp.toISOString()}>
+            <TableRow key={item.timestamp.toISOString() }>
               {(columnKey) => (
                 <TableCell>
                   {renderCell(item, columnKey as Columnkey)}
@@ -134,5 +151,4 @@ const NextTable = ({}: TableProps): ReactNode => {
     </NextUIProvider>
   );
 };
-
 export default NextTable;

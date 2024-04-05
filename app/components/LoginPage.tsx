@@ -19,9 +19,10 @@ const Login = ():ReactNode => {
         if(!passwordRef.current) return;
         const input = passwordRef.current.value;
         if(input === process.env.NEXT_PUBLIC_ADMIN_PW) {
-            //TODO
             login();
+            sessionStorage.setItem('loginState',process.env.NEXT_PUBLIC_ADMIN_PW);
             setOpenLogin(false);
+            window.scrollTo(0,0)
         };
         setError(true);
     }
@@ -48,7 +49,14 @@ const Login = ():ReactNode => {
       </main>
     </Portal>}
     <p className="cursor-pointer"
-          onClick={()=>setOpenLogin(true)}>{loggedIn ? '로그아웃' : '로그인'}</p>
+      onClick={()=>{
+        if (!loggedIn) setOpenLogin(true);
+        else {
+          logout();
+          sessionStorage.removeItem('loginState');
+          window.scrollTo(0,0);
+        };
+        }}>{loggedIn ? '로그아웃' : '로그인'}</p>
     </>)
 }
 
