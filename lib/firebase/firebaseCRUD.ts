@@ -4,13 +4,9 @@ import { db } from "../firebase/firebaseConfig";
 import { NoticeType } from "@/template/notice";
 // firebase
 import {
-  orderBy,
-  query,
   collection,
   getDocs,
-  limit,
   addDoc,
-  Timestamp,
   updateDoc,
   doc,
   increment,

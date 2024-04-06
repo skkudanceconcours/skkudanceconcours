@@ -11,10 +11,9 @@ const PrivacyPolicy = ({setPrivacyConfirm}:PrivacyPolicyProps):ReactNode => {
 
     return <div className="w-full flex flex-col items-center self-center">
         <Accordian
-          contents={[["개인정보 수집 및 이용 약관",개인정보수집동의],["개인정보 처리방침",개인정보처리방침]]}
-          defaultExpadedKeys={["개인정보 수집 및 이용 약관"]}/>
+          contents={[["개인정보 수집 및 이용 약관",개인정보수집동의],["개인정보 처리방침",개인정보처리방침]]}/>
         <div>
-            <div className="py-8 items-center">
+            <div className="py-8 items-center text-center leading-6">
                 <Checkbox
                   radius="sm"
                   onChange={({ target: { checked } }) => setPrivacyConfirm(checked)}
