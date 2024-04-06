@@ -31,17 +31,20 @@ const NotificationPage = async (): Promise<ReactNode> => {
   );
 };
 
-const fetchData = async (): Promise<{data:NoticeType[], totalPages: number}> => {
+const fetchData = async (): Promise<{
+  data: NoticeType[];
+  totalPages: number;
+}> => {
   try {
     console.log("fetchData");
     const data = await getAllNotices();
     if (data) {
-      return { data:data, totalPages: Math.ceil(data.length / DATA_PER_PAGE)}
+      return { data: data, totalPages: Math.ceil(data.length / DATA_PER_PAGE) };
     }
   } catch (error) {
     console.log(`error fetching data: ${error}`);
   }
-  return { data: [], totalPages: 0}
+  return { data: [], totalPages: 0 };
 };
 
 export default NotificationPage;

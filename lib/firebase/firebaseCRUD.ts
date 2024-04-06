@@ -16,7 +16,7 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 const storage = getStorage();
 const getCollection = (collectionName: "notices" | "reception" | "test") =>
   collection(db, collectionName);
-const getStorageRef = (refName: string) => ref(storage, refName);
+export const getStorageRef = (refName: string) => ref(storage, refName);
 
 //Create
 //임 시

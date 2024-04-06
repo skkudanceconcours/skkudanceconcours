@@ -9,7 +9,7 @@ import {
   TableCell,
   User,
 } from "@nextui-org/react";
-import { ReactNode, useCallback } from "react";
+import { ReactNode, useCallback, useEffect } from "react";
 
 const columns = [
   { name: "날짜", uid: "time" },
@@ -46,7 +46,12 @@ const NextTable = ({ receptions }: TableProps): ReactNode => {
     (reception: Reception, columnKey: Columnkey) => {
       switch (columnKey) {
         case "time":
-          return <p className="w-12">{reception.timestamp.toDateString()}</p>;
+          return (
+            <p className="w-12">
+              {reception.timestamp.toDateString()}" "
+              {reception.timestamp.toTimeString().slice(0, 8)}
+            </p>
+          );
         case "individualOrGroup":
           return reception.individualOrGroup;
         case "personalInfo":
