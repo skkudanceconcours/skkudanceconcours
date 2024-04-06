@@ -10,8 +10,7 @@ import { NoticeType } from "@/template/notice";
 import headerBackground from "@/public/images/sub_header_bg_ballet.jpg";
 // firebase
 import { getAllNotices } from "@/lib/firebase/firebaseCRUD";
-
-const DATA_PER_PAGE = 10;
+import { DATA_PER_PAGE } from "@/app/api/route";
 
 const NotificationPage = async (): Promise<ReactNode> => {
   const { data, totalPages } = await fetchData();
@@ -22,11 +21,7 @@ const NotificationPage = async (): Promise<ReactNode> => {
         <Image src={headerBackground} alt="header" layout="fill" />
       </div>
       <NoticeHeader />
-      <NoticeBody
-        data={data}
-        totalPages={totalPages}
-        DATA_PER_PAGE={DATA_PER_PAGE}
-      />
+      <NoticeBody data={data} totalPages={totalPages} />
     </main>
   );
 };
@@ -36,13 +31,12 @@ const fetchData = async (): Promise<{
   totalPages: number;
 }> => {
   try {
-    console.log("fetchData");
-    const data = await getAllNotices();
-    if (data) {
-      return { data: data, totalPages: Math.ceil(data.length / DATA_PER_PAGE) };
-    }
+    const res = await fetch("http://localhost:3000/api");
+    const data = await res.json();
+    console.log(res);
+    // return res;
   } catch (error) {
-    console.log(`error fetching data: ${error}`);
+    console.log(error);
   }
   return { data: [], totalPages: 0 };
 };

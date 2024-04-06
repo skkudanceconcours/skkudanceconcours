@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 // Types
 import { NoticeType, NoticeViewType } from "@/template/notice";
@@ -9,22 +9,19 @@ import Pagination from "@mui/material/Pagination";
 import Box from "@mui/material/Box";
 // components
 import NoticePreview from "./NoticePreview";
-import AddNotice from "./manage/AddNotice";
+import Settings from "./manage/Settings";
 // context
 import useNoticeStore from "@/lib/zustand/noticeStore";
 import useLoginStore from "@/lib/zustand/loginStore";
 
+import { DATA_PER_PAGE } from "@/app/api/route";
+
 interface NoticeBodyProps {
   data: NoticeType[];
   totalPages: number;
-  DATA_PER_PAGE: number;
 }
 
-const NoticeBody = ({
-  data,
-  totalPages,
-  DATA_PER_PAGE,
-}: NoticeBodyProps): ReactNode => {
+const NoticeBody = ({ data, totalPages }: NoticeBodyProps): ReactNode => {
   // useState
   const [focused, setFocused] = useState<boolean>(false);
   const [searchInput, setSearchInput] = useState<string>("");
@@ -96,7 +93,6 @@ const NoticeBody = ({
   function routePageHandler(e: React.ChangeEvent<unknown>, value: number) {
     router.push(`/notification?page=${value}`, { scroll: false });
   }
-
   return (
     <div className="relative flex w-4/5 flex-col items-center justify-start">
       <div className="relative flex h-[5vh] w-full items-center justify-between">
@@ -153,7 +149,7 @@ const NoticeBody = ({
           />
         </Box>
       </div>
-      {loginState === "admin" ? <AddNotice /> : null}
+      {loginState === "admin" ? <Settings /> : null}
     </div>
   );
 };

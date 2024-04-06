@@ -93,8 +93,8 @@ export const getAllNotices = async () => {
     const res = await getDocs(getCollection("notices"));
     // console.log(res.docs[0].data().reception)
     const datas: NoticeType[] = res.docs.map((doc) => {
-      const { timestamp } = doc.data().notice;
-      return { ...doc.data().notice, timeStamp: timestamp.toDate() };
+      const { timeStamp } = doc.data().notice;
+      return { ...doc.data().notice, timeStamp: timeStamp.toDate() };
     });
     const sorted_arr = sortNotices(datas);
     return sorted_arr;
