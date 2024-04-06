@@ -2,17 +2,17 @@
 import { getDownloadURL } from "firebase/storage";
 import { getStorageRef } from "./firebaseCRUD";
 
-export const downloadPDf = async (storage: string) => {
+export const downloadPDf = async (storage: string): Promise<undefined> => {
   try {
-    const url = await getDownloadURL(getStorageRef(storage));
-    const xhr = new XMLHttpRequest();
+    const url: string = await getDownloadURL(getStorageRef(storage));
+    const xhr: XMLHttpRequest = new XMLHttpRequest();
     xhr.responseType = "blob";
     xhr.onload = (event) => {
       const blob = xhr.response;
       console.log(blob);
 
-      const a = document.createElement("a");
-      const url = window.URL.createObjectURL(blob);
+      const a: HTMLAnchorElement = document.createElement("a");
+      const url: string = window.URL.createObjectURL(blob);
       a.href = url;
       a.download = storage;
       document.body.appendChild(a);

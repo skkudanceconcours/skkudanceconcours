@@ -9,7 +9,10 @@ import Pagination from "@mui/material/Pagination";
 import Box from "@mui/material/Box";
 // components
 import NoticePreview from "./NoticePreview";
+import AddNotice from "./manage/AddNotice";
+// context
 import useNoticeStore from "@/lib/zustand/noticeStore";
+import useLoginStore from "@/lib/zustand/loginStore";
 
 interface NoticeBodyProps {
   data: NoticeType[];
@@ -22,13 +25,12 @@ const NoticeBody = ({
   totalPages,
   DATA_PER_PAGE,
 }: NoticeBodyProps): ReactNode => {
-
   // useState
   const [focused, setFocused] = useState<boolean>(false);
   const [searchInput, setSearchInput] = useState<string>("");
   const [filteredData, setFilteredData] = useState<NoticeType[]>(data);
   const { setNoticeState } = useNoticeStore();
-
+  const { loginState } = useLoginStore();
   // dynamic_styles
   const searchClassName = focused
     ? "relative flex h-4/5 w-[20%] items-center justify-center rounded-md border-2 border-solid border-black duration-200"
@@ -151,6 +153,7 @@ const NoticeBody = ({
           />
         </Box>
       </div>
+      {loginState === "admin" ? <AddNotice /> : null}
     </div>
   );
 };

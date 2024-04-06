@@ -14,10 +14,6 @@ import { getAllNotices } from "@/lib/firebase/firebaseCRUD";
 const DATA_PER_PAGE = 10;
 
 const NotificationPage = async (): Promise<ReactNode> => {
-  // useState
-  // const [totalData, setTotalData] = useState<NoticeType[]>([]);
-  // const [totalPages, setTotalPages] = useState<number>(0);
-  // const [filteredData, setFilteredData] = useState<NoticeType[]>([]);
   const { data, totalPages } = await fetchData();
 
   return (

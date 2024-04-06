@@ -1,1 +1,7 @@
-export type Path = '/'|'/notification'|'/reception'|'/receptionadmin';
+export type Path =
+  | "/"
+  | "/notification"
+  | "notification/add_notice"
+  | "notification/details"
+  | "/reception"
+  | "/receptionadmin";
