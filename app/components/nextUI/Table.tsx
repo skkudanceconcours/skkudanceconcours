@@ -10,10 +10,10 @@ import {
   NextUIProvider,
   User,
 } from "@nextui-org/react";
-import { ReactNode, useCallback } from "react";
+import { ReactNode, useCallback, useEffect } from "react";
 
 const columns = [
-  { name: "날짜", uid:"time"},
+  { name: "날짜", uid: "time" },
   { name: "개인/단체", uid: "individualOrGroup" },
   { name: "참가자(대표자) 정보", uid: "personalInfo" },
   { name: "학교명", uid: "schoolName" },
@@ -22,7 +22,7 @@ const columns = [
   { name: "부문", uid: "part" },
   { name: "작품 제목", uid: "artTitle" },
   { name: "음악/포즈", uid: "music/pose" },
-  { name: "음악 다운로드", uid: "musicURL"},
+  { name: "음악 다운로드", uid: "musicURL" },
   { name: "참가자 명단", uid: "participants" },
 ];
 
@@ -39,34 +39,42 @@ type Columnkey =
   | "musicURL"
   | "participants";
 
-
 type TableProps = {
-  receptions: Reception[]
-}
-const NextTable = ({ receptions } : TableProps): ReactNode => {
-
+  receptions: Reception[];
+};
+const NextTable = ({ receptions }: TableProps): ReactNode => {
   const renderCell = useCallback(
     (reception: Reception, columnKey: Columnkey) => {
-        
       switch (columnKey) {
         case "time":
-          return <p className="w-12">{reception.timestamp.toDateString()}</p>;
+          return (
+            <p className="w-12">
+              {reception.timestamp.toDateString()}" "
+              {reception.timestamp.toTimeString().slice(0, 8)}
+            </p>
+          );
         case "individualOrGroup":
           return reception.individualOrGroup;
         case "personalInfo":
           return (
-            <User name
-            description={<div className="flex flex-col ml-1 gap-1">
-                <p className="font-bold text-sm text-black">{reception.name}</p>
-                <p>{reception.gender}</p>
-                <p>{reception.birth}</p>
-                <p>{reception.email}</p>
-                <p>{reception.grade || reception.leaderGrade}</p>
-                <p>{reception.contact}</p>
-            </div>}
-            avatarProps={{src:"https://t4.ftcdn.net/jpg/00/65/77/27/360_F_65772719_A1UV5kLi5nCEWI0BNLLiFaBPEkUbv5Fv.jpg"}}
-                />
-              
+            <User
+              name
+              description={
+                <div className="ml-1 flex flex-col gap-1">
+                  <p className="text-sm font-bold text-black">
+                    {reception.name}
+                  </p>
+                  <p>{reception.gender}</p>
+                  <p>{reception.birth}</p>
+                  <p>{reception.email}</p>
+                  <p>{reception.grade || reception.leaderGrade}</p>
+                  <p>{reception.contact}</p>
+                </div>
+              }
+              avatarProps={{
+                src: "https://t4.ftcdn.net/jpg/00/65/77/27/360_F_65772719_A1UV5kLi5nCEWI0BNLLiFaBPEkUbv5Fv.jpg",
+              }}
+            />
           );
         case "schoolName":
           return reception.school;
@@ -74,13 +82,20 @@ const NextTable = ({ receptions } : TableProps): ReactNode => {
           return reception.academy;
         case "instructorInfo":
           return (
-            <User name
-              description={<div className="flex flex-col ml-1 gap-1">
-                <p className="font-bold text-sm text-black">{reception.instructorName}</p>
-                <p>{reception.instructorContact}</p>
-              </div>}
-              avatarProps={{src:"https://t4.ftcdn.net/jpg/00/65/77/27/360_F_65772719_A1UV5kLi5nCEWI0BNLLiFaBPEkUbv5Fv.jpg"}}
-              />
+            <User
+              name
+              description={
+                <div className="ml-1 flex flex-col gap-1">
+                  <p className="text-sm font-bold text-black">
+                    {reception.instructorName}
+                  </p>
+                  <p>{reception.instructorContact}</p>
+                </div>
+              }
+              avatarProps={{
+                src: "https://t4.ftcdn.net/jpg/00/65/77/27/360_F_65772719_A1UV5kLi5nCEWI0BNLLiFaBPEkUbv5Fv.jpg",
+              }}
+            />
           );
         case "part":
           return (
@@ -95,44 +110,48 @@ const NextTable = ({ receptions } : TableProps): ReactNode => {
         case "music/pose":
           return reception.musicOrPose;
         case "musicURL":
-          return <div className="w-32 overflow-x-auto flex flex-wrap">
-          <a
-           className="cursor-pointer underline"
-           target="_blank"
-           href={reception.musicFileURL ?? undefined}>{reception.musicFileURL}</a>
-           </div>;
+          return (
+            <div className="flex w-32 flex-wrap overflow-x-auto">
+              <a
+                className="cursor-pointer underline"
+                target="_blank"
+                href={reception.musicFileURL ?? undefined}
+              >
+                {reception.musicFileURL}
+              </a>
+            </div>
+          );
         case "participants":
-          return( <div>
-            {reception.participants?.map(participant => <p key={participant}>{participant}</p>)}
-          </div>);
+          return (
+            <div>
+              {reception.participants?.map((participant) => (
+                <p key={participant}>{participant}</p>
+              ))}
+            </div>
+          );
       }
     },
     [],
   );
 
-
   return (
-      <Table
-        aria-label="receptions"
-        className="h-full max-h-screen overflow-y-scroll"
-      >
-        <TableHeader columns={columns}>
-          {column => (
-            <TableColumn key={column.uid}>{column.name}</TableColumn>
-          )}
-        </TableHeader>
-        <TableBody items={receptions}>
-          {item => (
-            <TableRow key={item.timestamp.toISOString() }>
-              {(columnKey) => (
-                <TableCell>
-                  {renderCell(item, columnKey as Columnkey)}
-                </TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+    <Table
+      aria-label="receptions"
+      className="h-full max-h-screen overflow-y-scroll"
+    >
+      <TableHeader columns={columns}>
+        {(column) => <TableColumn key={column.uid}>{column.name}</TableColumn>}
+      </TableHeader>
+      <TableBody items={receptions}>
+        {(item) => (
+          <TableRow key={item.timestamp.toISOString()}>
+            {(columnKey) => (
+              <TableCell>{renderCell(item, columnKey as Columnkey)}</TableCell>
+            )}
+          </TableRow>
+        )}
+      </TableBody>
+    </Table>
   );
 };
 export default NextTable;
