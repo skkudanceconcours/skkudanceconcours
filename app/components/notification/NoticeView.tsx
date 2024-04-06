@@ -2,13 +2,16 @@ import React, { ReactNode } from "react";
 // Types
 import { NoticeViewType } from "@/template/notice";
 
-const NoticeView = ( {contents, title, viewCount}  : NoticeViewType): ReactNode => {
+const NoticeView = ({
+  timeStamp,
+  contents,
+  title,
+  viewCount,
+}: NoticeViewType): ReactNode => {
+  const formattedDate: string = timeStamp
+    ? `${timeStamp.getFullYear().toString().slice(-2)}-${(timeStamp.getMonth() + 1).toString().padStart(2, "0")}-${timeStamp.getDate().toString().padStart(2, "0")} ${timeStamp.getHours().toString().padStart(2, "0")}:${timeStamp.getMinutes().toString().padStart(2, "0")}`
+    : "";
 
-  // const formattedDate: string = data.timestamp
-  //   ? `${data.timestamp.getFullYear().toString().slice(-2)}-${(data.timestamp.getMonth() + 1).toString().padStart(2, "0")}-${data.timestamp.getDate().toString().padStart(2, "0")} ${data.timestamp.getHours().toString().padStart(2, "0")}:${data.timestamp.getMinutes().toString().padStart(2, "0")}`
-  //   : "";
-
-  const formattedDate = "";
   console.log(formattedDate); // 출력: "24-04-02 18:37"
   return (
     <div className="relative flex h-[20vh] w-4/5 flex-col justify-start">

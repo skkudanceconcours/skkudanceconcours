@@ -231,7 +231,7 @@ const ReceptionForm = (): ReactNode => {
   return (
     <div className="flex flex-col">
       <div ref={scrollRef}></div>
-      <form className={`flex gap-20 ${quicksand.className}`}>
+      <form className={`flex flex-col lg:flex-row lg:gap-20 ${quicksand.className}`}>
         <div>
           <Selection
             value={individualOrGroup}
@@ -246,7 +246,7 @@ const ReceptionForm = (): ReactNode => {
             options={individualOrGroupOption}
             ref={individualOrGroupRef}
           />
-          <div className="flex gap-10 my-10">
+          <div className="flex flex-col lg:flex-row lg:gap-10 lg:my-10">
             <div className="p-8 flex flex-col">
               <label className="text-xl">
                 {individual ? "참가자 정보" : "대표자 정보"}

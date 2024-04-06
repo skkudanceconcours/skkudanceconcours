@@ -1,18 +1,14 @@
 "use client";
-import React, { ReactNode, useContext, useEffect } from "react";
+import React, { ReactNode } from "react";
 import Image from "next/image";
-// Types
-import { NoticeViewType } from "@/template/notice";
-import { Timestamp } from "firebase/firestore";
 // img & icons
 import headerBackground from "@/public/images/sub_header_bg_ballet.jpg";
 import useNoticeStore from "@/lib/zustand/noticeStore";
-
 // components
 import NoticeHeader from "@/app/components/notification/NoticeHeader";
 import NoticeView from "@/app/components/notification/NoticeView";
 const DetailsPage = (): ReactNode => {
-  const { contents, title, timeStamp, viewCount ,setNoticeState } = useNoticeStore();
+  const { contents, title, timeStamp, viewCount } = useNoticeStore();
 
   return (
     <main className="relative flex min-h-screen w-full flex-col items-center justify-start">

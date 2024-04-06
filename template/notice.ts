@@ -1,16 +1,13 @@
-export type NoticeType = {
-  id?: string;
-  num?: number;
+export interface NoticeViewType {
   contents: string;
   timeStamp: Date;
   title: string;
   viewCount: number;
+};
+export interface NoticeType extends NoticeViewType {
+  id?: string;
+  num?: number;
   important: boolean;
 };
 
-export type NoticeViewType = {
-  contents: string;
-  timeStamp: Date;
-  title: string;
-  viewCount: number;
-};
+

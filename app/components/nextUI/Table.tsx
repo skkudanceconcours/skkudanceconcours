@@ -7,7 +7,6 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  NextUIProvider,
   User,
 } from "@nextui-org/react";
 import { ReactNode, useCallback, useEffect } from "react";
@@ -49,7 +48,7 @@ const NextTable = ({ receptions }: TableProps): ReactNode => {
         case "time":
           return (
             <p className="w-12">
-              {reception.timestamp.toDateString()}" "
+              {reception.timestamp.toDateString()}
               {reception.timestamp.toTimeString().slice(0, 8)}
             </p>
           );

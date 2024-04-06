@@ -3,16 +3,15 @@ import {Accordion, AccordionItem } from "@nextui-org/react";
 
 type AccordianProps = {
     contents: [string,string][]
-    defaultExpadedKeys?: string[]
 }
-const NextAccordian = ({contents,defaultExpadedKeys}:AccordianProps) :ReactNode => {
+const NextAccordian = ({contents}:AccordianProps) :ReactNode => {
 
     return(
-      <div className="w-[60rem] self-center mb-2">
+      <div className="w-full lg:w-[60rem] self-center mb-2">
         <Accordion
+          fullWidth
           variant="shadow"
           isCompact
-          defaultExpandedKeys={defaultExpadedKeys}
           >
           {contents.map(item => {
             const [title,content] = item;

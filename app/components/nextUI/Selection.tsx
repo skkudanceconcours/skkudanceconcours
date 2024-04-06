@@ -1,6 +1,6 @@
 import { ChangeEvent, ForwardedRef,ReactNode, RefObject, forwardRef } from "react";
 
-import {NextUIProvider, Select, SelectItem } from "@nextui-org/react";
+import { Select, SelectItem } from "@nextui-org/react";
 import React from "react";
 
 type SelectionProps = {
