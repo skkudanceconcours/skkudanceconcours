@@ -18,7 +18,7 @@ const NotificationPage = async (): Promise<ReactNode> => {
 
   return (
       <main className="relative flex min-h-screen w-full flex-col items-center justify-start">
-        <div className="relative flex h-[50vh] min-h-[40%] w-full items-center justify-center bg-yellow-300 text-5xl">
+        <div className="relative flex h-[50vh] min-h-[40%] w-full items-center justify-center text-5xl">
           <Image className="w-full h-full object-cover lg:object-fill" src={headerBackground} alt="header" layout="cover" />
         </div>
         <NoticeHeader/>
