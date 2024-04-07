@@ -11,9 +11,30 @@ import headerBackground from "@/public/images/sub_header_bg_ballet.jpg";
 // firebase
 import { baseUrl } from "@/lib/functions/dynamicURL";
 
+const fetchData = async (): Promise<{
+  data: NoticeType[];
+  totalPages: number;
+}> => {
+  try {
+    console.log("fetchData");
+    console.log(`${baseUrl}/getNotice`);
+
+    const res = await fetch(`${baseUrl}/getNotice`, {
+      method: "GET",
+      next: { revalidate: 60 }, //revalidate every 60 seconds
+    });
+    const { data, totalPages } = await res.json();
+    // console.log('data',data);
+    return { data: data, totalPages: totalPages };
+  } catch (error) {
+    console.log(error);
+  }
+  return { data: [], totalPages: 0 };
+};
+
 const NotificationPage = async (): Promise<ReactNode> => {
   const { data, totalPages } = await fetchData();
-  
+
   return (
     <main className="relative flex min-h-screen w-full flex-col items-center justify-start">
       <div className="relative flex h-[50vh] min-h-[40%] w-full items-center justify-center bg-yellow-300 text-5xl">
@@ -28,27 +49,6 @@ const NotificationPage = async (): Promise<ReactNode> => {
       <NoticeBody data={data} totalPages={totalPages} />
     </main>
   );
-};
-
-const fetchData = async (): Promise<{
-  data: NoticeType[];
-  totalPages: number;
-}> => {
-  try {
-    console.log('fetchData');
-    const res = await fetch(`${baseUrl}/getNotice`,
-      {
-        method : 'GET',
-        next: { revalidate: 60 }, //revalidate every 60 seconds
-      },
-    );
-    const { data, totalPages } = await res.json();
-    // console.log('data',data);
-    return { data: data, totalPages: totalPages };
-  } catch (error) {
-    console.log(error);
-  }
-  return { data: [], totalPages: 0 };
 };
 
 export default NotificationPage;
