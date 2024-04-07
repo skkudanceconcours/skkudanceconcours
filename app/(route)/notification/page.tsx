@@ -9,12 +9,11 @@ import { NoticeType } from "@/template/notice";
 // img & icons
 import headerBackground from "@/public/images/sub_header_bg_ballet.jpg";
 // firebase
-import { DATA_PER_PAGE } from "@/public/constants";
 import { baseUrl } from "@/lib/functions/dynamicURL";
 
 const NotificationPage = async (): Promise<ReactNode> => {
   const { data, totalPages } = await fetchData();
-
+  
   return (
     <main className="relative flex min-h-screen w-full flex-col items-center justify-start">
       <div className="relative flex h-[50vh] min-h-[40%] w-full items-center justify-center bg-yellow-300 text-5xl">
@@ -36,10 +35,16 @@ const fetchData = async (): Promise<{
   totalPages: number;
 }> => {
   try {
-    const res = await fetch(`${baseUrl}/api/getNotice`);
-    const data = await res.json();
-    console.log(data);
-    // return res;
+    console.log('fetchData');
+    const res = await fetch(`${baseUrl}/getNotice`,
+      {
+        method : 'GET',
+        next: { revalidate: 60 }, //revalidate every 60 seconds
+      },
+    );
+    const { data, totalPages } = await res.json();
+    // console.log('data',data);
+    return { data: data, totalPages: totalPages };
   } catch (error) {
     console.log(error);
   }

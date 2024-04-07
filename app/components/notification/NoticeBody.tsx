@@ -14,7 +14,7 @@ import Settings from "./manage/Settings";
 import useNoticeStore from "@/lib/zustand/noticeStore";
 import useLoginStore from "@/lib/zustand/loginStore";
 
-import { DATA_PER_PAGE } from "@/app/api/getNotice";
+import { DATA_PER_PAGE } from "@/public/constants";
 
 interface NoticeBodyProps {
   data: NoticeType[];
@@ -71,7 +71,7 @@ const NoticeBody = ({ data, totalPages }: NoticeBodyProps): ReactNode => {
       idx++;
       return (
         <NoticePreview
-          key={notice.id}
+          key={idx}
           id={notice.id}
           num={data.length - idx + 1}
           contents={notice.contents}

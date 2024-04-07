@@ -86,18 +86,17 @@ function sortNotices(data: NoticeType[]): NoticeType[] {
 
 export const getAllNotices = async () => {
   try {
+  console.log('getAllNotices');
     const res = await getDocs(getCollection("notices"));
-    // console.log(res.docs[0].data().reception)
     const datas: NoticeType[] = res.docs.map((doc) => {
       const { timeStamp } = doc.data().notice;
-      return { ...doc.data().notice, timeStamp: timeStamp.toDate() };
+      return { ...doc.data().notice, timeStamp: new Date(timeStamp.toDate()) };
     });
     const sorted_arr = sortNotices(datas);
     return sorted_arr;
   } catch (error) {
-    console.log(error);
-
-    console.log(`error Occured on firebaseCRUD: ${error}`);
+    console.log(`error occured on firebaseCRUD: ${error}`);
+    return [];
   }
 };
 
@@ -120,7 +119,7 @@ export const getAllReception = async (): Promise<Reception[]> => {
 // Update
 export const updateViewCount = async (id: string) => {
   try {
-    const res = await updateDoc(doc(db, "notices", id), {
+    await updateDoc(doc(db, "notices", id), {
       "notice.viewCount": increment(1),
     });
     console.log("증가 잘됨");
@@ -130,5 +129,3 @@ export const updateViewCount = async (id: string) => {
 };
 
 // Delete
-
-// 예시 데이터 넣기

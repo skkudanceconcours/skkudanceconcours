@@ -20,6 +20,7 @@ const NoticePreview = ({
   important,
   updateNoticeCTX,
 }: NoticePreviewProps): ReactNode => {
+  timeStamp = new Date(timeStamp);
   // 선언
   const router = useRouter();
   const month: String = String(timeStamp.getMonth() + 1).padStart(
