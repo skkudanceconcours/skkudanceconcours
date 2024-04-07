@@ -126,7 +126,7 @@ const ReceptionForm = (): ReactNode => {
       console.log(element)
       if (ref.current && !element) {
         setError(true);
-        error = true
+        error = true;
       };
     });
       
@@ -145,13 +145,12 @@ const ReceptionForm = (): ReactNode => {
     ).forEach(([ref, setError]) => {
       if (ref.current && !ref.current.value) {
         setError(true);
-        error = true
+        error = true;
       };
     });
 
     //music file check
     if(musicFileRef.current && !musicFile){
-      console.log('music error')
       setMusicFileError(true);
       error = true;   
     }
