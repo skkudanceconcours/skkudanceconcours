@@ -9,8 +9,8 @@ import { NoticeType } from "@/template/notice";
 // img & icons
 import headerBackground from "@/public/images/sub_header_bg_ballet.jpg";
 // firebase
-import { getAllNotices } from "@/lib/firebase/firebaseCRUD";
-import { DATA_PER_PAGE } from "@/app/api/route";
+import { DATA_PER_PAGE } from "@/public/constants";
+import { baseUrl } from "@/lib/functions/dynamicURL";
 
 const NotificationPage = async (): Promise<ReactNode> => {
   const { data, totalPages } = await fetchData();
@@ -36,9 +36,9 @@ const fetchData = async (): Promise<{
   totalPages: number;
 }> => {
   try {
-    const res = await fetch("http://localhost:3000/api");
+    const res = await fetch(`${baseUrl}/api/getNotice`);
     const data = await res.json();
-    console.log(res);
+    console.log(data);
     // return res;
   } catch (error) {
     console.log(error);

@@ -19,5 +19,5 @@ export type Reception = {
     artTitle: string | null
     musicFileURL: string | null
     musicOrPose: musicOrPose | null
-    participants: string[] | null
+    participants: string[]
 }

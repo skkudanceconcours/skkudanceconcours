@@ -1,7 +1,6 @@
 import { getAllNotices } from "@/lib/firebase/firebaseCRUD";
+import { DATA_PER_PAGE } from "@/public/constants";
 export const dynamic = "force-dynamic"; // defaults to auto
-
-export const DATA_PER_PAGE = 10;
 
 export async function GET(request: Request) {
   try {

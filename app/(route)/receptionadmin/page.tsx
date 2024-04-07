@@ -8,7 +8,7 @@ const ReceptionAdmin = async (): Promise<ReactNode> => {
 
   return (
     <main className="relative flex h-screen w-screen flex-col items-center">
-      <h1 className="relative my-12 flex h-[15vh] w-4/5 flex-col justify-center text-5xl font-semibold">
+      <h1 className="relative lg:my-12 flex h-[15vh] w-4/5 flex-col justify-center text-2xl lg:text-5xl font-semibold">
         콩쿨 접수 현황
       </h1>
 

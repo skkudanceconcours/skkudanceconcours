@@ -14,7 +14,7 @@ import Settings from "./manage/Settings";
 import useNoticeStore from "@/lib/zustand/noticeStore";
 import useLoginStore from "@/lib/zustand/loginStore";
 
-import { DATA_PER_PAGE } from "@/app/api/route";
+import { DATA_PER_PAGE } from "@/app/api/getNotice";
 
 interface NoticeBodyProps {
   data: NoticeType[];
