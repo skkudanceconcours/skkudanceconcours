@@ -25,7 +25,7 @@ interface ModalProps {
 const Modal = ({ modalHandler }: ModalProps): ReactNode => {
   // Declare
   const router = useRouter();
-  const path: Path = "notification/add_notice";
+  const path: Path = "/notification/add_notice";
   const boxRef = useRef<HTMLElement>(null);
   //   const [isOpen, outsideClick] = useDetectClose(boxRef, false);
 

@@ -1,15 +1,15 @@
-import React from "react";
+import React, { ReactNode } from "react";
 // editor
 import { QuillEditor } from "@/app/components/QuillEditor";
 import NoticeHeader from "@/app/components/notification/NoticeHeader";
 // components
 
-const page = () => {
+const Page = ():ReactNode => {
   return (
     <main className="relative flex h-screen min-h-screen w-full flex-col items-center justify-start">
-      <QuillEditor />
+      {/* <QuillEditor /> */}
     </main>
   );
 };
 
-export default page;
+export default Page;
