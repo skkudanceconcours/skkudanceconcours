@@ -80,7 +80,7 @@ function sortNotices(data: NoticeType[]): NoticeType[] {
       return 1;
     }
 
-    return b.timeStamp.getSeconds() - a.timeStamp.getSeconds();
+    return b.timeStamp.getTime() - a.timeStamp.getTime();
   });
 }
 
