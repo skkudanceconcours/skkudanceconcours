@@ -13,14 +13,15 @@ import ReactQuill from "react-quill";
 // Quill.register("modules/ImageResize", ImageResize);
 // Icons & Images
 import { Box, InputLabel, TextField } from "@mui/material";
-import { Button } from "@nextui-org/react";
 // Type
 import { NoticeType } from "@/template/notice";
 // firebase
-import { setNotices, getStorageRef } from "@/lib/firebase/firebaseCRUD";
+import { getStorageRef } from "@/lib/firebase/firebaseCRUD";
 import { uploadBytes, getDownloadURL, ref } from "firebase/storage";
 // 고유 식별자 생성
 import { v4 as uuidv4 } from "uuid";
+// components
+import SubmitBtn from "./SubmitBtn";
 
 // Editor Setting
 const formats = [
@@ -58,22 +59,12 @@ export const QuillEditor = (): ReactNode => {
   const [contents, setContents] = useState<string>("");
   const quillRef = useRef<ReactQuill>(null);
 
-  // State Handling
-  function handleInput(input: string, value: string | boolean) {
-    // 제목
-    if (input === "title") {
-      setNoticeInput((prev) => ({
-        ...prev,
-        title: value as string,
-      }));
-    }
-    // 중요 공지임
-    if (input === "important") {
-      setNoticeInput((prev) => ({
-        ...prev,
-        important: true,
-      }));
-    }
+  // Functions
+  function handleInput(value: string) {
+    setNoticeInput((prev) => ({
+      ...prev,
+      title: value as string,
+    }));
   }
 
   // Image base64 to url
@@ -125,23 +116,6 @@ export const QuillEditor = (): ReactNode => {
     };
   }, []);
 
-  // Submit
-  const submitHandler = async (): Promise<undefined> => {
-    try {
-      const data: NoticeType = {
-        ...noticeInput,
-        contents: contents,
-        timeStamp: new Date(),
-      };
-      setNotices(data);
-    } catch (error) {
-      console.log("Error Occured on Submitting!", error);
-    }
-  };
-
-  // useEffect(() => {
-  //   console.log(noticeInput);
-  // }, [noticeInput]);
   return (
     <Box
       component="form"
@@ -162,7 +136,7 @@ export const QuillEditor = (): ReactNode => {
         fullWidth
         onChange={(
           e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-        ) => handleInput("title", e.currentTarget.value)}
+        ) => handleInput(e.currentTarget.value as string)}
       />
       <ReactQuill
         style={{ width: "100%", height: "100%" }}
@@ -172,14 +146,7 @@ export const QuillEditor = (): ReactNode => {
         onChange={setContents}
         ref={quillRef}
       />
-      <Button
-        color="primary"
-        variant="solid"
-        className="fixed bottom-4 right-4"
-        onClick={submitHandler}
-      >
-        Submit
-      </Button>
+      <SubmitBtn noticeInput={noticeInput} contents={contents} />
     </Box>
   );
 };

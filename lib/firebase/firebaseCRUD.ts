@@ -25,6 +25,7 @@ export const setNotices = async (notice: NoticeType) => {
     const res = await addDoc(getCollection("notices"), {
       notice,
     });
+    console.log("제대로 올라감");
   } catch (error) {
     console.log(error);
   }
