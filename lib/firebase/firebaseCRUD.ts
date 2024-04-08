@@ -86,11 +86,15 @@ function sortNotices(data: NoticeType[]): NoticeType[] {
 
 export const getAllNotices = async () => {
   try {
-  console.log('getAllNotices');
+    console.log("getAllNotices");
     const res = await getDocs(getCollection("notices"));
     const datas: NoticeType[] = res.docs.map((doc) => {
       const { timeStamp } = doc.data().notice;
-      return { ...doc.data().notice, timeStamp: new Date(timeStamp.toDate()) };
+      return {
+        id: doc.id,
+        ...doc.data().notice,
+        timeStamp: new Date(timeStamp.toDate()),
+      };
     });
     const sorted_arr = sortNotices(datas);
     return sorted_arr;

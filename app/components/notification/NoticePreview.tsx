@@ -5,10 +5,8 @@ import { useRouter } from "next/navigation";
 import { NoticeType, NoticeViewType } from "@/template/notice";
 // firebase
 import { updateViewCount } from "@/lib/firebase/firebaseCRUD";
-
-interface NoticePreviewProps extends NoticeType {
-  updateNoticeCTX: (data: NoticeViewType) => void;
-}
+// context
+import useNoticeStore from "@/lib/zustand/noticeStore";
 
 const NoticePreview = ({
   id,
@@ -18,15 +16,12 @@ const NoticePreview = ({
   title,
   viewCount,
   important,
-  updateNoticeCTX,
-}: NoticePreviewProps): ReactNode => {
+}: NoticeType): ReactNode => {
   timeStamp = new Date(timeStamp);
   // 선언
   const router = useRouter();
-  const month: String = String(timeStamp.getMonth() + 1).padStart(
-    2,
-    "0",
-  );
+  const { setNoticeState } = useNoticeStore();
+  const month: String = String(timeStamp.getMonth() + 1).padStart(2, "0");
   const day: String = String(timeStamp.getDate()).padStart(2, "0"); // 일을 가져와서 두 자리 수로 만듭니다.
   const dateString: string = `${month}-${day}`;
 
@@ -43,6 +38,7 @@ const NoticePreview = ({
       <div className="flex w-[64%] items-center justify-center  hover:underline">
         <div
           onClick={() => {
+            console.log(id);
             const queryData: NoticeViewType = {
               contents,
               timeStamp: timeStamp,
@@ -50,9 +46,9 @@ const NoticePreview = ({
               viewCount: ++viewCount, // 백엔드에 업데이트 되기 전에 Client에서 미리 표시
             };
 
-            router.push("/notification/details", { scroll: false });
             updateViewCount(id as string);
-            updateNoticeCTX(queryData);
+            setNoticeState(queryData);
+            router.push("/notification/details", { scroll: false });
           }}
         >
           {title}

@@ -17,14 +17,13 @@ const fetchData = async (): Promise<{
 }> => {
   try {
     console.log("fetchData");
-    console.log(`${baseUrl}/getNotice`);
+    console.log(`${baseUrl}/api/getNotice`);
 
-    const res = await fetch(`${baseUrl}/getNotice`, {
-      method: "GET",
+    const res = await fetch(`${baseUrl}/api/getNotice`, {
       next: { revalidate: 60 }, //revalidate every 60 seconds
     });
+
     const { data, totalPages } = await res.json();
-    // console.log('data',data);
     return { data: data, totalPages: totalPages };
   } catch (error) {
     console.log(error);

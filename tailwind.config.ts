@@ -1,5 +1,5 @@
 import type { Config } from "tailwindcss";
-import {nextui} from '@nextui-org/react'
+import { nextui } from "@nextui-org/react";
 
 const config: Config = {
   content: [
@@ -10,15 +10,13 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        
-      },
+      backgroundImage: {},
       fontFamily: {
-        HSBombaram: ['var(--font-HSBombaram']
-      }
+        HSBombaram: ["var(--font-HSBombaram"],
+      },
     },
   },
   darkMode: "class",
-  plugins: [nextui()],
+  plugins: [nextui(), require("tailwind-scrollbar-hide")],
 };
 export default config;
