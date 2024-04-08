@@ -1,5 +1,12 @@
 "use client";
-import React, { RefObject, useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  ReactNode,
+  RefObject,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import "react-quill/dist/quill.snow.css";
 import ReactQuill from "react-quill";
 // import { ImageResize } from "quill-image-resize-module-ts";
@@ -46,7 +53,7 @@ const initNotice: NoticeType = {
   viewCount: 0,
 };
 
-export const QuillEditor = () => {
+export const QuillEditor = (): ReactNode => {
   const [noticeInput, setNoticeInput] = useState<NoticeType>(initNotice);
   const [contents, setContents] = useState<string>("");
   const quillRef = useRef<ReactQuill>(null);
@@ -83,7 +90,6 @@ export const QuillEditor = () => {
       const range = editor.getSelection(true);
 
       try {
-        // 파일명을 "image/Date.now()"로 저장
         const uniqueId = uuidv4(); // UUID 생성
         const storageRef = getStorageRef(`이미지/${uniqueId}`);
         const snapshot = await uploadBytes(storageRef, file);

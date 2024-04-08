@@ -4,7 +4,7 @@ import { QuillEditor } from "@/app/components/QuillEditor";
 import NoticeHeader from "@/app/components/notification/NoticeHeader";
 // components
 
-const Page = ():ReactNode => {
+const Page = (): ReactNode => {
   return (
     <main className="relative flex h-screen min-h-screen w-full flex-col items-center justify-start">
       <QuillEditor />
