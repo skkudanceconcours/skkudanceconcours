@@ -141,9 +141,10 @@ const NoticeBody = ({ data, totalPages }: NoticeBodyProps): ReactNode => {
         >
           <Pagination
             count={totalPages}
-            defaultPage={page_number}
+            defaultPage={1}
             shape="rounded"
             onChange={routePageHandler}
+            variant="text"
           />
         </Box>
       </div>
