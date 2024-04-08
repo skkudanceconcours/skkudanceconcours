@@ -1,9 +1,11 @@
 import { ReactNode } from "react";
 import Navbar from "./Navbar";
 
+
 const Header = (): ReactNode => {
   return (
-    <div className="h-20 lg:h-24 p-2 lg:p-0 w-screen flex justify-center z-10 ">
+    <div className="z-10 flex h-40 w-screen justify-center p-2 lg:h-60 lg:p-0 ">
+      
       <Navbar className="flex items-center justify-center" />
     </div>
   );

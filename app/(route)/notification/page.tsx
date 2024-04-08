@@ -36,7 +36,7 @@ const NotificationPage = async (): Promise<ReactNode> => {
   const { data, totalPages } = await fetchData();
 
   return (
-    <main className="relative flex min-h-screen w-full flex-col items-center justify-start">
+    <main className="relative flex min-h-screen w-full pb-20 flex-col items-center justify-start">
       <div className="relative flex h-[50vh] min-h-[40%] w-full items-center justify-center bg-yellow-300 text-5xl">
         <Image
           className="h-full w-full object-cover lg:object-fill"

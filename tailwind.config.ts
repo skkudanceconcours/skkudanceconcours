@@ -14,7 +14,8 @@ const config: Config = {
         
       },
       fontFamily: {
-        HSBombaram: ['var(--font-HSBombaram']
+        HSBombaram: ['var(--font-HSBombaram)'],
+        UniverseLTPro: ['var(--font-UniverseLTPro)'],
       }
     },
   },
