@@ -19,12 +19,12 @@ const getCollection = (collectionName: "notices" | "reception" | "test") =>
 export const getStorageRef = (refName: string) => ref(storage, refName);
 
 //Create
-//임 시
 export const setNotices = async (notice: NoticeType) => {
   try {
     const res = await addDoc(getCollection("notices"), {
       notice,
     });
+    // console.log("제대로 올라감");
   } catch (error) {
     console.log(error);
   }
@@ -80,17 +80,21 @@ function sortNotices(data: NoticeType[]): NoticeType[] {
       return 1;
     }
 
-    return b.timeStamp.getSeconds() - a.timeStamp.getSeconds();
+    return b.timeStamp.getTime() - a.timeStamp.getTime();
   });
 }
 
 export const getAllNotices = async () => {
   try {
-  console.log('getAllNotices');
+    console.log("getAllNotices");
     const res = await getDocs(getCollection("notices"));
     const datas: NoticeType[] = res.docs.map((doc) => {
       const { timeStamp } = doc.data().notice;
-      return { ...doc.data().notice, timeStamp: new Date(timeStamp.toDate()) };
+      return {
+        id: doc.id,
+        ...doc.data().notice,
+        timeStamp: new Date(timeStamp.toDate()),
+      };
     });
     const sorted_arr = sortNotices(datas);
     return sorted_arr;
@@ -114,6 +118,17 @@ export const getAllReception = async (): Promise<Reception[]> => {
     console.log(error);
     return [];
   }
+};
+
+// PDF 받아오기
+export const getPDF = async (PDFPath: string): Promise<string> => {
+  try {
+    const url = await getDownloadURL(getStorageRef(PDFPath));
+    return url;
+  } catch (error) {
+    console.log(error);
+  }
+  return "failed!";
 };
 
 // Update

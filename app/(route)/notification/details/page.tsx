@@ -16,7 +16,12 @@ const DetailsPage = (): ReactNode => {
         <Image src={headerBackground} alt="header" layout="fill" />
       </div>
       <NoticeHeader />
-      <NoticeView contents={contents} timeStamp={timeStamp} title={title} viewCount={viewCount}  />
+      <NoticeView
+        contents={contents}
+        timeStamp={timeStamp}
+        title={title}
+        viewCount={viewCount}
+      />
     </main>
   );
 };

@@ -13,5 +13,6 @@ export async function GET() {
   } catch (error) {
     console.log(`error fetching data: ${error}`);
     return NextResponse.json({ data: [], totalPages: 0 });
+    
   }
 }

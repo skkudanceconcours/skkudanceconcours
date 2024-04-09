@@ -20,7 +20,6 @@ const Login = ():ReactNode => {
         const input = passwordRef.current.value;
         if(input === process.env.NEXT_PUBLIC_ADMIN_PW) {
             login();
-            sessionStorage.setItem('loginState',process.env.NEXT_PUBLIC_ADMIN_PW);
             setOpenLogin(false);
             window.scrollTo(0,0)
         };
@@ -65,7 +64,6 @@ const Login = ():ReactNode => {
         if (!loggedIn) setOpenLogin(true);
         else {
           logout();
-          sessionStorage.removeItem('loginState');
           window.scrollTo(0,0);
         };
         }}>{loggedIn ? '로그아웃' : '관리자 로그인'}</p>

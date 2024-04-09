@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { ReactNode } from "react";
 import logo from "@/public/images/무용학과로고_반전.png";
 import Image from "next/image";
-import { UniverseLTPro } from "@/public/fonts/font";
 
 const Navbar = ({ className }: { className?: string }): ReactNode => {
   const router = useRouter();

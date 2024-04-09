@@ -2,7 +2,7 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 // Types
-import { NoticeType, NoticeViewType } from "@/template/notice";
+import { NoticeType } from "@/template/notice";
 // Images & Icons
 import { IoIosSearch } from "react-icons/io";
 import Pagination from "@mui/material/Pagination";
@@ -11,7 +11,6 @@ import Box from "@mui/material/Box";
 import NoticePreview from "./NoticePreview";
 import Settings from "./manage/Settings";
 // context
-import useNoticeStore from "@/lib/zustand/noticeStore";
 import useLoginStore from "@/lib/zustand/loginStore";
 
 import { DATA_PER_PAGE } from "@/public/constants";
@@ -26,7 +25,6 @@ const NoticeBody = ({ data, totalPages }: NoticeBodyProps): ReactNode => {
   const [focused, setFocused] = useState<boolean>(false);
   const [searchInput, setSearchInput] = useState<string>("");
   const [filteredData, setFilteredData] = useState<NoticeType[]>(data);
-  const { setNoticeState } = useNoticeStore();
   const { loginState } = useLoginStore();
   // dynamic_styles
   const searchClassName = focused
@@ -79,7 +77,6 @@ const NoticeBody = ({ data, totalPages }: NoticeBodyProps): ReactNode => {
           title={notice.title}
           viewCount={notice.viewCount}
           important={notice.important}
-          updateNoticeCTX={(data: NoticeViewType) => setNoticeState(data)}
         />
       );
     })
@@ -93,9 +90,10 @@ const NoticeBody = ({ data, totalPages }: NoticeBodyProps): ReactNode => {
   function routePageHandler(e: React.ChangeEvent<unknown>, value: number) {
     router.push(`/notification?page=${value}`, { scroll: false });
   }
+
   return (
     <div className="relative flex w-4/5 flex-col items-center justify-start">
-      <div className="relative flex h-[5vh] w-full items-center justify-between">
+      <div className="relative mb-4 flex h-[5vh] w-full items-center justify-between">
         <div>
           Total {filteredData.length}건 {page_number}페이지
         </div>
@@ -143,9 +141,10 @@ const NoticeBody = ({ data, totalPages }: NoticeBodyProps): ReactNode => {
         >
           <Pagination
             count={totalPages}
-            defaultPage={page_number}
+            defaultPage={1}
             shape="rounded"
             onChange={routePageHandler}
+            variant="text"
           />
         </Box>
       </div>

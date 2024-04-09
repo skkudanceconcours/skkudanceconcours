@@ -1,7 +1,9 @@
 export type Path =
   | "/"
   | "/notification"
-  | "/notification/add_notice"
+  | "/notification?page=1"
+  | "/notification/addNotice"
   | "/notification/details"
+  | "/notification/guideline"
   | "/reception"
   | "/receptionadmin";
