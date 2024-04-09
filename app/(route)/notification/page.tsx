@@ -24,6 +24,7 @@ const fetchData = async (): Promise<{
     });
 
     const { data, totalPages } = await res.json();
+
     return { data: data, totalPages: totalPages };
   } catch (error) {
     console.log(error);
