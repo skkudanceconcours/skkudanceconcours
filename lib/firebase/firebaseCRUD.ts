@@ -19,13 +19,12 @@ const getCollection = (collectionName: "notices" | "reception" | "test") =>
 export const getStorageRef = (refName: string) => ref(storage, refName);
 
 //Create
-//임 시
 export const setNotices = async (notice: NoticeType) => {
   try {
     const res = await addDoc(getCollection("notices"), {
       notice,
     });
-    console.log("제대로 올라감");
+    // console.log("제대로 올라감");
   } catch (error) {
     console.log(error);
   }
@@ -119,6 +118,17 @@ export const getAllReception = async (): Promise<Reception[]> => {
     console.log(error);
     return [];
   }
+};
+
+// PDF 받아오기
+export const getPDF = async (PDFPath: string): Promise<string> => {
+  try {
+    const url = await getDownloadURL(getStorageRef(PDFPath));
+    return url;
+  } catch (error) {
+    console.log(error);
+  }
+  return "failed!";
 };
 
 // Update

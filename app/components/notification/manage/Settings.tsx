@@ -78,8 +78,9 @@ const AddNotice = (): ReactNode => {
         size="medium"
         sx={{
           position: "fixed",
-          right: 30,
-          bottom: 30,
+          right: 32,
+          bottom: 32,
+          zIndex: 1,
         }}
         onClick={() => setOpenModal(!openModal)}
       >

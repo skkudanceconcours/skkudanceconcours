@@ -93,7 +93,7 @@ const NoticeBody = ({ data, totalPages }: NoticeBodyProps): ReactNode => {
 
   return (
     <div className="relative flex w-4/5 flex-col items-center justify-start">
-      <div className="relative flex h-[5vh] w-full items-center justify-between">
+      <div className="relative mb-4 flex h-[5vh] w-full items-center justify-between">
         <div>
           Total {filteredData.length}건 {page_number}페이지
         </div>

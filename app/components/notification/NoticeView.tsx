@@ -18,7 +18,7 @@ const NoticeView = ({
   console.log(formattedDate); // 출력: "24-04-02 18:37"
   return (
     <div className="relative flex w-4/5 flex-col justify-start">
-      <section className="flex h-[8vh] w-full items-center justify-start text-3xl font-semibold">
+      <section className="flex h-[8vh] w-full items-center justify-start text-3xl font-semibold hover:cursor-pointer">
         {title}
       </section>
       <section className="flex h-[4vh] w-full items-center border-b-2 border-solid border-[#d8d8d8]">

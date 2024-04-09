@@ -27,8 +27,8 @@ const NoticePreview = ({
 
   // dynamic_styles
   const is_imp = important
-    ? "flex h-[5vh] w-full items-center font-bold border-b-1 border-solid border-[#e8e8e8] bg-[#fbfbfb]"
-    : "flex h-[5vh] w-full items-center border-b-1 border-solid border-[#e8e8e8] hover:bg-[#fbfbfb]";
+    ? "flex h-[5.5vh] w-full items-center font-bold border-b-1 border-solid border-[#e8e8e8] bg-[#fbfbfb]"
+    : "flex h-[5.5vh] w-full items-center border-b-1 border-solid border-[#e8e8e8] hover:bg-[#fbfbfb]";
 
   return (
     <div className={is_imp}>

@@ -43,8 +43,9 @@ const NotificationPage = async (): Promise<ReactNode> => {
           alt="header"
           layout="cover"
         />
+        <NoticeHeader />
       </div>
-      <NoticeHeader />
+      <div className="h-[15vh] w-full" />
       <NoticeBody data={data} totalPages={totalPages} />
     </main>
   );
