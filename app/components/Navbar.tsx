@@ -26,19 +26,23 @@ const Navbar = ({ className }: { className?: string }): ReactNode => {
   const className_li =
     'relative flex-1 h-12 w-full p-6 flex justify-center items-end text-center lg:text-xl cursor-pointer transition-colors duration-[400ms]';
   
-
   return (
-    <div className={`${className} w-max z-10`}>
-      <div className="absolute left-8 top-2 flex flex-col items-start p-4 cursor-pointer"
+    <div className={`${className} w-max h-max lg:h-full z-10 flex flex-col lg:static`}>
+      
+      <div className="lg:absolute lg:left-8 lg:top-2 flex flex-col self-start items-start py-12 pl-4 lg:p-4 cursor-pointer"
            onClick={() => router.push("/")}>
         <Image className="w-10" src={logo} alt="logo" />
-        <p className={`${UniverseLTPro.className} pt-2 text-xl leading-[1.8rem] tracking-[0.2rem]`}>
-          Skku<br/>
-          Dance<br/>
-          Concours
+        <p className={`font-[UniverseLTPro] font-extrabold pt-2 text-xl leading-[1.8rem] tracking-[0.2rem]`}>
+          SKKU<br/>
+          DANCE<br/>
+          CONCOURS
         </p>
       </div>
       <ul className="flex justify-center w-max lg:max-w-lg gap-2">
+        <li className={className_li}
+          onClick={() => router.push("/")} >
+          HOME
+        </li>
         <li className={className_li}
           onClick={() => router.push("/reception")} >
           REGISTRATION
