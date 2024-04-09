@@ -72,9 +72,6 @@ export const QuillEditor = (): ReactNode => {
     });
   };
 
-  useEffect(() => {
-    console.log(contents);
-  }, [contents]);
   // Editor Setting
   const formats = [
     "size",

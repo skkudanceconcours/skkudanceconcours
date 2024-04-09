@@ -2,7 +2,7 @@ export type Path =
   | "/"
   | "/notification"
   | "/notification?page=1"
-  | "/notification/add_notice"
+  | "/notification/addNotice"
   | "/notification/details"
   | "/notification/guideline"
   | "/reception"

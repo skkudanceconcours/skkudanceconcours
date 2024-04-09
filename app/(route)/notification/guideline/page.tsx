@@ -21,7 +21,6 @@ const fetchPDF = async (): Promise<string> => {
 
 const GuidelinePage = async (): Promise<ReactNode> => {
   const url = await fetchPDF();
-  console.log(url);
 
   return (
     <main className="relative flex min-h-screen w-full flex-col items-center justify-start">
