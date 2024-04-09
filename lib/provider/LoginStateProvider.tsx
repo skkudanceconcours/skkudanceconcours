@@ -12,8 +12,7 @@ const LoginStateProvider = ({
   const path = usePathname() as Path;
   const { loginState, login } = useLoginStore();
   useEffect(() => {
-    const key = sessionStorage.getItem("loginState");
-    if (key === process.env.NEXT_PUBLIC_ADMIN_PW) {
+    if (loginState === process.env.NEXT_PUBLIC_ADMIN_PW) {
       login();
     } else {
       if (path === "/receptionadmin") redirect("/");

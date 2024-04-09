@@ -37,6 +37,7 @@ const NoticePreview = ({
       </div>
       <div className="flex w-[64%] items-center justify-center  hover:cursor-pointer hover:underline">
         <div
+          className="cursor-pointer"
           onClick={() => {
             console.log(id);
             const queryData: NoticeViewType = {

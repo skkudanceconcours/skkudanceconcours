@@ -15,3 +15,12 @@ export const HSBombaram = localFont({
     ],
     variable: '--font-HSBombaram'
 })
+
+export const UniverseLTPro = localFont({
+    src:[
+        {
+            path: './UniverseLTPro.ttf',
+        }
+    ],
+    variable: '--font-UniverseLTPro'
+})

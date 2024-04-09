@@ -48,7 +48,8 @@ const NextTable = ({ receptions }: TableProps): ReactNode => {
         case "time":
           return (
             <p className="w-12">
-              {reception.timestamp.toDateString()}
+              {reception.timestamp.toDateString()+'\n'}
+              
               {reception.timestamp.toTimeString().slice(0, 8)}
             </p>
           );
@@ -136,7 +137,7 @@ const NextTable = ({ receptions }: TableProps): ReactNode => {
   return (
     <Table
       aria-label="receptions"
-      className="h-full max-h-screen overflow-y-scroll"
+      className="h-full p-2 max-h-screen overflow-y-scroll"
     >
       <TableHeader columns={columns}>
         {(column) => <TableColumn key={column.uid}>{column.name}</TableColumn>}

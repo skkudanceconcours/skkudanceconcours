@@ -35,7 +35,7 @@ const MusicInput = forwardRef<HTMLDivElement, MusicInputProps>(
           role={undefined}
           variant="outlined"
           tabIndex={-1}
-          style={{ borderColor: error ? 'red' : 'blue', color: error ? 'red' : 'blue',}}
+          style={{ borderColor: error ? 'red' : '#1976D2', color: error ? 'red' : '#1976D2',}}
           startIcon={<ImCloudUpload />}
         >
           파일 업로드

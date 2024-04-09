@@ -12,8 +12,9 @@ const config: Config = {
     extend: {
       backgroundImage: {},
       fontFamily: {
-        HSBombaram: ["var(--font-HSBombaram"],
-      },
+        HSBombaram: ['var(--font-HSBombaram)'],
+        UniverseLTPro: ['var(--font-UniverseLTPro)'],
+      }
     },
   },
   darkMode: "class",
