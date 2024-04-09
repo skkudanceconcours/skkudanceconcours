@@ -131,22 +131,6 @@ export const QuillEditor = (): ReactNode => {
       justifyContent="flex-start"
       alignItems="flex-start"
     >
-      {/* <div>
-        <label htmlFor="file">
-          v
-        </label>
-        <input id="file" type="file" onChange={handleFileChange} />
-      </div>
-      {file && (
-        <section>
-          File details:
-          <ul>
-            <li>Name: {file.name}</li>
-            <li>Type: {file.type}</li>
-            <li>Size: {file.size} bytes</li>
-          </ul>
-        </section>
-      )} */}
       <TextField
         required
         id="outlined-required"

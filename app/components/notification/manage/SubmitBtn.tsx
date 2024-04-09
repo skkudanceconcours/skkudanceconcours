@@ -53,7 +53,7 @@ const SubmitBtn = ({ noticeInput, contents }: SubmitBtnProps) => {
       };
       setNotices(data);
 
-      const nextPath: Path = "/notification";
+      const nextPath: Path = "/notification?page=1";
       router.push(nextPath);
     } catch (error) {
       console.log("Error Occured on Submitting!", error);

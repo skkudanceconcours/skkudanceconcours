@@ -35,7 +35,7 @@ const NoticePreview = ({
       <div className="flex w-[12%] items-center justify-center">
         {important ? "공지" : num}
       </div>
-      <div className="flex w-[64%] items-center justify-center  hover:underline">
+      <div className="flex w-[64%] items-center justify-center  hover:cursor-pointer hover:underline">
         <div
           onClick={() => {
             console.log(id);
@@ -51,7 +51,7 @@ const NoticePreview = ({
             router.push("/notification/details", { scroll: false });
           }}
         >
-          {title}
+          {title ? title : "(제목이 없습니다)"}
         </div>
       </div>
       <div className="flex w-[12%] items-center justify-center">

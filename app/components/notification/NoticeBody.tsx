@@ -2,7 +2,7 @@
 import React, { ReactNode, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 // Types
-import { NoticeType, NoticeViewType } from "@/template/notice";
+import { NoticeType } from "@/template/notice";
 // Images & Icons
 import { IoIosSearch } from "react-icons/io";
 import Pagination from "@mui/material/Pagination";
