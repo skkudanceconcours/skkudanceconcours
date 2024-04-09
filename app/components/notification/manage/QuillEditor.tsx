@@ -23,29 +23,6 @@ import { v4 as uuidv4 } from "uuid";
 // components
 import SubmitBtn from "./SubmitBtn";
 
-// Editor Setting
-const formats = [
-  "size",
-  "h1",
-  "h2",
-  "h3",
-  "bold",
-  "italic",
-  "underline",
-  "strike",
-  "color",
-  "background",
-  "align",
-  "list",
-  "link",
-  "blockquote",
-  "font",
-  "header",
-  "bullet",
-  "indent",
-  "image",
-];
-
 const initNotice: NoticeType = {
   contents: "",
   timeStamp: new Date(),
@@ -94,6 +71,32 @@ export const QuillEditor = (): ReactNode => {
       }
     });
   };
+
+  useEffect(() => {
+    console.log(contents);
+  }, [contents]);
+  // Editor Setting
+  const formats = [
+    "size",
+    "h1",
+    "h2",
+    "h3",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "color",
+    "background",
+    "align",
+    "list",
+    "link",
+    "blockquote",
+    "font",
+    "header",
+    "bullet",
+    "indent",
+    "image",
+  ];
   // Editor Settings
   const modules = useMemo(() => {
     return {
