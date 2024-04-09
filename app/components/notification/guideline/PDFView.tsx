@@ -23,25 +23,13 @@ const PDFView = ({ url }: { url: string }): ReactNode => {
     setNumPages(numPages);
   }
 
-  //   // functions
-  //   const handlePageNumber = (val: string) => {
-  //     if (val === "back") {
-  //       if (pageNumber != 1) {
-  //         setPageNumber((prev) => --prev);
-  //         window.scrollTo(0, 0);
-  //       }
-
-  //       return;
-  //     } else if (val === "front") {
-  //       if (pageNumber != numPages) {
-  //         setPageNumber((prev) => ++prev);
-  //         window.scrollTo(0, 0);
-  //       }
-  //     }
-  //   };
   useEffect(() => {
     if (window !== undefined) {
-      setpdfSize((window.innerWidth * 60) / 100);
+      if (window.innerHeight < 768) {
+        setpdfSize((window.innerWidth * 90) / 100);
+      } else {
+        setpdfSize((window.innerWidth * 60) / 100);
+      }
     }
   }, []);
   return (
