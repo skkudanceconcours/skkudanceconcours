@@ -10,7 +10,8 @@ import { QuillEditor } from "@/app/components/notification/manage/QuillEditor";
 const Page = async (): Promise<ReactNode> => {
   return (
     <main className="relative flex h-screen min-h-screen w-full flex-col items-center justify-start">
-      {typeof window !== "undefined" && <QuillEditor />}
+      <QuillEditor />
+      {/* {typeof window !== "undefined" && <QuillEditor />} */}
     </main>
   );
 };
