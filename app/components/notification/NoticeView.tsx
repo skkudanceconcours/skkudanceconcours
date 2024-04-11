@@ -21,8 +21,9 @@ const NoticeView = ({
       <section className="flex h-[8vh] w-full items-center justify-start text-3xl font-semibold hover:cursor-pointer">
         {title}
       </section>
+
       <section className="flex h-[4vh] w-full items-center border-b-2 border-solid border-[#d8d8d8]">
-        최고관리자 | 조회수 {viewCount} | {formattedDate}
+        무용학과 | 조회수 {viewCount} | {formattedDate}
       </section>
       <div
         className="view ql-editor h-[10vh] w-full p-0 scrollbar-hide" // react-quill css

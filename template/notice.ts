@@ -3,6 +3,7 @@ export interface NoticeViewType {
   timeStamp: Date;
   title: string;
   viewCount: number;
+  file: File[];
 }
 export interface NoticeType extends NoticeViewType {
   id?: string;

@@ -1,13 +1,17 @@
 "use client";
-import React, { ReactNode, useMemo, useRef, useState } from "react";
+import React, { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 // Quill Related
 import ReactQuill from "react-quill";
 // Icons & Images
 import { Box, TextField } from "@mui/material";
+import Button from "@mui/material/Button";
+import { ImCloudUpload } from "react-icons/im";
+import { styled } from "@mui/material/styles";
+
 // Type
 import { NoticeType } from "@/template/notice";
 // firebase
-import { getStorageRef } from "@/lib/firebase/firebaseCRUD";
+import { getStorageRef, uploadNoticeFile } from "@/lib/firebase/firebaseCRUD";
 import { uploadBytes, getDownloadURL } from "firebase/storage";
 // 고유 식별자 생성
 import { v4 as uuidv4 } from "uuid";
@@ -21,21 +25,39 @@ const initNotice: NoticeType = {
   important: false,
   title: "",
   viewCount: 0,
+  file: [],
 };
 
 export const QuillEditor = (): ReactNode => {
   const [noticeInput, setNoticeInput] = useState<NoticeType>(initNotice);
   const [contents, setContents] = useState<string>("");
+  const [files, setFiles] = useState<File[]>([]);
   const quillRef = useRef<ReactQuill>(null);
 
   // Functions
-  function handleInput(value: string) {
+  function handleTitle(value: string) {
     setNoticeInput((prev) => ({
       ...prev,
       title: value as string,
     }));
   }
+  const handleFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const uploadedFile = event.target.files;
 
+    if (!uploadedFile) return;
+    const filesArray: File[] = Array.from(uploadedFile);
+    console.log(filesArray);
+
+    setFiles((prevFiles) => [...prevFiles, ...filesArray]);
+
+    // firebase 올리기
+    const downloadURL = await uploadNoticeFile(filesArray[0]);
+    console.log(downloadURL);
+  };
+
+  useEffect(() => {
+    console.log(files);
+  }, [files]);
   // Image base64 to url
   const imageHandler = async () => {
     const input = document.createElement("input");
@@ -109,6 +131,19 @@ export const QuillEditor = (): ReactNode => {
     };
   }, []);
 
+  //File Settings
+  const VisuallyHiddenInput = styled("input")({
+    clip: "rect(0 0 0 0)",
+    clipPath: "inset(50%)",
+    height: 1,
+    overflow: "hidden",
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    whiteSpace: "nowrap",
+    width: 1,
+  });
+
   return (
     <Box
       component="form"
@@ -129,11 +164,30 @@ export const QuillEditor = (): ReactNode => {
         fullWidth
         onChange={(
           e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-        ) => handleInput(e.currentTarget.value as string)}
+        ) => handleTitle(e.currentTarget.value as string)}
       />
+      <Button
+        component="label"
+        role={undefined}
+        variant="outlined"
+        tabIndex={-1}
+        startIcon={<ImCloudUpload />}
+      >
+        파일 업로드
+        <VisuallyHiddenInput type="file" multiple onChange={handleFiles} />
+      </Button>
+      {files.map((file, index) => (
+        <p
+          className="hover: h-3 w-full cursor-pointer"
+          key={index}
+          onClick={() => window.open(file.name, "_blank")}
+        >
+          {file.name}
+        </p>
+      ))}
       {typeof window !== "undefined" ? (
         <EditorWrapper
-          style={{ width: "100%", height: "100%" }}
+          style={{ width: "100%", height: "100%", marginTop: "1rem" }}
           theme="snow"
           modules={modules}
           formats={formats}

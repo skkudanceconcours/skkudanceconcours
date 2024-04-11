@@ -2,6 +2,8 @@ import { Reception } from "@/template/reception";
 import { db } from "../firebase/firebaseConfig";
 // type
 import { NoticeType } from "@/template/notice";
+import { v4 as uuidv4 } from "uuid";
+
 // firebase
 import {
   collection,
@@ -51,7 +53,28 @@ export const uploadMP3File = async (
   }
 };
 
-export const submitReception = async (reception: Reception):Promise<string|null> => {
+export const uploadNoticeFile = async (
+  file: File | null,
+): Promise<string | null> => {
+  if (!file) return null;
+
+  let fileURL: string;
+  try {
+    const uniqueId = uuidv4(); // UUID 생성
+    const storageRef = getStorageRef(`공지사항/${uniqueId}`);
+    const snapshot = await uploadBytes(storageRef, file);
+    fileURL = await getDownloadURL(snapshot.ref);
+    console.log(fileURL);
+    return fileURL;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const submitReception = async (
+  reception: Reception,
+): Promise<string | null> => {
   try {
     const res = await addDoc(getCollection("reception"), { reception });
     return res.id;
