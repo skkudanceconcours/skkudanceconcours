@@ -1,6 +1,5 @@
 import { nanumgothic, quicksand, raleway } from "@/public/fonts/font";
 import { ReactNode } from "react";
-import Login from "./LoginPage";
 
 const Footer = ():ReactNode => {
 
@@ -10,7 +9,6 @@ const Footer = ():ReactNode => {
         <p>(03063) 서울특별시 종로구 성균관로 25-2</p>
         <p>성균관대학교 인문사회과학캠퍼스 예술대학 무용학과</p>
         <p>수선관 별관 6층 62601호 02-760-0604</p>
-        <Login/>
     </div>
 }
 

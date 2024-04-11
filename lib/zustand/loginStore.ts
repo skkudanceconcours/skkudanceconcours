@@ -1,9 +1,9 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 interface LoginState {
-  loginState: "admin" | "anonymous";
-  login: () => void;
-  logout: () => void;
+  loginState: "admin" | "anonymous"
+  login: () => void
+  logout: () => void
 }
 
 const useLoginStore = create<LoginState>()(

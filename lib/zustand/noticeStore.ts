@@ -25,9 +25,10 @@ const useNoticeStore = create<NoticeState>()(
           viewCount: notice.viewCount,
         }),
     }),
-    { 
+    {
       name: "notice-storage",
-      storage: createJSONStorage(() => sessionStorage)  },
+      storage: createJSONStorage(() => sessionStorage),
+    },
   ),
 );
 

@@ -6,22 +6,26 @@ import TextInput from "./nextUI/TextInput";
 import { nanumgothic } from "@/public/fonts/font";
 import { Button } from "@nextui-org/react";
 import useLoginStore from "@/lib/zustand/loginStore";
+import { redirect } from "next/dist/server/api-utils";
+import { Path } from "@/template/paths";
+import { useRouter } from "next/navigation";
 
 
-const Login = ():ReactNode => {
+const Login = ({className}:{className?: string}):ReactNode => {
     const [openLogin, setOpenLogin] = useState<boolean>(false);
     const passwordRef = useRef<HTMLInputElement>(null);
-    const { loginState, login, logout } = useLoginStore();
+    const { loginState, login } = useLoginStore();
     const loggedIn = loginState === 'admin';
     const [error,setError] = useState<boolean>(false);
+    const router = useRouter();
     
     const onLogin = () => {
         if(!passwordRef.current) return;
         const input = passwordRef.current.value;
         if(input === process.env.NEXT_PUBLIC_ADMIN_PW) {
-            login();
-            setOpenLogin(false);
-            window.scrollTo(0,0)
+          login();
+          setOpenLogin(false);
+          router.push("/reception/admin" as Path);
         };
         setError(true);
     }
@@ -59,14 +63,11 @@ const Login = ():ReactNode => {
           </div>
       </main>
     </Portal>}
-    <p className="cursor-pointer"
+    <li className={className}
       onClick={()=>{
         if (!loggedIn) setOpenLogin(true);
-        else {
-          logout();
-          window.scrollTo(0,0);
-        };
-        }}>{loggedIn ? '로그아웃' : '관리자 로그인'}</p>
+        else router.push("/reception/admin" as Path);
+        }}>ADMIN</li>
     </>)
 }
 

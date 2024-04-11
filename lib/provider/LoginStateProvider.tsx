@@ -10,14 +10,11 @@ const LoginStateProvider = ({
   children: ReactNode;
 }): ReactNode => {
   const path = usePathname() as Path;
-  const { loginState, login } = useLoginStore();
+  const { loginState } = useLoginStore();
   useEffect(() => {
-    if (loginState === process.env.NEXT_PUBLIC_ADMIN_PW) {
-      login();
-    } else {
-      if (path === "/receptionadmin") redirect("/");
-    }
+    if(loginState === "anonymous" && path === "/reception/admin") redirect("/" as Path);
   }, [loginState]);
+  
   return children;
 };
 

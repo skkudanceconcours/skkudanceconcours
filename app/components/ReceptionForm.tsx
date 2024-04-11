@@ -39,7 +39,8 @@ import { Button } from "@nextui-org/react";
 import { Reception } from "@/template/reception";
 import PrivacyPolicy from "./PrivacyPolicy";
 import { submitReception, submitTest, uploadMP3File } from "@/lib/firebase/firebaseCRUD";
-import SubmitLottie from "@/public/lottie/SubmitLottie";
+import { useRouter } from "next/navigation";
+import { Path } from "@/template/paths";
 
 
 const ReceptionForm = (): ReactNode => {
@@ -77,8 +78,6 @@ const ReceptionForm = (): ReactNode => {
   const [musicFileError, setMusicFileError] = useState<boolean>(false);
   //useState_error_privacy
   const [privacyConfirmError,setPrivacyConfirmError] = useState<boolean>(false);
-  //useState_animation
-  const [showAnimation,setShowAnimation] = useState<boolean>(false);
 
   //useRef_textInputs
   const nameRef = useRef<HTMLInputElement>(null);
@@ -103,6 +102,9 @@ const ReceptionForm = (): ReactNode => {
   const musicFileRef = useRef<HTMLDivElement>(null);
   //useRef_scroll
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  //useRouter
+  const router = useRouter();
 
   //useEffects
   useEffect(() => setPrivacyConfirmError(false), [privacyConfirm]);
@@ -193,13 +195,9 @@ const ReceptionForm = (): ReactNode => {
       musicOrPose: musicOrPose ? musicOrPose : null,
       participants: participantsList,
     };
-    const res = await submitReception(newReception);
-    if(res){
-      setShowAnimation(true);
-      setTimeout(()=>{
-        window && window.location.reload();
-        scrollRef.current?.scrollIntoView()
-      },2000);
+    const docId = await submitReception(newReception);
+    if(docId){
+      router.push("/reception/submit" as Path);
     }
     else{
       console.log('submission failed');
@@ -488,7 +486,6 @@ const ReceptionForm = (): ReactNode => {
         onClick={onSubmit}
         isLoading={loading}
         color={'primary'}
-        startContent={showAnimation && <SubmitLottie/>}
         >
         접수하기
       </Button>

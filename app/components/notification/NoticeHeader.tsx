@@ -13,7 +13,7 @@ const NoticeHeader = (): ReactNode => {
   // Dynamic Styling
 
   const stylebyPath_noficiation =
-    pathName === "/notification"
+    pathName === "/notification" || pathName === "/notification/details"
       ? "flex h-full w-2/5 items-center justify-end underline underline-offset-8 hover:cursor-pointer"
       : "flex h-full w-2/5 items-center justify-end hover:cursor-pointer";
   const stylebyPath_guideline =

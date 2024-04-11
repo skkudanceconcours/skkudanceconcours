@@ -51,12 +51,13 @@ export const uploadMP3File = async (
   }
 };
 
-export const submitReception = async (reception: Reception) => {
+export const submitReception = async (reception: Reception):Promise<string|null> => {
   try {
     const res = await addDoc(getCollection("reception"), { reception });
-    return res;
+    return res.id;
   } catch (error) {
     console.log(error);
+    return null;
   }
 };
 

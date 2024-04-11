@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
 import Navbar from "./Navbar";
-import Login from "./LoginPage";
 
 
 const Header = (): ReactNode => {

@@ -6,4 +6,5 @@ export type Path =
   | "/notification/details"
   | "/notification/guideline"
   | "/reception"
-  | "/receptionadmin";
+  | "/reception/submit"
+  | "/reception/admin";

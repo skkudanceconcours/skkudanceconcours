@@ -6,8 +6,7 @@ import { ReactNode } from "react";
 const ReceptionAdmin = async (): Promise<ReactNode> => {
   const receptionData = await getReceptionData();
 
-  return (
-    <main className="relative flex h-screen w-screen flex-col items-center">
+  return (<main className="relative flex h-screen w-screen flex-col items-center">
       <h1 className="relative lg:my-12 flex h-[15vh] w-4/5 flex-col justify-center text-2xl lg:text-5xl font-semibold">
         콩쿨 접수 현황
       </h1>
@@ -17,8 +16,7 @@ const ReceptionAdmin = async (): Promise<ReactNode> => {
         <div className="">총 {receptionData.length}개의 접수</div>
         <ExcelButton receptions={receptionData} />
       </div>
-    </main>
-  );
+    </main>);
 };
 const getReceptionData = async () => {
   const receptions = await getAllReception();
