@@ -15,7 +15,7 @@ const useLoginStore = create<LoginState>()(
     }),
     { 
         name: "loginState", 
-        storage:createJSONStorage(() => sessionStorage) 
+        storage: createJSONStorage(() => sessionStorage) 
     },
   ),
 );
