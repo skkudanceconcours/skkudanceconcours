@@ -168,7 +168,7 @@ const ReceptionForm = (): ReactNode => {
       setPrivacyConfirmError(true);
       return;
     }
-    console.log('no error')
+    console.log('no error');
     setLoading(true);
 
     const currentTime: Date = new Date();
@@ -197,7 +197,7 @@ const ReceptionForm = (): ReactNode => {
     };
     const docId = await submitReception(newReception);
     if(docId){
-      router.push("/reception/submit" as Path);
+      router.replace("/reception/submit" as Path);
     }
     else{
       console.log('submission failed');
@@ -414,12 +414,9 @@ const ReceptionForm = (): ReactNode => {
               />
               {(!individual ||
                 (individual &&
-                  ((major === "한국무용" && category === "전통(재구성)") ||
-                    (major === "발레" &&
-                      category === "고전<기초실기 A,B & Variation>") ||
-                    (major === "컨템포러리댄스" &&
-                      (grade === "초등부 저학년(3학년)" ||
-                        grade === "초등부 저학년(4학년)"))))) && (
+                  ((major === "한국무용" && (category === "전통(재구성)" || category === "창작")) ||
+                    (major === "발레" && (category === "고전<기초실기 A,B & Variation>" || category === "창작")) ||
+                    (major === "컨템포러리댄스" && (grade === "초등부 저학년(3학년)" || grade === "초등부 저학년(4학년)"))))) && (
                 <Selection
                   value={musicOrPose}
                   onChange={(value: string) => {
