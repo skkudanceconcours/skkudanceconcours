@@ -48,9 +48,9 @@ const NextTable = ({ receptions }: TableProps): ReactNode => {
         case "time":
           return (
             <p className="w-12">
-              {reception.timestamp.toDateString()+'\n'}
+              {new Date(reception.timestamp).toDateString()+'\n'}
               
-              {reception.timestamp.toTimeString().slice(0, 8)}
+              {new Date(reception.timestamp).toTimeString().slice(0, 8)}
             </p>
           );
         case "individualOrGroup":
@@ -144,7 +144,7 @@ const NextTable = ({ receptions }: TableProps): ReactNode => {
       </TableHeader>
       <TableBody items={receptions}>
         {(item) => (
-          <TableRow key={item.timestamp.toISOString()}>
+          <TableRow key={new Date(item.timestamp).toISOString()}>
             {(columnKey) => (
               <TableCell>{renderCell(item, columnKey as Columnkey)}</TableCell>
             )}
