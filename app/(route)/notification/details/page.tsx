@@ -8,7 +8,7 @@ import useNoticeStore from "@/lib/zustand/noticeStore";
 import NoticeHeader from "@/app/components/notification/NoticeHeader";
 import NoticeView from "@/app/components/notification/NoticeView";
 const DetailsPage = (): ReactNode => {
-  const { contents, title, timeStamp, viewCount } = useNoticeStore();
+  const { contents, title, timeStamp, viewCount, files } = useNoticeStore();
 
   return (
     <main className="relative flex min-h-screen w-full flex-col items-center justify-start">
@@ -22,6 +22,7 @@ const DetailsPage = (): ReactNode => {
         timeStamp={timeStamp}
         title={title}
         viewCount={viewCount}
+        files={files}
       />
     </main>
   );

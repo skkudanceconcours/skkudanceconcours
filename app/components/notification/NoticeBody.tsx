@@ -77,6 +77,7 @@ const NoticeBody = ({ data, totalPages }: NoticeBodyProps): ReactNode => {
           title={notice.title}
           viewCount={notice.viewCount}
           important={notice.important}
+          files={notice.files}
         />
       );
     })

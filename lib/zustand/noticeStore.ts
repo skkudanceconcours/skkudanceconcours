@@ -16,13 +16,14 @@ const useNoticeStore = create<NoticeState>()(
       timeStamp: new Date(),
       title: "",
       viewCount: 0,
-
+      files: [],
       setNoticeState: (notice: NoticeViewType) =>
         set({
           contents: notice.contents,
           timeStamp: notice.timeStamp,
           title: notice.title,
           viewCount: notice.viewCount,
+          files: notice.files,
         }),
     }),
     {

@@ -1,14 +1,20 @@
 "use client";
-import React, { ReactNode, useMemo, useRef, useState } from "react";
+import React, { ReactNode, useEffect, useMemo, useRef, useState } from "react";
 // Quill Related
 import ReactQuill from "react-quill";
 // Icons & Images
 import { Box, TextField } from "@mui/material";
+import Button from "@mui/material/Button";
+import { ImCloudUpload } from "react-icons/im";
+import { styled } from "@mui/material/styles";
+
 // Type
-import { NoticeType } from "@/template/notice";
+import { NoticeFileType, NoticeType } from "@/template/notice";
 // firebase
-import { getStorageRef } from "@/lib/firebase/firebaseCRUD";
+import { getStorageRef, uploadNoticeFile } from "@/lib/firebase/firebaseCRUD";
 import { uploadBytes, getDownloadURL } from "firebase/storage";
+import { downloadPDf } from "@/lib/firebase/downloadFile";
+
 // 고유 식별자 생성
 import { v4 as uuidv4 } from "uuid";
 // components
@@ -21,20 +27,47 @@ const initNotice: NoticeType = {
   important: false,
   title: "",
   viewCount: 0,
+  files: [],
 };
 
 export const QuillEditor = (): ReactNode => {
   const [noticeInput, setNoticeInput] = useState<NoticeType>(initNotice);
   const [contents, setContents] = useState<string>("");
+  const [files, setFiles] = useState<NoticeFileType[]>([]); // 파일 url들을 저장
+  const [isSaving, setIsSaving] = useState<boolean>(false);
   const quillRef = useRef<ReactQuill>(null);
 
   // Functions
-  function handleInput(value: string) {
+  function handleTitle(value: string) {
     setNoticeInput((prev) => ({
       ...prev,
       title: value as string,
     }));
   }
+  const handleFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const uploadedFile = event.target.files;
+
+    if (!uploadedFile) return;
+    const filesArray: File[] = Array.from(uploadedFile);
+    // firebase 올리기
+    setIsSaving(true);
+    const uniqueId: string | null = await uploadNoticeFile(filesArray[0]);
+
+    const fileObj: NoticeFileType = {
+      name: filesArray[0].name,
+      uuid: uniqueId as string,
+    };
+    setFiles((prevFilesObj) => [...prevFilesObj, fileObj]);
+    setNoticeInput((prev) => ({
+      ...prev,
+      files: [...prev.files, fileObj],
+    }));
+    setIsSaving(false);
+  };
+
+  useEffect(() => {
+    console.log(noticeInput);
+  }, [noticeInput]);
 
   // Image base64 to url
   const imageHandler = async () => {
@@ -109,6 +142,19 @@ export const QuillEditor = (): ReactNode => {
     };
   }, []);
 
+  //File Settings
+  const VisuallyHiddenInput = styled("input")({
+    clip: "rect(0 0 0 0)",
+    clipPath: "inset(50%)",
+    height: 1,
+    overflow: "hidden",
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    whiteSpace: "nowrap",
+    width: 1,
+  });
+
   return (
     <Box
       component="form"
@@ -129,11 +175,35 @@ export const QuillEditor = (): ReactNode => {
         fullWidth
         onChange={(
           e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-        ) => handleInput(e.currentTarget.value as string)}
+        ) => handleTitle(e.currentTarget.value as string)}
       />
+      <Button
+        component="label"
+        role={undefined}
+        variant="outlined"
+        tabIndex={-1}
+        startIcon={<ImCloudUpload />}
+      >
+        파일 업로드
+        <VisuallyHiddenInput type="file" multiple onChange={handleFiles} />
+      </Button>
+      {isSaving ? (
+        <p className="h-3 w-full ">Saving...</p>
+      ) : (
+        files.map((file, index) => (
+          <div
+            className="flex h-[10%] w-full items-center justify-start overflow-hidden text-ellipsis whitespace-nowrap hover:cursor-pointer hover:text-blue-400"
+            key={index}
+            onClick={() => downloadPDf(`공지사항/${file.uuid}`, file.name)}
+          >
+            {file.name}
+          </div>
+        ))
+      )}
+
       {typeof window !== "undefined" ? (
         <EditorWrapper
-          style={{ width: "100%", height: "100%" }}
+          style={{ width: "100%", height: "100%", marginTop: "1rem" }}
           theme="snow"
           modules={modules}
           formats={formats}
