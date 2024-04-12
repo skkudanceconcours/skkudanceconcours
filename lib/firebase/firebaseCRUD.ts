@@ -1,5 +1,6 @@
 import { Reception } from "@/template/reception";
 import { db } from "../firebase/firebaseConfig";
+import { revalidateTag } from "next/cache";
 // type
 import { NoticeType } from "@/template/notice";
 import { v4 as uuidv4 } from "uuid";
@@ -12,8 +13,6 @@ import {
   updateDoc,
   doc,
   increment,
-  getDoc,
-  setDoc,
 } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
@@ -26,24 +25,21 @@ export const getStorageRef = (refName: string) => ref(storage, refName);
 export const setNotices = async (notice: NoticeType) => {
   const { id, ...data } = notice;
   try {
-    const noticeRef = doc(db, "notices", id);
-    const docSnap = await getDoc(noticeRef);
+    const res = await getDocs(getCollection("notices"));
+    const exists: boolean = res.docs.some((doc) => doc.id === id);
     // 수정
-    if (docSnap.exists()) {
-      const modify_doc = await updateDoc(noticeRef, {
+    if (exists) {
+      const modify_doc = await updateDoc(doc(db, "notices", id), {
         notice: data,
       });
-      console.log("문서 업데이트 성공");
     }
     // 생성
     else {
       const new_doc = await addDoc(getCollection("notices"), {
-        data,
+        notice: data,
       });
-      console.log("문서 생성 성공");
     }
-
-    // console.log("제대로 올라감");
+    // revalidateTag("notice");
   } catch (error) {
     console.log(error);
   }
@@ -62,7 +58,6 @@ export const uploadMP3File = async (
   try {
     await uploadBytes(fileRef, file, metadata);
     fileURL = await getDownloadURL(fileRef);
-    console.log(fileURL);
     return fileURL;
   } catch (error) {
     console.log(error);
@@ -75,14 +70,13 @@ export const uploadNoticeFile = async (
 ): Promise<string | null> => {
   if (!file) return null;
 
-  let fileURL: string;
+  // let fileURL: string;
   try {
     const uniqueId = uuidv4(); // UUID 생성
     const storageRef = getStorageRef(`공지사항/${uniqueId}`);
     const snapshot = await uploadBytes(storageRef, file);
     // fileURL = await getDownloadURL(snapshot.ref);
     // console.log(fileURL);
-    console.log("Upload completed!");
     return uniqueId;
   } catch (error) {
     console.log(error);
@@ -128,7 +122,6 @@ function sortNotices(data: NoticeType[]): NoticeType[] {
 
 export const getAllNotices = async () => {
   try {
-    console.log("getAllNotices");
     const res = await getDocs(getCollection("notices"));
     const datas: NoticeType[] = res.docs.map((doc) => {
       const { timeStamp } = doc.data().notice;
@@ -149,12 +142,10 @@ export const getAllNotices = async () => {
 export const getAllReception = async (): Promise<Reception[]> => {
   try {
     const res = await getDocs(getCollection("reception"));
-    // console.log(res.docs[0].data().reception)
     const datas: Reception[] = res.docs.map((doc) => {
       const { timestamp } = doc.data().reception;
       return { ...doc.data().reception, timestamp: timestamp.toDate() };
     });
-    // console.log(datas)
     return datas;
   } catch (error) {
     console.log(error);
@@ -179,7 +170,6 @@ export const updateViewCount = async (id: string) => {
     await updateDoc(doc(db, "notices", id), {
       "notice.viewCount": increment(1),
     });
-    console.log("증가 잘됨");
   } catch (error) {
     console.log("Error updating view Count", error);
   }

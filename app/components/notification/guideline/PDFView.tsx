@@ -19,7 +19,6 @@ const PDFView = ({ url }: { url: string }): ReactNode => {
   // pages
 
   function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
-    console.log(`numPages ${numPages}`);
     setNumPages(numPages);
   }
 

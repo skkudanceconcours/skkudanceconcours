@@ -90,7 +90,7 @@ const SubmitBtn = ({ noticeInput, contents }: SubmitBtnProps) => {
             <Button
               color="danger"
               variant="bordered"
-              onClick={() => submitHandler(true)}
+              onClick={() => submitHandler(false)}
             >
               No
             </Button>

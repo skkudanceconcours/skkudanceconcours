@@ -12,7 +12,6 @@ export const downloadPDf = async (
     xhr.responseType = "blob";
     xhr.onload = (event) => {
       const blob = xhr.response;
-      console.log(blob);
 
       const a: HTMLAnchorElement = document.createElement("a");
       const url: string = window.URL.createObjectURL(blob);

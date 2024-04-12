@@ -47,28 +47,33 @@ export const QuillEditor = (): ReactNode => {
     }));
   }
 
-  useEffect(() => {
-    // console.log(filesInput);
-    console.log(noticeInput);
-  }, [noticeInput]);
+  
   const handleFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const uploadedFile = event.target.files;
+  
 
     if (!uploadedFile) return;
     const filesArray: File[] = Array.from(uploadedFile);
+
     // firebase 올리기
     setIsSaving(true);
-    const uniqueId: string | null = await uploadNoticeFile(filesArray[0]);
+    try {
 
-    const fileObj: NoticeFileType = {
-      name: filesArray[0].name,
-      uuid: uniqueId as string,
-    };
-    setFilesInput((prevFilesObj) => [...prevFilesObj, fileObj]);
-    setNoticeInput((prev) => ({
-      ...prev,
-      files: [...prev.files, fileObj],
-    }));
+      const uniqueId: string | null = await uploadNoticeFile(filesArray[0]);
+
+      const fileObj: NoticeFileType = {
+        name: filesArray[0].name,
+        uuid: uniqueId as string,
+      };
+      setFilesInput((prevFilesObj) => [...prevFilesObj, fileObj]);
+      setNoticeInput((prev) => ({
+        ...prev,
+        files: [...prev.files, fileObj],
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+
     setIsSaving(false);
   };
 

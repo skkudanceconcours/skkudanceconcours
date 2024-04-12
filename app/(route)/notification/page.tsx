@@ -16,11 +16,8 @@ const fetchData = async (): Promise<{
   totalPages: number;
 }> => {
   try {
-    console.log("fetchData");
-    console.log(`${baseUrl}/api/getNotice`);
-
     const res = await fetch(`${baseUrl}/api/getNotice`, {
-      next: { revalidate: 60 }, //revalidate every 60 seconds
+      next: { revalidate: 10, tags: ["notice"] }, //revalidate every 60 seconds
     });
 
     const { data, totalPages } = await res.json();
