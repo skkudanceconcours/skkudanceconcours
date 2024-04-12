@@ -16,6 +16,7 @@ const NoticePreview = ({
   title,
   viewCount,
   important,
+  files,
 }: NoticeType): ReactNode => {
   timeStamp = new Date(timeStamp);
   // 선언
@@ -45,6 +46,7 @@ const NoticePreview = ({
               timeStamp: timeStamp,
               title,
               viewCount: ++viewCount, // 백엔드에 업데이트 되기 전에 Client에서 미리 표시
+              files: files,
             };
 
             updateViewCount(id as string);

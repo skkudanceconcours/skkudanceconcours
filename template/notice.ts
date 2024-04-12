@@ -1,9 +1,13 @@
+export interface NoticeFileType {
+  name: string;
+  uuid: string;
+}
 export interface NoticeViewType {
   contents: string;
   timeStamp: Date;
   title: string;
   viewCount: number;
-  file: File[];
+  files: NoticeFileType[];
 }
 export interface NoticeType extends NoticeViewType {
   id?: string;

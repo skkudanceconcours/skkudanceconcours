@@ -47,7 +47,7 @@ const PDFView = ({ url }: { url: string }): ReactNode => {
       </Document>
       <button
         className="h-[2.5rem] w-60 border-[0.8px] border-solid border-gray-700 hover:bg-gray-100"
-        onClick={() => downloadPDf("요강/24_요강.pdf")}
+        onClick={() => downloadPDf("요강/24_요강.pdf", "24년도_콩쿨요강.pdf")}
       >
         요강 다운로드
       </button>

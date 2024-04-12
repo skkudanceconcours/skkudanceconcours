@@ -63,9 +63,9 @@ export const uploadNoticeFile = async (
     const uniqueId = uuidv4(); // UUID 생성
     const storageRef = getStorageRef(`공지사항/${uniqueId}`);
     const snapshot = await uploadBytes(storageRef, file);
-    fileURL = await getDownloadURL(snapshot.ref);
-    console.log(fileURL);
-    return fileURL;
+    // fileURL = await getDownloadURL(snapshot.ref);
+    // console.log(fileURL);
+    return uniqueId;
   } catch (error) {
     console.log(error);
     return null;

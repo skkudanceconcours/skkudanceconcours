@@ -9,10 +9,12 @@ import { ImCloudUpload } from "react-icons/im";
 import { styled } from "@mui/material/styles";
 
 // Type
-import { NoticeType } from "@/template/notice";
+import { NoticeFileType, NoticeType } from "@/template/notice";
 // firebase
 import { getStorageRef, uploadNoticeFile } from "@/lib/firebase/firebaseCRUD";
 import { uploadBytes, getDownloadURL } from "firebase/storage";
+import { downloadPDf } from "@/lib/firebase/downloadFile";
+
 // 고유 식별자 생성
 import { v4 as uuidv4 } from "uuid";
 // components
@@ -25,13 +27,14 @@ const initNotice: NoticeType = {
   important: false,
   title: "",
   viewCount: 0,
-  file: [],
+  files: [],
 };
 
 export const QuillEditor = (): ReactNode => {
   const [noticeInput, setNoticeInput] = useState<NoticeType>(initNotice);
   const [contents, setContents] = useState<string>("");
-  const [files, setFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<NoticeFileType[]>([]); // 파일 url들을 저장
+  const [isSaving, setIsSaving] = useState<boolean>(false);
   const quillRef = useRef<ReactQuill>(null);
 
   // Functions
@@ -46,18 +49,26 @@ export const QuillEditor = (): ReactNode => {
 
     if (!uploadedFile) return;
     const filesArray: File[] = Array.from(uploadedFile);
-    console.log(filesArray);
-
-    setFiles((prevFiles) => [...prevFiles, ...filesArray]);
-
     // firebase 올리기
-    const downloadURL = await uploadNoticeFile(filesArray[0]);
-    console.log(downloadURL);
+    setIsSaving(true);
+    const uniqueId: string | null = await uploadNoticeFile(filesArray[0]);
+
+    const fileObj: NoticeFileType = {
+      name: filesArray[0].name,
+      uuid: uniqueId as string,
+    };
+    setFiles((prevFilesObj) => [...prevFilesObj, fileObj]);
+    setNoticeInput((prev) => ({
+      ...prev,
+      files: [...prev.files, fileObj],
+    }));
+    setIsSaving(false);
   };
 
   useEffect(() => {
-    console.log(files);
-  }, [files]);
+    console.log(noticeInput);
+  }, [noticeInput]);
+
   // Image base64 to url
   const imageHandler = async () => {
     const input = document.createElement("input");
@@ -176,15 +187,20 @@ export const QuillEditor = (): ReactNode => {
         파일 업로드
         <VisuallyHiddenInput type="file" multiple onChange={handleFiles} />
       </Button>
-      {files.map((file, index) => (
-        <p
-          className="hover: h-3 w-full cursor-pointer"
-          key={index}
-          onClick={() => window.open(file.name, "_blank")}
-        >
-          {file.name}
-        </p>
-      ))}
+      {isSaving ? (
+        <p className="h-3 w-full ">Saving...</p>
+      ) : (
+        files.map((file, index) => (
+          <div
+            className="flex h-[10%] w-full items-center justify-start overflow-hidden text-ellipsis whitespace-nowrap hover:cursor-pointer hover:text-blue-400"
+            key={index}
+            onClick={() => downloadPDf(`공지사항/${file.uuid}`, file.name)}
+          >
+            {file.name}
+          </div>
+        ))
+      )}
+
       {typeof window !== "undefined" ? (
         <EditorWrapper
           style={{ width: "100%", height: "100%", marginTop: "1rem" }}
