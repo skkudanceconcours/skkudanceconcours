@@ -141,6 +141,7 @@ export const getAllNotices = async () => {
 
 export const getAllReception = async (): Promise<Reception[]> => {
   try {
+    console.log("getAllReception");
     const res = await getDocs(getCollection("reception"));
     const datas: Reception[] = res.docs.map((doc) => {
       const { timestamp } = doc.data().reception;
