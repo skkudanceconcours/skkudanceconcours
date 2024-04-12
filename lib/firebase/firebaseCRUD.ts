@@ -12,6 +12,8 @@ import {
   updateDoc,
   doc,
   increment,
+  getDoc,
+  setDoc,
 } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
@@ -22,10 +24,25 @@ export const getStorageRef = (refName: string) => ref(storage, refName);
 
 //Create
 export const setNotices = async (notice: NoticeType) => {
+  const { id, ...data } = notice;
   try {
-    const res = await addDoc(getCollection("notices"), {
-      notice,
-    });
+    const noticeRef = doc(db, "notices", id);
+    const docSnap = await getDoc(noticeRef);
+    // 수정
+    if (docSnap.exists()) {
+      const modify_doc = await updateDoc(noticeRef, {
+        notice: data,
+      });
+      console.log("문서 업데이트 성공");
+    }
+    // 생성
+    else {
+      const new_doc = await addDoc(getCollection("notices"), {
+        data,
+      });
+      console.log("문서 생성 성공");
+    }
+
     // console.log("제대로 올라감");
   } catch (error) {
     console.log(error);
@@ -65,6 +82,7 @@ export const uploadNoticeFile = async (
     const snapshot = await uploadBytes(storageRef, file);
     // fileURL = await getDownloadURL(snapshot.ref);
     // console.log(fileURL);
+    console.log("Upload completed!");
     return uniqueId;
   } catch (error) {
     console.log(error);

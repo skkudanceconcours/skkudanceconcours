@@ -8,9 +8,9 @@ export interface NoticeViewType {
   title: string;
   viewCount: number;
   files: NoticeFileType[];
+  id: string;
 }
 export interface NoticeType extends NoticeViewType {
-  id?: string;
   num?: number;
   important: boolean;
 }

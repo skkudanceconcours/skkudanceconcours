@@ -51,15 +51,15 @@ const Modal = ({ modalHandler }: ModalProps): ReactNode => {
               <ListItemText primary="Add" />
             </ListItemButton>
           </ListItem>
-          <Divider />
-          <ListItem disablePadding>
+          {/* <Divider /> */}
+          {/* <ListItem disablePadding>
             <ListItemButton>
               <ListItemIcon>
                 <EditIcon />
               </ListItemIcon>
               <ListItemText primary="Modify" />
             </ListItemButton>
-          </ListItem>
+          </ListItem> */}
         </List>
       </nav>
     </Box>

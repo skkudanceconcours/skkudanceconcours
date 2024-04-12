@@ -4,11 +4,13 @@ import Image from "next/image";
 // img & icons
 import headerBackground from "@/public/images/sub_header_bg_ballet.jpg";
 import useNoticeStore from "@/lib/zustand/noticeStore";
+import ScrollToTopFab from "@/app/components/MUI/ScrollTob";
+
 // components
 import NoticeHeader from "@/app/components/notification/NoticeHeader";
 import NoticeView from "@/app/components/notification/NoticeView";
 const DetailsPage = (): ReactNode => {
-  const { contents, title, timeStamp, viewCount, files } = useNoticeStore();
+  const { contents, title, timeStamp, viewCount, files, id } = useNoticeStore();
 
   return (
     <main className="relative flex min-h-screen w-full flex-col items-center justify-start">
@@ -23,7 +25,9 @@ const DetailsPage = (): ReactNode => {
         title={title}
         viewCount={viewCount}
         files={files}
+        id={id}
       />
+      <ScrollToTopFab />
     </main>
   );
 };

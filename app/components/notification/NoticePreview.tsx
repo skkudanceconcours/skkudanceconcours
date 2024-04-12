@@ -40,8 +40,8 @@ const NoticePreview = ({
         <div
           className="cursor-pointer"
           onClick={() => {
-            console.log(id);
             const queryData: NoticeViewType = {
+              id,
               contents,
               timeStamp: timeStamp,
               title,
