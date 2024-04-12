@@ -5,6 +5,15 @@ interface NoticeState extends NoticeViewType {
   setNoticeState: (notice: NoticeViewType) => void;
 }
 
+export const initStore = {
+  contents: "",
+  timeStamp: new Date(),
+  title: "",
+  viewCount: 0,
+  files: [],
+  id: "",
+};
+
 const useNoticeStore = create<NoticeState>()(
   persist(
     (set) => ({

@@ -18,6 +18,8 @@ import AddIcon from "@mui/icons-material/Add";
 import { Path } from "@/template/paths";
 // hooks
 import { useDetectClose } from "@/lib/hooks/useDetectClose";
+// context
+import useNoticeStore, { initStore } from "@/lib/zustand/noticeStore";
 interface ModalProps {
   modalHandler: (val: boolean) => void;
 }
@@ -28,6 +30,8 @@ const Modal = ({ modalHandler }: ModalProps): ReactNode => {
   const path: Path = "/notification/addNotice";
   const boxRef = useRef<HTMLElement>(null);
   //   const [isOpen, outsideClick] = useDetectClose(boxRef, false);
+  // context
+  const { setNoticeState } = useNoticeStore();
 
   return (
     <Box
@@ -44,7 +48,12 @@ const Modal = ({ modalHandler }: ModalProps): ReactNode => {
       <nav aria-label="main mailbox folders" onBlur={() => modalHandler(false)}>
         <List sx={{ padding: "0" }}>
           <ListItem disablePadding>
-            <ListItemButton onClick={() => router.push(path)}>
+            <ListItemButton
+              onClick={() => {
+                setNoticeState(initStore);
+                router.push(path);
+              }}
+            >
               <ListItemIcon>
                 <AddIcon />
               </ListItemIcon>
