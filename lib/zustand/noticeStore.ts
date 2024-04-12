@@ -2,12 +2,17 @@ import { create } from "zustand";
 import { NoticeViewType } from "@/template/notice";
 import { createJSONStorage, persist } from "zustand/middleware";
 interface NoticeState extends NoticeViewType {
-  contents: string;
-  timeStamp: Date;
-  title: string;
-  viewCount: number;
   setNoticeState: (notice: NoticeViewType) => void;
 }
+
+export const initStore = {
+  contents: "",
+  timeStamp: new Date(),
+  title: "",
+  viewCount: 0,
+  files: [],
+  id: "",
+};
 
 const useNoticeStore = create<NoticeState>()(
   persist(
@@ -17,6 +22,7 @@ const useNoticeStore = create<NoticeState>()(
       title: "",
       viewCount: 0,
       files: [],
+      id: "",
       setNoticeState: (notice: NoticeViewType) =>
         set({
           contents: notice.contents,
@@ -24,6 +30,7 @@ const useNoticeStore = create<NoticeState>()(
           title: notice.title,
           viewCount: notice.viewCount,
           files: notice.files,
+          id: notice.id,
         }),
     }),
     {
