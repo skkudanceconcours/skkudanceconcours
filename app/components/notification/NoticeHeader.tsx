@@ -37,7 +37,7 @@ const NoticeHeader = (): ReactNode => {
           router.push("/notification/guideline")
         }
       >
-        Guideline
+        Guidelines
       </span>
     </nav>
   );

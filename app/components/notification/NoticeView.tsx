@@ -55,7 +55,7 @@ const NoticeView = ({
         {files ? <FilePreview files={files} /> : null}
       </section>
       <div
-        className="view ql-editor h-[10vh] w-full p-0 scrollbar-hide" // react-quill css
+        className="view ql-editor h-[10vh] w-full p-40 scrollbar-hide" // react-quill css
         dangerouslySetInnerHTML={{
           __html: DOMPurify.sanitize(contents),
         }}
