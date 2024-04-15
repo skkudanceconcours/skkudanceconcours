@@ -430,12 +430,9 @@ const ReceptionForm = (): ReactNode => {
                   ref={musicOrPoseRef}
                 />
               )}
-              {!(
-                (major === "한국무용" && category === "즉흥") ||
-                (major === "발레" &&
-                  category === "즉흥<기초실기 A,B & 즉흥>") ||
-                major === "컨템포러리댄스"
-              ) && (
+              {(category=='창작' || 
+                (major === "한국무용" && category === "전통(재구성)") ||
+                (major === "발레" && category === "고전<기초실기 A,B & Variation>")) && (
                 <MusicInput
                   onChange={(file: File) => {
                     setMusicFile(file);
