@@ -387,7 +387,8 @@ const ReceptionForm = (): ReactNode => {
                 disabled={individual ? (!major  || !grade ) : !major }
                 width={250}
               />
-              <TextInput
+              {!(major === "컨템포러리댄스" && !(grade === "초등부 저학년(3학년)" || grade === "초등부 저학년(4학년)") )&&
+                <TextInput
                 label="작품 제목"
                 error={artTitleError}
                 ref={artTitleRef}
@@ -411,7 +412,7 @@ const ReceptionForm = (): ReactNode => {
                 category === "즉흥<Movement Phrase 1 & 즉흥>" ||
                 category === "즉흥<기초실기 A,B & 즉흥>") && false}
                 onChange={() => setArtTitleError(false)}
-              />
+              />}
               {(!individual ||
                 (individual &&
                   ((major === "한국무용" && (category === "전통(재구성)" || category === "창작")) ||

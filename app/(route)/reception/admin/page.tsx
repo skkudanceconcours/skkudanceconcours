@@ -1,13 +1,26 @@
+"use client";
 import ExcelButton from "@/app/components/ExcelButton";
 import NextTable from "@/app/components/nextUI/Table";
-import { getAllReception } from "@/lib/firebase/firebaseCRUD";
 import { baseUrl } from "@/lib/functions/dynamicURL";
+import useLoginStore from "@/lib/zustand/loginStore";
+import { Path } from "@/template/paths";
 import { Reception } from "@/template/reception";
-import { ReactNode } from "react";
+import { redirect } from "next/navigation";
+import { ReactNode, useEffect, useState } from "react";
 
-const ReceptionAdmin = async (): Promise<ReactNode> => {
-  const receptionData  = await fetchData();
-  console.log("receptionData:", receptionData);
+const ReceptionAdmin = (): ReactNode => {
+  const [receptionData, setReceptionData] = useState<Reception[]>([]);
+  const { loginState } = useLoginStore();
+  
+  useEffect(() => {
+    if(loginState === "admin") fetchData();
+    else redirect("/" as Path);
+  }, []);
+
+  async function fetchData() { 
+    setReceptionData(await getReceptionData());
+  }
+
   return (<main className="relative flex h-screen w-screen flex-col items-center">
       <h1 className="relative lg:my-12 flex h-[15vh] w-4/5 flex-col justify-center text-2xl lg:text-5xl font-semibold">
         콩쿨 접수 현황
@@ -20,7 +33,7 @@ const ReceptionAdmin = async (): Promise<ReactNode> => {
       </div>
     </main>);
 };
-const fetchData = async ():Promise<Reception[]> => {
+const getReceptionData = async ():Promise<Reception[]> => {
   try{
     const res = await fetch(`${baseUrl}/api/getReception`,{
       next: { revalidate: 10, tags: ["reception"] },
