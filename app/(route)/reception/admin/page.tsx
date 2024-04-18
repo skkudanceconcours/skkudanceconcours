@@ -17,7 +17,8 @@ const ReceptionAdmin = (): ReactNode => {
     else redirect("/" as Path);
   }, []);
 
-  async function fetchData() { 
+  async function fetchData() {
+    console.log("fetch");
     setReceptionData(await getReceptionData());
   }
 
