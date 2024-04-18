@@ -190,7 +190,7 @@ const ReceptionForm = (): ReactNode => {
       major: major,
       grade: grade,
       category: category,
-      artTitle: artTitleRef.current!.value,
+      artTitle: artTitleRef.current ? artTitleRef.current!.value : null,
       musicFileURL: fileURL,
       musicOrPose: musicOrPose ? musicOrPose : null,
       participants: participantsList,
