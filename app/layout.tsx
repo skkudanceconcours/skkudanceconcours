@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html className="relative" lang="en">
-      <body className={`${raleway.className} flex flex-col`}>
+      <body className={`${raleway.className} flex flex-col w-full overflow-x-hidden`}>
         <NextUIProviders>
           <LoginStateProvider>
             <Header />
