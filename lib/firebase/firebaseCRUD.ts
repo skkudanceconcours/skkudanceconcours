@@ -78,22 +78,26 @@ export const uploadStorageFile = async (
   folder: string,
 ): Promise<string | null> => {
   if (!file) return null;
-
+  let storageRef = getStorageRef(``);
   try {
-    let storageRef = getStorageRef("");
     if (folder === "공지사항") {
       const uniqueId = uuidv4(); // UUID 생성
       storageRef = getStorageRef(`${folder}/${uniqueId}`);
+      const snapshot = await uploadBytes(storageRef, file);
       return uniqueId;
     } else if (folder === "요강") {
+      const metadata = {
+        contentType: "application/pdf",
+      };
+
       storageRef = getStorageRef(`${folder}/${file.name}`);
+      const snapshot = await uploadBytes(storageRef, file, metadata);
+      return null;
     }
-    const snapshot = await uploadBytes(storageRef, file);
-    return null;
   } catch (error) {
     console.log(error);
-    return null;
   }
+  return null;
 };
 
 export const submitReception = async (
@@ -153,7 +157,6 @@ export const getAllNotices = async () => {
 
 export const getAllReception = async (): Promise<Reception[]> => {
   try {
-    console.log("getAllReception");
     const res = await getDocs(getCollection("reception"));
     const datas: Reception[] = res.docs.map((doc) => {
       const { timestamp } = doc.data().reception;
@@ -170,12 +173,25 @@ export const getAllReception = async (): Promise<Reception[]> => {
 };
 
 // PDF 받아오기
-export const getPDF = async (PDFPath: string): Promise<string> => {
+export const getPDFPath = async (): Promise<string> => {
   try {
-    const url = await getDownloadURL(getStorageRef(PDFPath));
-    return url;
+    const storageRef = getStorageRef("요강");
+    const fileList = await listAll(storageRef);
+    return fileList.items[0].fullPath;
   } catch (error) {
     console.log(error);
+  }
+  return "";
+};
+
+export const getPDF = async (): Promise<string> => {
+  try {
+    const filePath = await getPDFPath();
+    const storageRef = getStorageRef(filePath);
+    const url = await getDownloadURL(storageRef);
+    return url;
+  } catch (error) {
+    console.log("GetPDF", error);
   }
   return "failed!";
 };
@@ -193,16 +209,11 @@ export const updateViewCount = async (id: string) => {
 
 export const updatePDF = async (file: File | null) => {
   try {
-    const fileList = await listAll(getStorageRef("요강"));
-    // #1. 파일 삭제
-    const deleteFileName: string = fileList.items[0].fullPath;
-
-    const res = deleteObject(getStorageRef(deleteFileName));
-    console.log("삭제 제대로 됨");
-
-    // #2. 파일 업로드
-    const upload_res = uploadStorageFile(file, "요강");
-    console.log("업로드 제대로 됨");
+    const filePath = await getPDFPath();
+    // 파일 업로드
+    const upload_res = await uploadStorageFile(file, "요강");
+    // 파일 삭제
+    const res = await deleteObject(getStorageRef(filePath));
   } catch (error) {
     console.log("Error in pdf upload", error);
   }
