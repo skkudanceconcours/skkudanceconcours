@@ -10,7 +10,7 @@ import { styled } from "@mui/material/styles";
 // Type
 import { NoticeFileType, NoticeType } from "@/template/notice";
 // firebase
-import { getStorageRef, uploadNoticeFile } from "@/lib/firebase/firebaseCRUD";
+import { getStorageRef, uploadStorageFile } from "@/lib/firebase/firebaseCRUD";
 import { uploadBytes, getDownloadURL } from "firebase/storage";
 import { downloadPDf } from "@/lib/firebase/downloadFile";
 // context
@@ -47,10 +47,8 @@ export const QuillEditor = (): ReactNode => {
     }));
   }
 
-  
   const handleFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const uploadedFile = event.target.files;
-  
 
     if (!uploadedFile) return;
     const filesArray: File[] = Array.from(uploadedFile);
@@ -58,8 +56,10 @@ export const QuillEditor = (): ReactNode => {
     // firebase 올리기
     setIsSaving(true);
     try {
-
-      const uniqueId: string | null = await uploadNoticeFile(filesArray[0]);
+      const uniqueId: string | null = await uploadStorageFile(
+        filesArray[0],
+        "공지사항",
+      );
 
       const fileObj: NoticeFileType = {
         name: filesArray[0].name,
