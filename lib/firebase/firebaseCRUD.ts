@@ -13,6 +13,7 @@ import {
   updateDoc,
   doc,
   increment,
+  deleteDoc,
 } from "firebase/firestore";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
@@ -177,3 +178,10 @@ export const updateViewCount = async (id: string) => {
 };
 
 // Delete
+export const deleteNotice = async (id:string) => {
+  try {
+    await deleteDoc(doc(db,"notices",id));
+  } catch (error) {
+    console.log("Error is deleting notices",error);    
+  }
+}

@@ -3,7 +3,8 @@ import React, { ReactNode } from "react";
 import DOMPurify from "isomorphic-dompurify";
 import "react-quill/dist/quill.core.css";
 import { useRouter } from "next/navigation";
-
+// firebase
+import { deleteNotice } from "@/lib/firebase/firebaseCRUD";
 // Types
 import { NoticeViewType } from "@/template/notice";
 import { Path } from "@/template/paths";
@@ -31,6 +32,12 @@ const NoticeView = ({
   // useRouter
   const router = useRouter();
   // Functions
+  const deleteHandler = async () => {
+    console.log(id);
+
+    await deleteNotice(id);
+    router.push("/notification?page=1" as Path);
+  };
   const modifyHandler = () => {
     router.push(`/notification/addNotice` as Path);
   };
@@ -43,12 +50,20 @@ const NoticeView = ({
       <section className="flex h-[4vh] w-full items-center border-b-2 border-solid border-[#d8d8d8]">
         무용학과 | 조회수 {viewCount} | {formattedDate}
         {loginState === "admin" ? (
-          <p
-            onClick={modifyHandler}
-            className="absolute right-0 hover:cursor-pointer hover:text-red-300"
-          >
-            수정하기
-          </p>
+          <div className="absolute right-0 flex justify-self-end">
+            <p
+              onClick={deleteHandler}
+              className="mr-2 hover:cursor-pointer hover:font-semibold hover:text-red-400"
+            >
+              삭제하기
+            </p>
+            <p
+              onClick={modifyHandler}
+              className="hover:cursor-pointer hover:font-semibold hover:text-green-400"
+            >
+              수정하기
+            </p>
+          </div>
         ) : null}
       </section>
       <section className="flex w-full items-start justify-start border-b-2 border-solid border-[#d8d8d8]">
