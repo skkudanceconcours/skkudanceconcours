@@ -15,7 +15,14 @@ import {
   increment,
   deleteDoc,
 } from "firebase/firestore";
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import {
+  deleteObject,
+  getDownloadURL,
+  getStorage,
+  listAll,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
 
 const storage = getStorage();
 const getCollection = (collectionName: "notices" | "reception" | "test") =>
@@ -66,19 +73,23 @@ export const uploadMP3File = async (
   }
 };
 
-export const uploadNoticeFile = async (
+export const uploadStorageFile = async (
   file: File | null,
+  folder: string,
 ): Promise<string | null> => {
   if (!file) return null;
 
-  // let fileURL: string;
   try {
-    const uniqueId = uuidv4(); // UUID 생성
-    const storageRef = getStorageRef(`공지사항/${uniqueId}`);
+    let storageRef = getStorageRef("");
+    if (folder === "공지사항") {
+      const uniqueId = uuidv4(); // UUID 생성
+      storageRef = getStorageRef(`${folder}/${uniqueId}`);
+      return uniqueId;
+    } else if (folder === "요강") {
+      storageRef = getStorageRef(`${folder}/${file.name}`);
+    }
     const snapshot = await uploadBytes(storageRef, file);
-    // fileURL = await getDownloadURL(snapshot.ref);
-    // console.log(fileURL);
-    return uniqueId;
+    return null;
   } catch (error) {
     console.log(error);
     return null;
@@ -146,7 +157,10 @@ export const getAllReception = async (): Promise<Reception[]> => {
     const res = await getDocs(getCollection("reception"));
     const datas: Reception[] = res.docs.map((doc) => {
       const { timestamp } = doc.data().reception;
-      return { ...doc.data().reception, timestamp: new Date(timestamp.toDate()) };
+      return {
+        ...doc.data().reception,
+        timestamp: new Date(timestamp.toDate()),
+      };
     });
     return datas;
   } catch (error) {
@@ -177,11 +191,28 @@ export const updateViewCount = async (id: string) => {
   }
 };
 
-// Delete
-export const deleteNotice = async (id:string) => {
+export const updatePDF = async (file: File | null) => {
   try {
-    await deleteDoc(doc(db,"notices",id));
+    const fileList = await listAll(getStorageRef("요강"));
+    // #1. 파일 삭제
+    const deleteFileName: string = fileList.items[0].fullPath;
+
+    const res = deleteObject(getStorageRef(deleteFileName));
+    console.log("삭제 제대로 됨");
+
+    // #2. 파일 업로드
+    const upload_res = uploadStorageFile(file, "요강");
+    console.log("업로드 제대로 됨");
   } catch (error) {
-    console.log("Error is deleting notices",error);    
+    console.log("Error in pdf upload", error);
   }
-}
+};
+
+// Delete
+export const deleteNotice = async (id: string) => {
+  try {
+    await deleteDoc(doc(db, "notices", id));
+  } catch (error) {
+    console.log("Error is deleting notices", error);
+  }
+};

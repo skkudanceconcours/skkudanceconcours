@@ -3,12 +3,12 @@ import React, { ReactNode } from "react";
 import Image from "next/image";
 // img & icons
 import headerBackground from "@/public/images/sub_header_bg_ballet.jpg";
-import useNoticeStore from "@/lib/zustand/noticeStore";
 import ScrollToTopFab from "@/app/components/MUI/ScrollTob";
-
 // components
 import NoticeHeader from "@/app/components/notification/NoticeHeader";
 import NoticeView from "@/app/components/notification/NoticeView";
+// context
+import useNoticeStore from "@/lib/zustand/noticeStore";
 const DetailsPage = (): ReactNode => {
   const { contents, title, timeStamp, viewCount, files, id } = useNoticeStore();
 

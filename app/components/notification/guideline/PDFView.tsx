@@ -3,10 +3,15 @@ import React, { ReactNode, useEffect, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
-// Images * Icons
-import Button from "@mui/material/Button";
 // firebase
 import { downloadPDf } from "@/lib/firebase/downloadFile";
+// context
+import useLoginStore from "@/lib/zustand/loginStore";
+import { updatePDF, uploadStorageFile } from "@/lib/firebase/firebaseCRUD";
+// icons * image
+import Button from "@mui/material/Button";
+import { ImCloudUpload } from "react-icons/im";
+import { styled } from "@mui/material/styles";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -16,8 +21,34 @@ const PDFView = ({ url }: { url: string }): ReactNode => {
   const [pageScale, setPageScale] = useState<number>(1); // 페이지 스케일
   const [pdfSize, setpdfSize] = useState<number>(0); // 페이지 크기
 
-  // pages
+  const { loginState } = useLoginStore();
 
+  const handleFiles = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const uploadedFile = event.target.files;
+
+    if (!uploadedFile) return;
+    const filesArray: File[] = Array.from(uploadedFile);
+    // firebase 올리기
+    try {
+      const res = await updatePDF(filesArray[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // File Settings
+  const VisuallyHiddenInput = styled("input")({
+    clip: "rect(0 0 0 0)",
+    clipPath: "inset(50%)",
+    height: 1,
+    overflow: "hidden",
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    whiteSpace: "nowrap",
+    width: 1,
+  });
+  // pages
   function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
     setNumPages(numPages);
   }
@@ -50,31 +81,21 @@ const PDFView = ({ url }: { url: string }): ReactNode => {
       >
         요강 다운로드
       </button>
-      {/* <Document file={url} onLoadSuccess={onDocumentLoadSuccess}>
-        <Page width={pdfSize} scale={pageScale} pageNumber={pageNumber} />
-      </Document> */}
-      {/* <div className="flex w-4/5 flex-col items-center justify-start">
-        <p className="font-semibold">
-          Page {pageNumber} of {numPages}
-        </p>
-        <div className="m-6 flex w-full items-center justify-around">
-          <Button
-            variant="outlined"
-            onClick={() => handlePageNumber("back")}
-            style={{}}
-            disabled={pageNumber === 1 ? true : false}
-          >
-            이전
-          </Button>
-          <Button
-            variant="outlined"
-            onClick={() => handlePageNumber("front")}
-            disabled={pageNumber === numPages ? true : false}
-          >
-            다음
-          </Button>
-        </div>
-      </div> */}
+      {loginState === "admin" ? (
+        <Button
+          component="label"
+          role={undefined}
+          variant="outlined"
+          tabIndex={-1}
+          sx={{
+            marginTop: "2rem",
+          }}
+          startIcon={<ImCloudUpload />}
+        >
+          요강 교체하기
+          <VisuallyHiddenInput type="file" onChange={handleFiles} />
+        </Button>
+      ) : null}
     </>
   );
 };

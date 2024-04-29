@@ -8,7 +8,6 @@ const NoticeHeader = (): ReactNode => {
   const router = useRouter();
   const pathName = usePathname();
   const currPath = pathName;
-  console.log(currPath);
 
   // Dynamic Styling
 
