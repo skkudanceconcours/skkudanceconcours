@@ -104,11 +104,10 @@ export const QuillEditor = (): ReactNode => {
 
   // Editor Setting
   const formats = [
-    "size",
-    "h1",
-    "h2",
-    "h3",
+    "header",
+    "code-block",
     "bold",
+    "size",
     "italic",
     "underline",
     "strike",
@@ -119,15 +118,7 @@ export const QuillEditor = (): ReactNode => {
     "link",
     "blockquote",
     "font",
-    "header",
-    "bullet",
-    "indent",
-    "image",
-    "float",
-    "height",
-    "width",
   ];
-  // Editor Settings
   const modules = useMemo(() => {
     return {
       imageActions: {},

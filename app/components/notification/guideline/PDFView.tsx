@@ -31,7 +31,7 @@ const PDFView = (): ReactNode => {
 
   const { loginState } = useLoginStore();
 
-  const refresh = async (delay: number) => {
+  const refresh = async (delay: number): Promise<undefined> => {
     return new Promise((resolve) => setTimeout(resolve, delay));
   };
 
