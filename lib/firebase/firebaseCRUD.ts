@@ -23,6 +23,7 @@ import {
   ref,
   uploadBytes,
 } from "firebase/storage";
+import delayTimeout from "../functions/asyncTimeout";
 
 const storage = getStorage();
 const getCollection = (collectionName: "notices" | "reception" | "test") =>
@@ -223,6 +224,8 @@ export const updatePDF = async (file: File | null) => {
 export const deleteNotice = async (id: string) => {
   try {
     await deleteDoc(doc(db, "notices", id));
+    revalidateTag("notice");
+    delayTimeout(1000);
   } catch (error) {
     console.log("Error is deleting notices", error);
   }
