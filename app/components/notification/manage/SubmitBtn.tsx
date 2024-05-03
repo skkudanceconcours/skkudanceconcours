@@ -59,7 +59,7 @@ const SubmitBtn = ({ noticeInput, contents }: SubmitBtnProps) => {
       setNotices(data);
       setIsSaving(true);
       customRevalidateTag("notice");
-      await delayTimeout(2000);
+      await delayTimeout(4000);
       const nextPath: Path = "/notification?page=1";
       router.push(nextPath);
     } catch (error) {
