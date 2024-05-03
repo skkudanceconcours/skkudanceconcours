@@ -41,6 +41,7 @@ const NoticeView = ({
   const modifyHandler = () => {
     router.push(`/notification/addNotice` as Path);
   };
+
   return (
     <div className="relative flex w-4/5 flex-col justify-start">
       <section className="flex h-[8vh] w-full items-center justify-start text-3xl font-semibold hover:cursor-pointer">
@@ -72,7 +73,7 @@ const NoticeView = ({
       <div
         className="view ql-editor h-[10vh] w-full p-40 scrollbar-hide" // react-quill css
         dangerouslySetInnerHTML={{
-          __html: DOMPurify.sanitize(contents),
+          __html: DOMPurify.sanitize("<h1>왜안되는데 진짜</h1>"),
         }}
       />
       {/* <section className="w-full py-5">{contents}</section> */}
