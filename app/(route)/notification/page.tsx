@@ -15,6 +15,8 @@ const fetchData = async (): Promise<{
   data: NoticeType[];
   totalPages: number;
 }> => {
+  console.log("Fetching data");
+
   try {
     const res = await fetch(`${baseUrl}/api/getNotice`, {
       next: { revalidate: 10, tags: ["notice"] }, //revalidate every 60 seconds

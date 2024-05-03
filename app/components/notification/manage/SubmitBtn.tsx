@@ -1,9 +1,12 @@
+"use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+// functions
+import { customRevalidateTag } from "@/lib/functions/customRevalidateTag";
+import delayTimeout from "@/lib/functions/asyncTimeout";
 // Type
 import { NoticeType } from "@/template/notice";
 import { Path } from "@/template/paths";
-
 // firebase
 import { setNotices } from "@/lib/firebase/firebaseCRUD";
 // Images & Icons
@@ -11,6 +14,7 @@ import { Button } from "@nextui-org/react";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
+import { CircularProgress } from "@mui/material";
 
 interface SubmitBtnProps {
   noticeInput: NoticeType;
@@ -39,6 +43,7 @@ const SubmitBtn = ({ noticeInput, contents }: SubmitBtnProps) => {
   const router = useRouter();
   // useState
   const [open, setOpen] = useState<boolean>(false);
+  const [isSaving, setIsSaving] = useState<boolean>(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -52,7 +57,9 @@ const SubmitBtn = ({ noticeInput, contents }: SubmitBtnProps) => {
         important: isImp,
       };
       setNotices(data);
-
+      setIsSaving(true);
+      customRevalidateTag("notice");
+      await delayTimeout(2000);
       const nextPath: Path = "/notification?page=1";
       router.push(nextPath);
     } catch (error) {
@@ -76,25 +83,36 @@ const SubmitBtn = ({ noticeInput, contents }: SubmitBtnProps) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            중요 공지로 등록할까요?
-          </Typography>
-          <div className="flex w-full items-center justify-evenly">
-            <Button
-              color="primary"
-              variant="bordered"
-              onClick={() => submitHandler(true)}
-            >
-              Yes
-            </Button>
-            <Button
-              color="danger"
-              variant="bordered"
-              onClick={() => submitHandler(false)}
-            >
-              No
-            </Button>
-          </div>
+          {isSaving ? (
+            <>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                저장 중입니다
+              </Typography>
+              <CircularProgress />
+            </>
+          ) : (
+            <>
+              <Typography id="modal-modal-title" variant="h6" component="h2">
+                중요 공지로 등록할까요?
+              </Typography>
+              <div className="flex w-full items-center justify-evenly">
+                <Button
+                  color="primary"
+                  variant="bordered"
+                  onClick={() => submitHandler(true)}
+                >
+                  Yes
+                </Button>
+                <Button
+                  color="danger"
+                  variant="bordered"
+                  onClick={() => submitHandler(false)}
+                >
+                  No
+                </Button>
+              </div>
+            </>
+          )}
         </Box>
       </Modal>
     </>

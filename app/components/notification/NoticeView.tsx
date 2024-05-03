@@ -33,8 +33,6 @@ const NoticeView = ({
   const router = useRouter();
   // Functions
   const deleteHandler = async () => {
-    console.log(id);
-
     await deleteNotice(id);
     router.push("/notification?page=1" as Path);
   };
