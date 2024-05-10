@@ -118,6 +118,7 @@ export const QuillEditor = (): ReactNode => {
     "link",
     "blockquote",
     "font",
+    "image"
   ];
   const modules = useMemo(() => {
     return {

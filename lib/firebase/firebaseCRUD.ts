@@ -225,7 +225,7 @@ export const deleteNotice = async (id: string) => {
   try {
     await deleteDoc(doc(db, "notices", id));
     revalidateTag("notice");
-    delayTimeout(4000);
+    await delayTimeout(4000);
   } catch (error) {
     console.log("Error is deleting notices", error);
   }

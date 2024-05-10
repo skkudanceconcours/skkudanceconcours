@@ -13,7 +13,7 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_MEASUREMENT_ID,
 };
 
-// Test Firebase
+// // Test Firebase
 // const firebaseConfig = {
 //   apiKey: process.env.NEXT_PUBLIC_TEST_API_KEY,
 //   authDomain: process.env.NEXT_PUBLIC_TEST_AUTH_DOMAIN,
