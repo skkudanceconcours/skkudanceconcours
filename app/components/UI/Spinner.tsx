@@ -1,6 +1,7 @@
-const loading = () => {
+import React, { ReactNode } from 'react';
+const Spinner = (): ReactNode => {
   return (
-    <main className='flex h-screen w-screen items-center justify-center'>
+    <main className='h-screen w-screen flex-col items-center justify-center'>
       <div className='animate-loading relative h-12 w-12'>
         <div className='absolute left-0 top-0 h-3 w-3 rounded-full bg-gray-800' />
         <div className='absolute right-0 top-0 h-3 w-3 rounded-full bg-gray-800' />
@@ -11,4 +12,4 @@ const loading = () => {
   );
 };
 
-export default loading;
+export default Spinner;

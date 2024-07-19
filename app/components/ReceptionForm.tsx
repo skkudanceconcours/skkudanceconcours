@@ -1,25 +1,10 @@
-"use client";
-import {
-  Dispatch,
-  ReactNode,
-  RefObject,
-  SetStateAction,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+'use client';
+import { Dispatch, ReactNode, RefObject, SetStateAction, useEffect, useRef, useState } from 'react';
 
-import {
-  category,
-  gender,
-  grade,
-  individualOrGroup,
-  major,
-  musicOrPose,
-} from "@/template/inputTypes";
-import Selection from "./nextUI/Selection";
-import TextInput from "./nextUI/TextInput";
-import { quicksand } from "@/public/fonts/font";
+import { category, gender, grade, individualOrGroup, major, musicOrPose } from '@/template/inputTypes';
+import Selection from './UI/nextUI/Selection';
+import TextInput from './UI/nextUI/TextInput';
+import { quicksand } from '@/public/fonts/font';
 import {
   categoryOption1,
   categoryOption2,
@@ -33,35 +18,34 @@ import {
   individualOrGroupOption,
   majorOption,
   musicOrPoseOption,
-} from "@/template/selectOptions";
-import MusicInput from "./MusicInput";
-import { Button } from "@nextui-org/react";
-import { Reception } from "@/template/reception";
-import PrivacyPolicy from "./PrivacyPolicy";
-import { submitReception, submitTest, uploadMP3File } from "@/lib/firebase/firebaseCRUD";
-import { useRouter } from "next/navigation";
-import { Path } from "@/template/paths";
-
+} from '@/template/selectOptions';
+import MusicInput from './MusicInput';
+import { Button } from '@nextui-org/react';
+import { Reception } from '@/template/reception';
+import PrivacyPolicy from './PrivacyPolicy';
+import { submitReception, submitTest, uploadMP3File } from '@/lib/firebase/firebaseCRUD';
+import { useRouter } from 'next/navigation';
+import { Path } from '@/template/paths';
 
 const ReceptionForm = (): ReactNode => {
   //useState
-  const [individualOrGroup, setIndividualOrGroup] = useState<individualOrGroup>("");
-  const [gender, setGender] = useState<gender>("");
-  const [major, setMajor] = useState<major>("");
-  const [grade, setGrade] = useState<grade>("");
-  const [category, setCategory] = useState<category>("");
-  const [musicOrPose, setMusicOrPose] = useState<musicOrPose>("");
+  const [individualOrGroup, setIndividualOrGroup] = useState<individualOrGroup>('');
+  const [gender, setGender] = useState<gender>('');
+  const [major, setMajor] = useState<major>('');
+  const [grade, setGrade] = useState<grade>('');
+  const [category, setCategory] = useState<category>('');
+  const [musicOrPose, setMusicOrPose] = useState<musicOrPose>('');
   const [participantsList, setParticipantsList] = useState<string[]>([]);
   const [musicFile, setMusicFile] = useState<File | null>(null);
-  const [privacyConfirm,setPrivacyConfirm] = useState<boolean>(false);
-  const [loading,setLoading] = useState<boolean>(false);
+  const [privacyConfirm, setPrivacyConfirm] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   //useState_errors_textInputs
   const [nameError, setNameError] = useState<boolean>(false);
   const [birthError, setBirthError] = useState<boolean>(false);
   const [contactError, setContactError] = useState<boolean>(false);
   const [emailError, setEmailError] = useState<boolean>(false);
   const [schoolError, setSchoolError] = useState<boolean>(false);
-  const [leaderGradeError,setLeaderGradeError] = useState<boolean>(false);
+  const [leaderGradeError, setLeaderGradeError] = useState<boolean>(false);
   const [academyError, setAcademyError] = useState<boolean>(false);
   const [instructorNameError, setInstructorNameError] = useState<boolean>(false);
   const [instructorContactError, setInstructorContactError] = useState<boolean>(false);
@@ -77,7 +61,7 @@ const ReceptionForm = (): ReactNode => {
   //useState_error_music
   const [musicFileError, setMusicFileError] = useState<boolean>(false);
   //useState_error_privacy
-  const [privacyConfirmError,setPrivacyConfirmError] = useState<boolean>(false);
+  const [privacyConfirmError, setPrivacyConfirmError] = useState<boolean>(false);
 
   //useRef_textInputs
   const nameRef = useRef<HTMLInputElement>(null);
@@ -110,58 +94,60 @@ const ReceptionForm = (): ReactNode => {
   useEffect(() => setPrivacyConfirmError(false), [privacyConfirm]);
 
   //variables
-  const individual: boolean = individualOrGroup !== "단체";
+  const individual: boolean = individualOrGroup !== '단체';
 
   //functions
   const checkError = (): boolean => {
     let error = false;
-    
-    ([
-      [individualOrGroupRef,individualOrGroup, setIndividualOrGroupError],
-      [genderRef,gender,setGenderError],
-      [majorRef,major, setMajorError],
-      [gradeRef,grade, setGradeError],
-      [categoryRef,category, setCategoryError],
-      [musicOrPoseRef,musicOrPose, setMusicOrPoseError],
-    ] as [RefObject<HTMLInputElement>, string, Dispatch<SetStateAction<boolean>>][]
-    ).forEach(([ref,element,setError]) => {
-      console.log(element)
+
+    (
+      [
+        [individualOrGroupRef, individualOrGroup, setIndividualOrGroupError],
+        [genderRef, gender, setGenderError],
+        [majorRef, major, setMajorError],
+        [gradeRef, grade, setGradeError],
+        [categoryRef, category, setCategoryError],
+        [musicOrPoseRef, musicOrPose, setMusicOrPoseError],
+      ] as [RefObject<HTMLInputElement>, string, Dispatch<SetStateAction<boolean>>][]
+    ).forEach(([ref, element, setError]) => {
+      console.log(element);
       if (ref.current && !element) {
         setError(true);
         error = true;
-      };
+      }
     });
-      
-    ([
-      [nameRef, setNameError],
-      [birthRef, setBirthError],
-      [contactRef, setContactError],
-      [emailRef, setEmailError],
-      [schoolRef, setSchoolError],
-      [leaderGradeRef, setLeaderGradeError],
-      [academyRef, setAcademyError],
-      [instructorNameRef, setInstructorNameError],
-      [instructorContactRef, setInstructorContactError],
-      [artTitleRef, setArtTitleError],
-    ] as [RefObject<HTMLInputElement>, Dispatch<SetStateAction<boolean>>][]
+
+    (
+      [
+        [nameRef, setNameError],
+        [birthRef, setBirthError],
+        [contactRef, setContactError],
+        [emailRef, setEmailError],
+        [schoolRef, setSchoolError],
+        [leaderGradeRef, setLeaderGradeError],
+        [academyRef, setAcademyError],
+        [instructorNameRef, setInstructorNameError],
+        [instructorContactRef, setInstructorContactError],
+        [artTitleRef, setArtTitleError],
+      ] as [RefObject<HTMLInputElement>, Dispatch<SetStateAction<boolean>>][]
     ).forEach(([ref, setError]) => {
       if (ref.current && !ref.current.value) {
         setError(true);
         error = true;
-      };
+      }
     });
 
     //music file check
-    if(musicFileRef.current && !musicFile){
+    if (musicFileRef.current && !musicFile) {
       setMusicFileError(true);
-      error = true;   
+      error = true;
     }
     return error;
   };
 
   const onSubmit = async () => {
     if (checkError()) {
-      scrollRef.current?.scrollIntoView({behavior:'smooth'});
+      scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
       return;
     }
     if (privacyConfirm === false) {
@@ -172,7 +158,10 @@ const ReceptionForm = (): ReactNode => {
     setLoading(true);
 
     const currentTime: Date = new Date();
-    const fileURL:string|null = await uploadMP3File(`${nameRef.current!.value.trim()}${currentTime.toString()}`,musicFile);
+    const fileURL: string | null = await uploadMP3File(
+      `${nameRef.current!.value.trim()}${currentTime.toString()}`,
+      musicFile,
+    );
 
     const newReception: Reception = {
       timestamp: currentTime,
@@ -196,63 +185,57 @@ const ReceptionForm = (): ReactNode => {
       participants: participantsList,
     };
     const docId = await submitReception(newReception);
-    if(docId){
-      router.replace("/reception/submit" as Path);
-    }
-    else{
+    if (docId) {
+      router.replace('/reception/submit' as Path);
+    } else {
       console.log('submission failed');
     }
     setLoading(false);
-    
   };
 
   const onAddParticipant = (e: any) => {
     e.preventDefault();
     if (participantRef && participantRef.current) {
-      if (participantRef.current!.value.trim() === "") {
+      if (participantRef.current!.value.trim() === '') {
         setParticipantError(true);
         return;
       }
-      setParticipantsList((prev) => [...prev, participantRef.current!.value]);
-      participantRef.current!.value = "";
+      setParticipantsList(prev => [...prev, participantRef.current!.value]);
+      participantRef.current!.value = '';
     }
   };
 
   const onRemoveParticipant = (target: string) => {
-    const newList = participantsList.filter(
-      (participant) => participant !== target
-    );
+    const newList = participantsList.filter(participant => participant !== target);
     setParticipantsList(newList);
   };
 
   return (
-    <div className="flex flex-col">
+    <div className='flex flex-col'>
       <div ref={scrollRef}></div>
       <form className={`flex flex-col lg:flex-row lg:gap-20 ${quicksand.className}`}>
         <div>
           <Selection
             value={individualOrGroup}
             onChange={(value: string) => {
-              console.log('value:',value)
+              console.log('value:', value);
               setIndividualOrGroup(value as individualOrGroup);
               setIndividualOrGroupError(false);
             }}
-            label={"개인/단체 선택"}
-            placeholder="개인/단체 선택"
+            label={'개인/단체 선택'}
+            placeholder='개인/단체 선택'
             error={individualOrGroupError}
             options={individualOrGroupOption}
             ref={individualOrGroupRef}
           />
-          <div className="flex flex-col lg:flex-row lg:gap-10 lg:my-10">
-            <div className="p-8 flex flex-col">
-              <label className="text-xl">
-                {individual ? "참가자 정보" : "대표자 정보"}
-              </label>
+          <div className='flex flex-col lg:my-10 lg:flex-row lg:gap-10'>
+            <div className='flex flex-col p-8'>
+              <label className='text-xl'>{individual ? '참가자 정보' : '대표자 정보'}</label>
               <TextInput
-                label="참가자 이름"
+                label='참가자 이름'
                 error={nameError}
                 ref={nameRef}
-                description={!individual ? "(대표자 이름 외 00명)" : ""}
+                description={!individual ? '(대표자 이름 외 00명)' : ''}
                 onChange={() => setNameError(false)}
               />
               <Selection
@@ -261,69 +244,66 @@ const ReceptionForm = (): ReactNode => {
                   setGender(value as gender);
                   setGenderError(false);
                 }}
-                label="성별"
-                placeholder="성별 선택"
+                label='성별'
+                placeholder='성별 선택'
                 error={genderError}
                 options={genderOption}
                 ref={genderRef}
               />
               <TextInput
-                label="생년월일"
+                label='생년월일'
                 error={birthError}
                 ref={birthRef}
                 onChange={() => setBirthError(false)}
-                description="*예) 2024-01-01"
+                description='*예) 2024-01-01'
               />
-              {!individual && <TextInput
-                label="학년"
-                error={leaderGradeError}
-                ref={leaderGradeRef}
-                onChange={() => setLeaderGradeError(false)}
-                description="*예) 중학교 1학년"
-              />}
+              {!individual && (
+                <TextInput
+                  label='학년'
+                  error={leaderGradeError}
+                  ref={leaderGradeRef}
+                  onChange={() => setLeaderGradeError(false)}
+                  description='*예) 중학교 1학년'
+                />
+              )}
               <TextInput
-                label="참가자 연락처"
+                label='참가자 연락처'
                 error={contactError}
                 ref={contactRef}
                 onChange={() => setContactError(false)}
-                description="*예) 010-1234-5678"
+                description='*예) 010-1234-5678'
               />
-              <TextInput
-                label="이메일"
-                error={emailError}
-                ref={emailRef}
-                onChange={() => setEmailError(false)}
-              />
+              <TextInput label='이메일' error={emailError} ref={emailRef} onChange={() => setEmailError(false)} />
             </div>
-            <div className="p-8 flex flex-col">
-              <label className="text-xl">추가 정보</label>
+            <div className='flex flex-col p-8'>
+              <label className='text-xl'>추가 정보</label>
 
               <TextInput
-                label="학교명"
+                label='학교명'
                 error={schoolError}
                 ref={schoolRef}
                 description="*(홈스쿨링은 '홈스쿨링'으로 기재)"
                 onChange={() => setSchoolError(false)}
               />
               <TextInput
-                label="학원명"
+                label='학원명'
                 error={academyError}
                 ref={academyRef}
                 description="*(없을 경우, '없음'으로 기재)"
                 onChange={() => setAcademyError(false)}
               />
               <TextInput
-                label="지도자 성함"
+                label='지도자 성함'
                 error={instructorNameError}
                 ref={instructorNameRef}
                 onChange={() => setInstructorNameError(false)}
               />
               <TextInput
-                label="지도자 연락처"
+                label='지도자 연락처'
                 error={instructorContactError}
                 ref={instructorContactRef}
                 onChange={() => setInstructorContactError(false)}
-                description="*예) 010-1234-5678"
+                description='*예) 010-1234-5678'
               />
             </div>
           </div>
@@ -335,15 +315,15 @@ const ReceptionForm = (): ReactNode => {
               setMajor(value as major);
               setMajorError(false);
             }}
-            label={"전공 선택"}
-            placeholder="전공 선택"
+            label={'전공 선택'}
+            placeholder='전공 선택'
             error={majorError}
             options={majorOption}
             ref={majorRef}
           />
-          <div className="flex gap-10 my-10">
-            <div className="p-8 flex flex-col">
-              <label className="text-xl">전공 상세</label>
+          <div className='my-10 flex gap-10'>
+            <div className='flex flex-col p-8'>
+              <label className='text-xl'>전공 상세</label>
 
               {individual && (
                 <Selection
@@ -352,12 +332,12 @@ const ReceptionForm = (): ReactNode => {
                     setGrade(value as grade);
                     setGradeError(false);
                   }}
-                  label={"학년 선택"}
-                  placeholder="학년 선택"
-                  options={major === "발레" ? gradeOption1 : gradeOption2}
+                  label={'학년 선택'}
+                  placeholder='학년 선택'
+                  options={major === '발레' ? gradeOption1 : gradeOption2}
                   error={gradeError}
                   ref={gradeRef}
-                  disabled={major == ""}
+                  disabled={major == ''}
                 />
               )}
               <Selection
@@ -366,74 +346,79 @@ const ReceptionForm = (): ReactNode => {
                   setCategory(value as category);
                   setCategoryError(false);
                 }}
-                label={"부문 선택"}
-                placeholder="부문 선택"
+                label={'부문 선택'}
+                placeholder='부문 선택'
                 error={categoryError}
                 options={
                   individual
-                    ? grade === "초등부 저학년(3학년)" ||
-                      grade === "초등부 저학년(4학년)"
+                    ? grade === '초등부 저학년(3학년)' || grade === '초등부 저학년(4학년)'
                       ? categoryOption2
-                      : major === "한국무용"
-                      ? categoryOption1
-                      : major === "발레"
-                      ? categoryOption3
-                      : categoryOption4
-                    : major === "한국무용" || major === "컨템포러리댄스"
-                    ? categoryOption5
-                    : categoryOption6
+                      : major === '한국무용'
+                        ? categoryOption1
+                        : major === '발레'
+                          ? categoryOption3
+                          : categoryOption4
+                    : major === '한국무용' || major === '컨템포러리댄스'
+                      ? categoryOption5
+                      : categoryOption6
                 }
                 ref={categoryRef}
-                disabled={individual ? (!major  || !grade ) : !major }
+                disabled={individual ? !major || !grade : !major}
                 width={250}
               />
-              {!(major === "컨템포러리댄스" && !(grade === "초등부 저학년(3학년)" || grade === "초등부 저학년(4학년)") )&&
+              {!(
+                major === '컨템포러리댄스' && !(grade === '초등부 저학년(3학년)' || grade === '초등부 저학년(4학년)')
+              ) && (
                 <TextInput
-                label="작품 제목"
-                error={artTitleError}
-                ref={artTitleRef}
-                disabled={
-                  individual &&
-                    (major === "" ||
-                    grade === "" ||
-                    category === "즉흥" ||
-                    category === "즉흥<Movement Phrase 1 & 즉흥>" ||
-                    category === "즉흥<기초실기 A,B & 즉흥>")
-                  
-                }
-                value={
-                  (category === "즉흥" ||
-                  category === "즉흥<Movement Phrase 1 & 즉흥>" ||
-                  category === "즉흥<기초실기 A,B & 즉흥>")
-                    ? "즉흥"
-                    : undefined
-                }
-                clearable={(category === "즉흥" ||
-                category === "즉흥<Movement Phrase 1 & 즉흥>" ||
-                category === "즉흥<기초실기 A,B & 즉흥>") && false}
-                onChange={() => setArtTitleError(false)}
-              />}
+                  label='작품 제목'
+                  error={artTitleError}
+                  ref={artTitleRef}
+                  disabled={
+                    individual &&
+                    (major === '' ||
+                      grade === '' ||
+                      category === '즉흥' ||
+                      category === '즉흥<Movement Phrase 1 & 즉흥>' ||
+                      category === '즉흥<기초실기 A,B & 즉흥>')
+                  }
+                  value={
+                    category === '즉흥' ||
+                    category === '즉흥<Movement Phrase 1 & 즉흥>' ||
+                    category === '즉흥<기초실기 A,B & 즉흥>'
+                      ? '즉흥'
+                      : undefined
+                  }
+                  clearable={
+                    (category === '즉흥' ||
+                      category === '즉흥<Movement Phrase 1 & 즉흥>' ||
+                      category === '즉흥<기초실기 A,B & 즉흥>') &&
+                    false
+                  }
+                  onChange={() => setArtTitleError(false)}
+                />
+              )}
               {(!individual ||
                 (individual &&
-                  ((major === "한국무용" && (category === "전통(재구성)" || category === "창작")) ||
-                    (major === "발레" && (category === "고전<기초실기 A,B & Variation>" || category === "창작")) ||
-                    (major === "컨템포러리댄스" && (grade === "초등부 저학년(3학년)" || grade === "초등부 저학년(4학년)"))))) && (
+                  ((major === '한국무용' && (category === '전통(재구성)' || category === '창작')) ||
+                    (major === '발레' && (category === '고전<기초실기 A,B & Variation>' || category === '창작')) ||
+                    (major === '컨템포러리댄스' &&
+                      (grade === '초등부 저학년(3학년)' || grade === '초등부 저학년(4학년)'))))) && (
                 <Selection
                   value={musicOrPose}
                   onChange={(value: string) => {
                     setMusicOrPose(value as musicOrPose);
                     setMusicOrPoseError(false);
                   }}
-                  label={"음악/포즈 선택"}
-                  placeholder={"음악/포즈 선택"}
+                  label={'음악/포즈 선택'}
+                  placeholder={'음악/포즈 선택'}
                   error={musicOrPoseError}
                   options={musicOrPoseOption}
                   ref={musicOrPoseRef}
                 />
               )}
-              {(category=='창작' || 
-                (major === "한국무용" && category === "전통(재구성)") ||
-                (major === "발레" && category === "고전<기초실기 A,B & Variation>")) && (
+              {(category == '창작' ||
+                (major === '한국무용' && category === '전통(재구성)') ||
+                (major === '발레' && category === '고전<기초실기 A,B & Variation>')) && (
                 <MusicInput
                   onChange={(file: File) => {
                     setMusicFile(file);
@@ -446,25 +431,25 @@ const ReceptionForm = (): ReactNode => {
               )}
             </div>
             {!individual && (
-              <div className="p-8 flex flex-col">
-                <label className="text-xl">참가자 정보</label>
+              <div className='flex flex-col p-8'>
+                <label className='text-xl'>참가자 정보</label>
                 {participantsList.map((participant, idx) => (
                   <p
-                    className="mt-6 relative cursor-pointer"
+                    className='relative mt-6 cursor-pointer'
                     onClick={() => onRemoveParticipant(participant)}
                     key={participant}
                   >{`${idx + 1}. ${participant}`}</p>
                 ))}
                 <TextInput
-                  label={"참가자 추가"}
-                  description="*이름/학교/학년 (클릭해서 삭제 가능)"
+                  label={'참가자 추가'}
+                  description='*이름/학교/학년 (클릭해서 삭제 가능)'
                   ref={participantRef}
                   onChange={() => setParticipantError(false)}
                   error={participantError}
                 />
                 <button
-                  className="self-center underline underline-offset-4 m-4"
-                  onClick={(e) => {
+                  className='m-4 self-center underline underline-offset-4'
+                  onClick={e => {
                     onAddParticipant(e);
                   }}
                 >
@@ -475,17 +460,12 @@ const ReceptionForm = (): ReactNode => {
           </div>
         </div>
       </form>
-      <PrivacyPolicy setPrivacyConfirm={setPrivacyConfirm}/>
-      <Button 
-        className="w-40 self-center" 
-        onClick={onSubmit}
-        isLoading={loading}
-        color={'primary'}
-        >
+      <PrivacyPolicy setPrivacyConfirm={setPrivacyConfirm} />
+      <Button className='w-40 self-center' onClick={onSubmit} isLoading={loading} color={'primary'}>
         접수하기
       </Button>
-      <p className="mt-4 h-8 text-center text-red-500">
-        {privacyConfirmError && "*개인정보 수집 및 이용 동의가 필요합니다"}
+      <p className='mt-4 h-8 text-center text-red-500'>
+        {privacyConfirmError && '*개인정보 수집 및 이용 동의가 필요합니다'}
       </p>
     </div>
   );
