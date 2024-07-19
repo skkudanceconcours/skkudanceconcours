@@ -12,9 +12,21 @@ const config: Config = {
     extend: {
       backgroundImage: {},
       fontFamily: {
-        HSBombaram: ['var(--font-HSBombaram)'],
-        UniverseLTPro: ['var(--font-UniverseLTPro)'],
-      }
+        HSBombaram: ["var(--font-HSBombaram)"],
+        UniverseLTPro: ["var(--font-UniverseLTPro)"],
+      },
+      animation: {
+        loading: "loading 2s linear infinite",
+      },
+      keyframes: {
+        loading: {
+          "0%": { transform: "scale(1) rotate(0)" },
+          "20%, 25%": { transform: "scale(1.3) rotate(90deg)" },
+          "45%, 50%": { transform: "scale(1) rotate(180deg)" },
+          "70%, 75%": { transform: "scale(1.3) rotate(270deg)" },
+          "95%, 100%": { transform: "scale(1) rotate(360deg)" },
+        },
+      },
     },
   },
   darkMode: "class",
