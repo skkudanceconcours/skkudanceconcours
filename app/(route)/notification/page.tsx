@@ -1,25 +1,23 @@
 // react & next
-import Image from "next/image";
-import { ReactNode } from "react";
+import Image from 'next/image';
+import { ReactNode } from 'react';
 // components
-import NoticeHeader from "@/app/components/notification/NoticeHeader";
-import NoticeBody from "@/app/components/notification/NoticeBody";
+import NoticeHeader from '@/app/components/notification/NoticeHeader';
+import NoticeBody from '@/app/components/notification/NoticeBody';
 // Types
-import { NoticeType } from "@/template/notice";
+import { NoticeType } from '@/template/notice';
 // img & icons
-import headerBackground from "@/public/images/sub_header_bg_ballet.jpg";
+import headerBackground from '@/public/images/sub_header_bg_ballet.jpg';
 // firebase
-import { baseUrl } from "@/lib/functions/dynamicURL";
+import { baseUrl } from '@/lib/functions/dynamicURL';
 
 const fetchData = async (): Promise<{
   data: NoticeType[];
   totalPages: number;
 }> => {
-  console.log("Fetching data");
-
   try {
     const res = await fetch(`${baseUrl}/api/getNotice`, {
-      next: { revalidate: 10, tags: ["notice"] }, //revalidate every 60 seconds
+      next: { revalidate: 10, tags: ['notice'] }, //revalidate every 60 seconds
     });
 
     const { data, totalPages } = await res.json();
