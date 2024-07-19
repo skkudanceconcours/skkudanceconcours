@@ -30,7 +30,9 @@ const NoticeBody = ({ data, totalPages }: NoticeBodyProps): ReactNode => {
   const searchClassName = focused
     ? 'relative flex h-4/5 w-[20%] items-center justify-center rounded-md border-2 border-solid border-black duration-200'
     : 'relative flex h-4/5 w-[10%] items-center justify-center rounded-md duration-200';
-
+  const searchIconStyle = focused
+    ? { height: '100%', width: '15%', margin: '0 10px 0 10px' }
+    : { height: '100%', width: '15%', margin: '0 10px 0 10px' };
   // useRouter
   const router = useRouter();
 
@@ -94,7 +96,7 @@ const NoticeBody = ({ data, totalPages }: NoticeBodyProps): ReactNode => {
           Total {filteredData.length}건 {page_number}페이지
         </div>
         <div className={searchClassName}>
-          <IoIosSearch style={{ margin: '0 10px 0 10px' }} />
+          <IoIosSearch style={searchIconStyle} />
           <input
             type='text'
             value={searchInput}
