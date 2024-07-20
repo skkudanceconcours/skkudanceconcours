@@ -1,52 +1,51 @@
 // react & next
-import Image from 'next/image';
-import { ReactNode, Suspense } from 'react';
+import Image from "next/image";
+import { ReactNode, Suspense } from "react";
 // components
-import NoticeHeader from '@/app/components/notification/NoticeHeader';
-import NoticeBody from '@/app/components/notification/NoticeBody';
+import NoticeHeader from "@/app/components/notification/NoticeHeader";
+import NoticeBody from "@/app/components/notification/NoticeBody";
 // Types
-import { NoticeType } from '@/template/notice';
+import { NoticeType } from "@/template/notice";
 // img & icons
-import Spinner from '@/app/components/UI/Spinner';
-import headerBackground from '@/public/images/sub_header_bg_ballet.jpg';
+import Spinner from "@/app/components/UI/Spinner";
+import headerBackground from "@/public/images/sub_header_bg_ballet.jpg";
 // firebase
-import { baseUrl } from '@/lib/functions/dynamicURL';
+import { baseUrl } from "@/lib/functions/dynamicURL";
 
 const fetchData = async (): Promise<{
   data: NoticeType[];
-  totalPages: number;
 }> => {
   try {
     const res = await fetch(`${baseUrl}/api/getNotice`, {
-      next: { revalidate: 10, tags: ['notice'] }, //revalidate every 60 seconds
+      next: { revalidate: 10, tags: ["notice"] }, //revalidate every 60 seconds
     });
 
-    const { data, totalPages } = await res.json();
+    const { data } = await res.json();
 
-    return { data: data, totalPages: totalPages };
+    return { data: data };
   } catch (error) {
     console.log(error);
   }
-  return { data: [], totalPages: 0 };
+  return { data: [] };
 };
 
 const NotificationPage = async (): Promise<ReactNode> => {
-  const { data, totalPages } = await fetchData();
+  const { data } = await fetchData();
 
   return (
-    <main className='relative flex min-h-screen w-full flex-col items-center justify-start pb-20'>
-      <div className='relative flex h-[50dvh] min-h-[40%] w-full items-center justify-center bg-yellow-300 text-5xl'>
+    <main className="relative flex min-h-screen w-full flex-col items-center justify-start pb-20">
+      <div className="relative flex h-[50dvh] min-h-[40%] w-full items-center justify-center bg-yellow-300 text-5xl">
         <Image
-          className='h-full w-full object-cover lg:object-fill'
+          className="h-full w-full object-cover lg:object-fill"
           src={headerBackground}
-          alt='header'
-          layout='cover'
+          alt="header"
+          layout="cover"
         />
         <NoticeHeader />
       </div>
-      <div className='h-[15dvh] w-full' />
+      <div className="h-[15dvh] w-full" />
       <Suspense fallback={<Spinner />}>
-        <NoticeBody data={data} totalPages={totalPages} />
+        <NoticeBody data={data} />
       </Suspense>
     </main>
   );

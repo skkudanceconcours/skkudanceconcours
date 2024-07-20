@@ -68,13 +68,8 @@ const SubmitBtn = ({ noticeInput, contents }: SubmitBtnProps) => {
   };
   return (
     <>
-      <Button
-        color="primary"
-        variant="solid"
-        className="fixed bottom-4 right-4"
-        onClick={handleOpen}
-      >
-        Submit
+      <Button color="primary" variant="solid" className="fixed bottom-4 right-4" onClick={handleOpen}>
+        글 올리기
       </Button>
       <Modal
         open={open}
@@ -96,18 +91,10 @@ const SubmitBtn = ({ noticeInput, contents }: SubmitBtnProps) => {
                 중요 공지로 등록할까요?
               </Typography>
               <div className="flex w-full items-center justify-evenly">
-                <Button
-                  color="primary"
-                  variant="bordered"
-                  onClick={() => submitHandler(true)}
-                >
+                <Button color="primary" variant="bordered" onClick={() => submitHandler(true)}>
                   Yes
                 </Button>
-                <Button
-                  color="danger"
-                  variant="bordered"
-                  onClick={() => submitHandler(false)}
-                >
+                <Button color="danger" variant="bordered" onClick={() => submitHandler(false)}>
                   No
                 </Button>
               </div>
