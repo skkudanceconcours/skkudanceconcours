@@ -89,7 +89,7 @@ const NoticeBody = ({ data }: NoticeBodyProps): ReactNode => {
           Total {filteredData.length}건 {page_number}페이지
         </div>
         <form
-          className="relative flex h-4/5 w-1/5 items-center justify-center rounded-md  lg:w-[15%]"
+          className="relative flex h-4/5 w-fit items-center justify-center rounded-md  lg:w-[15%]"
           onSubmit={handleSearch}
         >
           <input
