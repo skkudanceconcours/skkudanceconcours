@@ -22,7 +22,6 @@ const NoticeView = ({ contents, timeStamp, title, viewCount, files, id }: Notice
     : "";
   // Context
   const { loginState } = useLoginStore();
-
   // useRouter
   const router = useRouter();
   // Functions
