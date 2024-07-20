@@ -57,7 +57,7 @@ const Modal = ({ modalHandler }: ModalProps): ReactNode => {
               <ListItemIcon>
                 <AddIcon />
               </ListItemIcon>
-              <ListItemText primary="Add" />
+              <ListItemText primary="글 작성하기" />
             </ListItemButton>
           </ListItem>
           {/* <Divider /> */}

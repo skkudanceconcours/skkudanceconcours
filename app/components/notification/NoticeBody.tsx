@@ -20,7 +20,6 @@ interface NoticeBodyProps {
 
 const NoticeBody = ({ data }: NoticeBodyProps): ReactNode => {
   // useState
-  const [searchInput, setSearchInput] = useState<string>("");
   const [filteredData, setFilteredData] = useState<NoticeType[]>(data);
   const { loginState } = useLoginStore();
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -95,7 +94,6 @@ const NoticeBody = ({ data }: NoticeBodyProps): ReactNode => {
         >
           <input
             type="text"
-            defaultValue={searchInput}
             className="w-full pl-1 placeholder:text-center placeholder:text-xs focus:rounded-md focus:border-1 focus:border-solid focus:border-black focus:outline-none placeholder:lg:text-base placeholder:2xl:text-xl"
             placeholder="검색어를 입력하세요"
             ref={searchInputRef}

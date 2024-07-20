@@ -7,6 +7,7 @@ import { Box, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import { ImCloudUpload } from "react-icons/im";
 import { styled } from "@mui/material/styles";
+import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
 // Type
 import { NoticeFileType, NoticeType } from "@/template/notice";
 // firebase
@@ -41,7 +42,7 @@ export const QuillEditor = (): ReactNode => {
 
   // Functions
   function handleTitle(value: string) {
-    setNoticeInput((prev) => ({
+    setNoticeInput(prev => ({
       ...prev,
       title: value as string,
     }));
@@ -56,17 +57,14 @@ export const QuillEditor = (): ReactNode => {
     // firebase 올리기
     setIsSaving(true);
     try {
-      const uniqueId: string | null = await uploadStorageFile(
-        filesArray[0],
-        "공지사항",
-      );
+      const uniqueId: string | null = await uploadStorageFile(filesArray[0], "공지사항");
 
       const fileObj: NoticeFileType = {
         name: filesArray[0].name,
         uuid: uniqueId as string,
       };
-      setFilesInput((prevFilesObj) => [...prevFilesObj, fileObj]);
-      setNoticeInput((prev) => ({
+      setFilesInput(prevFilesObj => [...prevFilesObj, fileObj]);
+      setNoticeInput(prev => ({
         ...prev,
         files: [...prev.files, fileObj],
       }));
@@ -118,7 +116,7 @@ export const QuillEditor = (): ReactNode => {
     "link",
     "blockquote",
     "font",
-    "image"
+    "image",
   ];
   const modules = useMemo(() => {
     return {
@@ -174,30 +172,25 @@ export const QuillEditor = (): ReactNode => {
         margin="dense"
         fullWidth
         value={noticeInput.title}
-        onChange={(
-          e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-        ) => handleTitle(e.currentTarget.value as string)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+          handleTitle(e.currentTarget.value as string)
+        }
       />
-      <Button
-        component="label"
-        role={undefined}
-        variant="outlined"
-        tabIndex={-1}
-        startIcon={<ImCloudUpload />}
-      >
+      <Button component="label" role={undefined} variant="outlined" tabIndex={-1} startIcon={<ImCloudUpload />}>
         파일 업로드
         <VisuallyHiddenInput type="file" multiple onChange={handleFiles} />
       </Button>
       {isSaving ? (
         <p className="h-3 w-full ">Saving...</p>
       ) : filesInput ? (
-        filesInput.map((file) => (
+        filesInput.map(file => (
           <Box
             component="div"
             className="flex w-full items-center justify-start overflow-hidden text-ellipsis whitespace-nowrap py-4 hover:cursor-pointer hover:text-blue-400"
             key={file.uuid}
             onClick={() => downloadPDf(`공지사항/${file.uuid}`, file.name)}
           >
+            <UploadFileOutlinedIcon />
             {file.name}
           </Box>
         ))
