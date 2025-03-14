@@ -1,5 +1,5 @@
 "use client";
-import { Reception } from "@/template/reception";
+import { Reception2024 } from "@/template/reception";
 import {
   Table,
   TableHeader,
@@ -38,12 +38,13 @@ type Columnkey =
   | "musicURL"
   | "participants";
 
+
 type TableProps = {
-  receptions: Reception[];
+  receptions: Reception2024[];
 };
 const NextTable2024 = ({ receptions }: TableProps): ReactNode => {
   const renderCell = useCallback(
-    (reception: Reception, columnKey: Columnkey) => {
+    (reception: Reception2024, columnKey: Columnkey) => {
       switch (columnKey) {
         case "time":
           return (

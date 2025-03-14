@@ -1,5 +1,5 @@
 "use client";
-import { Reception } from "@/template/reception";
+import { Reception2025 } from "@/template/reception";
 import {
   Table,
   TableHeader,
@@ -39,11 +39,11 @@ type Columnkey =
 //   | "participants";
 
 type TableProps = {
-  receptions: Reception[];
+  receptions: Reception2025[];
 };
 const NextTable2025 = ({ receptions }: TableProps): ReactNode => {
   const renderCell = useCallback(
-    (reception: Reception, columnKey: Columnkey) => {
+    (reception: Reception2025, columnKey: Columnkey) => {
       switch (columnKey) {
         case "time":
           return (
@@ -67,7 +67,7 @@ const NextTable2025 = ({ receptions }: TableProps): ReactNode => {
                   <p>{reception.gender}</p>
                   <p>{reception.birth}</p>
                   <p>{reception.email}</p>
-                  <p>{reception.grade || reception.leaderGrade}</p>
+                  {/* <p>{reception.grade || reception.leaderGrade}</p> */}
                   <p>{reception.contact}</p>
                 </div>
               }

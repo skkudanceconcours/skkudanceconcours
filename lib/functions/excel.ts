@@ -1,4 +1,4 @@
-import { Reception } from "@/template/reception";
+import { Reception2025 } from "@/template/reception";
 import * as Excel from "exceljs/dist/exceljs.min.js";
 import { saveAs } from "file-saver";
 
@@ -93,7 +93,7 @@ const styleDataCell = (cell: any) => {
   };
 };
 
-export const downloadExcel = async (data: Reception[]) => {
+export const downloadExcel = async (data: Reception2025[]) => {
   try {
     // 여러 엑셀 시트를 포함하는 하나의 workbook(단위) 생성
     const wb = new Excel.Workbook();
@@ -134,7 +134,7 @@ export const downloadExcel = async (data: Reception[]) => {
           musicFileURL,
           musicOrPose,
           participants,
-        }: Reception,
+        }: Reception2025,
         idx: number,
       ) => {
         const rowDatas = [

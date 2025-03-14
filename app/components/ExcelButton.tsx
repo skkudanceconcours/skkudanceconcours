@@ -1,11 +1,11 @@
 'use client';
 import { downloadExcel } from "@/lib/functions/excel";
-import { Reception } from "@/template/reception";
+import { Reception2025 } from "@/template/reception";
 import { Button } from "@nextui-org/react";
 import { ReactNode } from "react";
 
 type ExcelButtonProps = {
-    receptions: Reception[];
+    receptions: Reception2025[];
 }
 
 const ExcelButton = ({ receptions }:ExcelButtonProps):ReactNode => {

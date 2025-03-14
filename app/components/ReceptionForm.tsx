@@ -21,7 +21,7 @@ import {
 } from "@/template/selectOptions";
 import MusicInput from "./MusicInput";
 import { Button } from "@nextui-org/react";
-import { Reception } from "@/template/reception";
+import { Reception2025 } from "@/template/reception";
 import PrivacyPolicy from "./PrivacyPolicy";
 import { submitReception, submitTest, uploadMP3File } from "@/lib/firebase/firebaseCRUD";
 import { useRouter } from "next/navigation";
@@ -171,7 +171,7 @@ const ReceptionForm = (): ReactNode => {
       musicFile,
     );
 
-    const newReception: Reception = {
+    const newReception: Reception2025 = {
       timestamp: currentTime,
       // individualOrGroup: individualOrGroup,
       name: nameRef.current!.value.trim(),
