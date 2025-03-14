@@ -1,0 +1,1 @@
+type YearOption = "2024" | "2025";

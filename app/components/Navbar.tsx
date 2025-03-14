@@ -8,7 +8,7 @@ import Image from 'next/image';
 import { Path } from '@/template/paths';
 import Login from './LoginPage';
 
-const Navbar = ({ className }: { className?: string }): ReactNode => {
+const Navbar = (): ReactNode => {
   const router = useRouter();
   const path: string = usePathname();
   const { loginState } = useLoginStore();
@@ -22,7 +22,7 @@ const Navbar = ({ className }: { className?: string }): ReactNode => {
     'relative flex-1 h-12 w-full p-6 flex justify-center items-end text-center lg:text-xl cursor-pointer transition-colors duration-[400ms]';
 
   return (
-    <div className={`${className} z-10 flex h-max w-max flex-col lg:static lg:h-full`}>
+    <div className={`flex items-center justify-center z-10 h-max w-fit flex-col lg:static lg:h-full`}>
       <Image
         className='my-8 ml-8 w-12 cursor-pointer self-start lg:absolute lg:left-8 lg:top-8 lg:my-0 lg:ml-0 lg:w-20'
         src={logo}

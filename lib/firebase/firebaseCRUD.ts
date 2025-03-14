@@ -10,8 +10,10 @@ import { collection, getDocs, addDoc, updateDoc, doc, increment, deleteDoc } fro
 import { deleteObject, getDownloadURL, getStorage, listAll, ref, uploadBytes } from 'firebase/storage';
 import delayTimeout from '../functions/asyncTimeout';
 
+
+
 const storage = getStorage();
-const getCollection = (collectionName: 'notices' | 'reception' | 'test') => collection(db, collectionName);
+const getCollection = (collectionName: Collection) => collection(db, collectionName);
 export const getStorageRef = (refName: string) => ref(storage, refName);
 
 //Create
@@ -81,7 +83,7 @@ export const uploadStorageFile = async (file: File | null, folder: string): Prom
 
 export const submitReception = async (reception: Reception): Promise<string | null> => {
   try {
-    const res = await addDoc(getCollection('reception'), { reception });
+    const res = await addDoc(getCollection('reception2025'), { reception });
     return res.id;
   } catch (error) {
     console.log(error);
@@ -132,9 +134,9 @@ export const getAllNotices = async () => {
   }
 };
 
-export const getAllReception = async (): Promise<Reception[]> => {
+export const getAllReception = async (year: YearOption): Promise<Reception[]> => {
   try {
-    const res = await getDocs(getCollection('reception'));
+    const res = await getDocs(getCollection(year == "2024" ? 'reception' : "reception2025"));
     const datas: Reception[] = res.docs.map((doc) => {
       const { timestamp } = doc.data().reception;
       return {

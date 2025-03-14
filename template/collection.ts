@@ -1,0 +1,1 @@
+type Collection = 'notices' | 'reception' | 'reception2025' | 'test';

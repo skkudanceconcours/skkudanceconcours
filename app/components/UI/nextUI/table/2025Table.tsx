@@ -9,12 +9,12 @@ import {
   TableCell,
   User,
 } from "@nextui-org/react";
-import { ReactNode, useCallback, useEffect } from "react";
+import { ReactNode, useCallback } from "react";
 
 const columns = [
   { name: "날짜", uid: "time" },
-  { name: "개인/단체", uid: "individualOrGroup" },
-  { name: "참가자(대표자) 정보", uid: "personalInfo" },
+//   { name: "개인/단체", uid: "individualOrGroup" },
+  { name: "참가자 정보", uid: "personalInfo" },
   { name: "학교명", uid: "schoolName" },
   { name: "학원명", uid: "academyName" },
   { name: "지도자 정보", uid: "instructorInfo" },
@@ -22,12 +22,12 @@ const columns = [
   { name: "작품 제목", uid: "artTitle" },
   { name: "음악/포즈", uid: "music/pose" },
   { name: "음악 다운로드", uid: "musicURL" },
-  { name: "참가자 명단", uid: "participants" },
+//   { name: "참가자 명단", uid: "participants" },
 ];
 
 type Columnkey =
   | "time"
-  | "individualOrGroup"
+//   | "individualOrGroup"
   | "personalInfo"
   | "schoolName"
   | "academyName"
@@ -35,13 +35,13 @@ type Columnkey =
   | "part"
   | "artTitle"
   | "music/pose"
-  | "musicURL"
-  | "participants";
+  | "musicURL";
+//   | "participants";
 
 type TableProps = {
   receptions: Reception[];
 };
-const NextTable = ({ receptions }: TableProps): ReactNode => {
+const NextTable2025 = ({ receptions }: TableProps): ReactNode => {
   const renderCell = useCallback(
     (reception: Reception, columnKey: Columnkey) => {
       switch (columnKey) {
@@ -53,8 +53,8 @@ const NextTable = ({ receptions }: TableProps): ReactNode => {
               {new Date(reception.timestamp).toTimeString().slice(0, 8)}
             </p>
           );
-        case "individualOrGroup":
-          return reception.individualOrGroup;
+        // case "individualOrGroup":
+        //   return reception.individualOrGroup;
         case "personalInfo":
           return (
             <User
@@ -121,14 +121,14 @@ const NextTable = ({ receptions }: TableProps): ReactNode => {
               </a>
             </div>
           );
-        case "participants":
-          return (
-            <div>
-              {reception.participants?.map((participant) => (
-                <p key={participant}>{participant}</p>
-              ))}
-            </div>
-          );
+        // case "participants":
+        //   return (
+        //     <div>
+        //       {reception.participants?.map((participant) => (
+        //         <p key={participant}>{participant}</p>
+        //       ))}
+        //     </div>
+        //   );
       }
     },
     [],
@@ -154,4 +154,4 @@ const NextTable = ({ receptions }: TableProps): ReactNode => {
     </Table>
   );
 };
-export default NextTable;
+export default NextTable2025;
