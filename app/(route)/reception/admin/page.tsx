@@ -18,22 +18,19 @@ const ReceptionAdmin = (): ReactNode => {
   const fetch2024Data = useCallback(async () => {
     const data2024 = await fetchReceptionData("2024");
     set2024Data(data2024 as Reception2024[]);
-  },[]);
+  }, []);
 
   const fetch2025Data = useCallback(async () => {
     const data2025 = await fetchReceptionData("2025");
     set2025Data(data2025 as Reception2025[]);
-  },[]);
+  }, []);
 
   useEffect(() => {
-    if(selectedYear == "2024" && receptionData2024 == null) fetch2024Data();
-    else if(selectedYear == "2025" && receptionData2025 == null) fetch2025Data();
-  },[selectedYear]);
+    if (selectedYear == "2024" && receptionData2024 == null) fetch2024Data();
+    else if (selectedYear == "2025" && receptionData2025 == null) fetch2025Data();
+  }, [selectedYear]);
 
-  if ((selectedYear == "2024" && receptionData2024 == null) || (selectedYear == "2025" && receptionData2025 == null))
-    return <Spinner />;
-
-  else return (
+  return (
     <main className="relative flex h-screen w-screen flex-col items-center">
       <h1 className="relative flex h-[15vh] w-4/5 flex-col justify-center text-2xl font-semibold lg:my-12 lg:text-5xl">
         콩쿨 접수 현황
@@ -48,15 +45,21 @@ const ReceptionAdmin = (): ReactNode => {
           error={false}
         />
       </div>
-      {selectedYear === "2024" ? (
+      {(selectedYear == "2024" && receptionData2024 == null) ||
+      (selectedYear == "2025" && receptionData2025 == null) ? (
+        <Spinner />
+      ) : selectedYear === "2024" ? (
         <NextTable2024 receptions={receptionData2024!} />
       ) : (
         <NextTable2025 receptions={receptionData2025!} />
       )}
 
       <div className="relative z-10 flex w-full justify-between p-4 px-8">
-        <div className="">총 {(selectedYear === "2024" ? receptionData2024 : receptionData2025)!.length}개의 접수</div>
-        <ExcelButton receptions={[]} />
+        <div className="">총 {((selectedYear === "2024" ? receptionData2024 : receptionData2025) ?? []).length}개의 접수</div>
+        <ExcelButton
+          year={selectedYear}
+          receptions={selectedYear === "2024" ? receptionData2024! : receptionData2025!}
+        />
       </div>
     </main>
   );
