@@ -40,7 +40,6 @@ const ReceptionAdmin = (): ReactNode => {
           value={selectedYear}
           onChange={(value: string) => setSelectedYear(value as YearOption)}
           label="년도"
-          placeholder=""
           options={yearOption}
           error={false}
         />

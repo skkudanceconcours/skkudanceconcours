@@ -8,7 +8,7 @@ type SelectionProps = {
   value: string;
   onChange: (value:string)=>void;
   label: string;
-  placeholder: string;
+  placeholder?: string;
   options: string[];
   error: boolean;
   disabled?: boolean;
@@ -40,10 +40,10 @@ const NextSelection = forwardRef<HTMLInputElement, SelectionProps>(
         isInvalid = {error}
         value={value}
         placeholder={placeholder}
+        defaultSelectedKeys={["2025"]}
         isDisabled={disabled}
         ref={ref as RefObject<HTMLSelectElement>}
         onChange={(e:ChangeEvent<HTMLSelectElement>) =>{
-          console.log(e.target.value)
           onChange(e.target.value)
         }}  
         
