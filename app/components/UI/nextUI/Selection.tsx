@@ -33,7 +33,7 @@ const NextSelection = forwardRef<HTMLInputElement, SelectionProps>(
     return (
 
     <div className={`${className} w-52 h-20 my-6`}>
-      <Select 
+      <Select
         label={label}
         variant="underlined"
         style={{width: width || "13rem"}}

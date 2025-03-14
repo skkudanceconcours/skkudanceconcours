@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { collection, getDocs, addDoc, updateDoc, doc, increment, deleteDoc } from 'firebase/firestore';
 import { deleteObject, getDownloadURL, getStorage, listAll, ref, uploadBytes } from 'firebase/storage';
 import delayTimeout from '../functions/asyncTimeout';
+import { FirebaseError } from 'firebase/app';
 
 
 

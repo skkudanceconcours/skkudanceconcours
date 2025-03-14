@@ -21,8 +21,7 @@ const Login = ({ className }: { className?: string }): ReactNode => {
   const onLogin = () => {
     if (!passwordRef.current) return;
     const input = passwordRef.current.value;
-    // if (input === process.env.NEXT_PUBLIC_ADMIN_PW) {
-      if (input === "1") {
+    if (input === process.env.NEXT_PUBLIC_ADMIN_PW) {
       login();
       setOpenLogin(false);
       router.push('/reception/admin' as Path);
@@ -40,6 +39,7 @@ const Login = ({ className }: { className?: string }): ReactNode => {
       }
     });
   });
+
 
   return (
     <>
