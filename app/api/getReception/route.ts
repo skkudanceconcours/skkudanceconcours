@@ -8,6 +8,7 @@ export async function GET(req: NextRequest) {
 
   const allowedOrigins = ["https://skkudanceconcours.kr", "https://www.skkudanceconcours.kr"];
   const origin = req.headers.get("origin") ?? "";
+  console.log("origin: ",origin);
 
   if (!allowedOrigins.includes(origin)) {
     return new NextResponse("Forbidden", { status: 403 });
