@@ -6,7 +6,6 @@ import TextInput from './UI/nextUI/TextInput';
 import { nanumgothic } from '@/public/fonts/font';
 import { Button } from '@nextui-org/react';
 import useLoginStore from '@/lib/zustand/loginStore';
-import { redirect } from 'next/dist/server/api-utils';
 import { Path } from '@/template/paths';
 import { useRouter } from 'next/navigation';
 
@@ -21,7 +20,7 @@ const Login = ({ className }: { className?: string }): ReactNode => {
   const onLogin = () => {
     if (!passwordRef.current) return;
     const input = passwordRef.current.value;
-    if (input === process.env.NEXT_PUBLIC_ADMIN_PW) {
+    if (input === process.env.NEXT_ADMIN_PW) {
       login();
       setOpenLogin(false);
       router.push('/reception/admin' as Path);

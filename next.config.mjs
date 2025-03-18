@@ -27,7 +27,7 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: `https://skkudanceconcours.kr/:path*`,
+        destination: `https://www.skkudanceconcours.kr/:path*`,
       },
     ];
   },
