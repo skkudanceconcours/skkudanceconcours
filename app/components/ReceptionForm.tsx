@@ -9,13 +9,9 @@ import {
   categoryOption1,
   categoryOption2,
   categoryOption3,
-  categoryOption4,
-  categoryOption5,
-  categoryOption6,
   genderOption,
   gradeOption1,
   gradeOption2,
-  individualOrGroupOption,
   majorOption,
   musicOrPoseOption,
 } from "@/template/selectOptions";
@@ -96,8 +92,8 @@ const ReceptionForm = (): ReactNode => {
   //variables
   // const individual: boolean = individualOrGroup !== '단체';
   const selectMusicOrPose =
-    (major === "한국무용" && (category === "전통" || category === "창작")) ||
-    (major === "발레" && (category === "고전<기초실기 A,B & Variation>" || category === "창작"));
+    (major === "한국무용" && category === "전통") ||
+    (major === "발레" && category === "고전<기초실기 A,B & Variation>");
   const selectArtTitle = major !== "컨템포러리댄스";
   const selectMusic =
     category == "창작" ||
@@ -334,7 +330,7 @@ const ReceptionForm = (): ReactNode => {
                 label={"부문 선택"}
                 placeholder="부문 선택"
                 error={categoryError}
-                options={major === "한국무용" ? categoryOption1 : major === "발레" ? categoryOption3 : categoryOption4}
+                options={major === "한국무용" ? categoryOption1 : major === "발레" ? categoryOption2 : categoryOption3}
                 ref={categoryRef}
                 disabled={!major || !grade}
                 width={250}
@@ -344,9 +340,7 @@ const ReceptionForm = (): ReactNode => {
                   label="작품 제목"
                   error={artTitleError}
                   ref={artTitleRef}
-                  disabled={major === "" || grade === "" || category === "즉흥"}
-                  value={category === "즉흥" ? "즉흥" : undefined}
-                  clearable={category !== "즉흥"}
+                  disabled={major === "" || grade === ""}
                   onChange={() => setArtTitleError(false)}
                 />
               )}

@@ -25,17 +25,11 @@ export const gradeOption2: grade[] = [
   "고등부 저학년(2학년)",
   "고등부 고학년(3학년)",
 ];
-//한국무용, 컨템포러리댄스
-export const categoryOption1: category[] = ["전통", "즉흥"];
-//초등부 저학년
-export const categoryOption2: category[] = ["창작"];
+//한국무용
+export const categoryOption1: category[] = ["전통"];
 //발레
-export const categoryOption3: category[] = ["고전<기초실기 A,B & Variation>"];
+export const categoryOption2: category[] = ["고전<기초실기 A,B & Variation>"];
 //컨템포러리댄스
-export const categoryOption4: category[] = ["규정<Movement Phrase I, II & 즉흥>"];
-//단체-한국무용, 컨템포러리댄스
-export const categoryOption5: category[] = ["고등부", "중등부", "초등부(1,2학년 제외)"];
-//단체-발레
-export const categoryOption6: category[] = ["일반부", "고등부", "중등부", "초등부(1,2학년 제외)"];
+export const categoryOption3: category[] = ["규정<Movement Phrase I, II & 즉흥>"]
 
 export const musicOrPoseOption: musicOrPose[] = ["음악 먼저", "포즈 먼저"];
