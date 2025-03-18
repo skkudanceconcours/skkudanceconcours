@@ -221,22 +221,9 @@ const ReceptionForm = (): ReactNode => {
   return (
     <div className="flex flex-col">
       <div ref={scrollRef}></div>
-      <form className={`flex flex-col lg:flex-row lg:gap-20 ${quicksand.className}`}>
+      <form className={`flex flex-col lg:flex-row  lg:gap-20 ${quicksand.className}`}>
         <div>
-          {/* <Selection
-            value={individualOrGroup}
-            onChange={(value: string) => {
-              console.log('value:', value);
-              setIndividualOrGroup(value as individualOrGroup);
-              setIndividualOrGroupError(false);
-            }}
-            label={'개인/단체 선택'}
-            placeholder='개인/단체 선택'
-            error={individualOrGroupError}
-            options={individualOrGroupOption}
-            ref={individualOrGroupRef}
-          /> */}
-          <div className="flex flex-col lg:flex-row lg:gap-10">
+          <div className="flex flex-col lg:flex-row  lg:gap-10">
             <div className="flex flex-col p-8">
               <label className="text-xl">참가자 정보</label>
               <TextInput label="참가자 이름" error={nameError} ref={nameRef} onChange={() => setNameError(false)} />
