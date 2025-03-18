@@ -7,6 +7,7 @@ import { ReactNode, useCallback, useEffect, useState } from "react";
 import NextSelection from "@/app/components/UI/nextUI/Selection";
 import NextTable2025 from "@/app/components/UI/nextUI/table/2025Table";
 import Spinner from "@/app/components/UI/Spinner";
+export const dynamic = "force-dynamic";
 
 const ReceptionAdmin = (): ReactNode => {
   // const receptionData = await fetchReceptionData();
@@ -66,6 +67,7 @@ const ReceptionAdmin = (): ReactNode => {
 
 const fetchReceptionData = async (year: YearOption): Promise<Reception2025[] | Reception2024[]> => {
   try {
+    console.log("requesting reception: ", `${baseUrl}/api/getReception?year=${year}`);
     const res = await fetch(`${baseUrl}/api/getReception?year=${year}`, {
       next: { revalidate: 10, tags: ["reception"] },
     });
