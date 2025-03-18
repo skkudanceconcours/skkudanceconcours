@@ -67,7 +67,6 @@ const ReceptionAdmin = (): ReactNode => {
 
 const fetchReceptionData = async (year: YearOption): Promise<Reception2025[] | Reception2024[]> => {
   try {
-    console.log("requesting reception: ", `${baseUrl}/api/getReception?year=${year}`);
     const res = await fetch(`${baseUrl}/api/getReception?year=${year}`, {
       next: { revalidate: 10, tags: ["reception"] },
     });

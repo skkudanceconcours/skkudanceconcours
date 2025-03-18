@@ -153,7 +153,14 @@ const ReceptionForm = (): ReactNode => {
     return error;
   };
 
+  const receptionStartDate = new Date(2025, 3, 14);
+  const receptionEndDate = new Date(2025, 4, 3);
+  const now = new Date();
+  const receptionAvailable =
+    receptionStartDate.getTime() <= now.getTime() && now.getTime() < receptionEndDate.getTime();
+
   const onSubmit = async () => {
+    if (!receptionAvailable) return;
     if (checkError()) {
       scrollRef.current?.scrollIntoView({ behavior: "smooth" });
       return;
@@ -373,8 +380,8 @@ const ReceptionForm = (): ReactNode => {
         </div>
       </form>
       <PrivacyPolicy setPrivacyConfirm={setPrivacyConfirm} />
-      <Button className="w-40 self-center" onClick={onSubmit} isLoading={loading} color={"primary"}>
-        접수하기
+      <Button className={`w-40 self-center ${!receptionAvailable && "text-white"}`} onClick={onSubmit} isLoading={loading} color={receptionAvailable ? "primary" : "default"}>
+        {receptionAvailable ? "접수하기" : "접수기간이 아닙니다"}
       </Button>
       <p className="mt-4 h-8 text-center text-red-500">
         {privacyConfirmError && "*개인정보 수집 및 이용 동의가 필요합니다"}
