@@ -93,12 +93,12 @@ const ReceptionForm = (): ReactNode => {
   // const individual: boolean = individualOrGroup !== '단체';
   const selectMusicOrPose =
     (major === "한국무용" && category === "전통") ||
-    (major === "발레" && category === "고전<기초실기 A,B & Variation>");
+    (major === "발레" && category === "고전");
   const selectArtTitle = major !== "컨템포러리댄스";
   const selectMusic =
     category == "창작" ||
     (major === "한국무용" && category === "전통") ||
-    (major === "발레" && category === "고전<기초실기 A,B & Variation>");
+    (major === "발레" && category === "고전");
 
   //functions
   const checkError = (): boolean => {

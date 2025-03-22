@@ -28,8 +28,8 @@ export const gradeOption2: grade[] = [
 //한국무용
 export const categoryOption1: category[] = ["전통"];
 //발레
-export const categoryOption2: category[] = ["고전<기초실기 A,B & Variation>"];
+export const categoryOption2: category[] = ["고전"];
 //컨템포러리댄스
-export const categoryOption3: category[] = ["규정<Movement Phrase I, II & 즉흥>"]
+export const categoryOption3: category[] = ["규정"]
 
 export const musicOrPoseOption: musicOrPose[] = ["음악 먼저", "포즈 먼저"];
