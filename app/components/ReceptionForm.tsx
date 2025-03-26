@@ -1,20 +1,11 @@
 "use client";
 import { Dispatch, ReactNode, RefObject, SetStateAction, useEffect, useRef, useState } from "react";
 
-import { category, gender, grade, individualOrGroup, major, musicOrPose } from "@/template/inputTypes";
+import { gender, grade, individualOrGroup, major, musicOrPose } from "@/template/inputTypes";
 import Selection from "./UI/nextUI/Selection";
 import TextInput from "./UI/nextUI/TextInput";
 import { quicksand } from "@/public/fonts/font";
-import {
-  categoryOption1,
-  categoryOption2,
-  categoryOption3,
-  genderOption,
-  gradeOption1,
-  gradeOption2,
-  majorOption,
-  musicOrPoseOption,
-} from "@/template/selectOptions";
+import { genderOption, gradeOption1, gradeOption2, majorOption, musicOrPoseOption } from "@/template/selectOptions";
 import MusicInput from "./MusicInput";
 import { Button } from "@nextui-org/react";
 import { Reception2025 } from "@/template/reception";
@@ -29,7 +20,7 @@ const ReceptionForm = (): ReactNode => {
   const [gender, setGender] = useState<gender>("");
   const [major, setMajor] = useState<major>("");
   const [grade, setGrade] = useState<grade>("");
-  const [category, setCategory] = useState<category>("");
+  // const [category, setCategory] = useState<category>("");
   const [musicOrPose, setMusicOrPose] = useState<musicOrPose>("");
   const [participantsList, setParticipantsList] = useState<string[]>([]);
   const [musicFile, setMusicFile] = useState<File | null>(null);
@@ -47,11 +38,11 @@ const ReceptionForm = (): ReactNode => {
   const [instructorContactError, setInstructorContactError] = useState<boolean>(false);
   const [artTitleError, setArtTitleError] = useState<boolean>(false);
   //useState_errors_selections
-  const [individualOrGroupError, setIndividualOrGroupError] = useState<boolean>(false);
+  // const [individualOrGroupError, setIndividualOrGroupError] = useState<boolean>(false);
   const [genderError, setGenderError] = useState<boolean>(false);
   const [majorError, setMajorError] = useState<boolean>(false);
   const [gradeError, setGradeError] = useState<boolean>(false);
-  const [categoryError, setCategoryError] = useState<boolean>(false);
+  // const [categoryError, setCategoryError] = useState<boolean>(false);
   const [musicOrPoseError, setMusicOrPoseError] = useState<boolean>(false);
   // const [participantError, setParticipantError] = useState<boolean>(false);
   //useState_error_music
@@ -91,14 +82,9 @@ const ReceptionForm = (): ReactNode => {
 
   //variables
   // const individual: boolean = individualOrGroup !== '단체';
-  const selectMusicOrPose =
-    (major === "한국무용" && category === "전통") ||
-    (major === "발레" && category === "고전");
-  const selectArtTitle = major !== "컨템포러리댄스";
-  const selectMusic =
-    category == "창작" ||
-    (major === "한국무용" && category === "전통") ||
-    (major === "발레" && category === "고전");
+  const selectMusicOrPose = major === "한국무용 <전통>" || major === "발레 <고전>";
+  const selectArtTitle = major !== "컨템포러리댄스 <규정>";
+  const selectMusic = major === "한국무용 <전통>" || major === "발레 <고전>";
 
   //functions
   const checkError = (): boolean => {
@@ -110,7 +96,7 @@ const ReceptionForm = (): ReactNode => {
         [genderRef, gender, setGenderError],
         [majorRef, major, setMajorError],
         [gradeRef, grade, setGradeError],
-        [categoryRef, category, setCategoryError],
+        // [categoryRef, category, setCategoryError],
         [musicOrPoseRef, musicOrPose, setMusicOrPoseError],
       ] as [RefObject<HTMLInputElement>, string, Dispatch<SetStateAction<boolean>>][]
     ).forEach(([ref, element, setError]) => {
@@ -189,7 +175,7 @@ const ReceptionForm = (): ReactNode => {
       instructorContact: instructorContactRef.current!.value.trim(),
       major: major,
       grade: grade,
-      category: category,
+      // category: category,
       artTitle: selectArtTitle && artTitleRef.current ? artTitleRef.current!.value : null,
       musicFileURL: selectMusic ? fileURL : null,
       musicOrPose: selectMusicOrPose ? musicOrPose : null,
@@ -316,12 +302,12 @@ const ReceptionForm = (): ReactNode => {
                 }}
                 label={"학년 선택"}
                 placeholder="학년 선택"
-                options={major === "발레" ? gradeOption1 : gradeOption2}
+                options={major === "발레 <고전>" ? gradeOption1 : gradeOption2}
                 error={gradeError}
                 ref={gradeRef}
                 disabled={major == ""}
               />
-              <Selection
+              {/* <Selection
                 value={category}
                 onChange={(value: string) => {
                   setCategory(value as category);
@@ -334,7 +320,7 @@ const ReceptionForm = (): ReactNode => {
                 ref={categoryRef}
                 disabled={!major || !grade}
                 width={250}
-              />
+              /> */}
               {selectArtTitle && (
                 <TextInput
                   label="작품 제목"
@@ -374,7 +360,12 @@ const ReceptionForm = (): ReactNode => {
         </div>
       </form>
       <PrivacyPolicy setPrivacyConfirm={setPrivacyConfirm} />
-      <Button className={`w-40 self-center ${!receptionAvailable && "text-white"}`} onClick={onSubmit} isLoading={loading} color={receptionAvailable ? "primary" : "default"}>
+      <Button
+        className={`w-40 self-center ${!receptionAvailable && "text-white"}`}
+        onClick={onSubmit}
+        isLoading={loading}
+        color={receptionAvailable ? "primary" : "default"}
+      >
         {receptionAvailable ? "접수하기" : "접수기간이 아닙니다"}
       </Button>
       <p className="mt-4 h-8 text-center text-red-500">

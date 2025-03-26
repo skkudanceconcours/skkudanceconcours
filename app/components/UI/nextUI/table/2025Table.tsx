@@ -102,7 +102,6 @@ const NextTable2025 = ({ receptions }: TableProps): ReactNode => {
             <div className="flex flex-col gap-1">
               <p>{reception.major}</p>
               <p>{reception.grade}</p>
-              <p>{reception.category}</p>
             </div>
           );
         case "artTitle":
@@ -121,14 +120,6 @@ const NextTable2025 = ({ receptions }: TableProps): ReactNode => {
               </a>
             </div>
           );
-        // case "participants":
-        //   return (
-        //     <div>
-        //       {reception.participants?.map((participant) => (
-        //         <p key={participant}>{participant}</p>
-        //       ))}
-        //     </div>
-        //   );
       }
     },
     [],

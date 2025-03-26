@@ -15,7 +15,7 @@ export type Reception2025 = {
     instructorContact: string
     major: major
     grade: grade
-    category: category
+    // category: category
     artTitle: string | null
     musicFileURL: string | null
     musicOrPose: musicOrPose | null

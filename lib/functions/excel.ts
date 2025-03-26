@@ -62,7 +62,7 @@ const headers2025 = [
   "지도자 연락처",
   "전공",
   "학년",
-  "부문",
+  // "부문",
   "작품 제목",
   "음악/포즈",
   "음악 다운로드",
@@ -82,7 +82,7 @@ const headerWidths2025 = [
   25, //instructor contact
   20, //major
   20, //grade
-  20, //category
+  // 20, //category
   25, //artTitle,
   10, //musicOrPose
   15, //musicURL,
@@ -227,7 +227,7 @@ export const downloadExcel = async (year: YearOption, data: Reception2024[] | Re
             instructorContact,
             major,
             grade,
-            category,
+            // category,
             artTitle,
             musicFileURL,
             musicOrPose,
@@ -248,7 +248,7 @@ export const downloadExcel = async (year: YearOption, data: Reception2024[] | Re
             instructorContact,
             major,
             grade,
-            category,
+            // category,
             artTitle,
             musicOrPose,
             musicFileURL,
