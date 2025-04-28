@@ -27,7 +27,7 @@ const NoticeHeader = (): ReactNode => {
           currPath !== "/notification" && router.push("/notification?page=1");
         }}
       >
-        Notice
+        공지사항
       </span>
       <span
         className={stylebyPath_guideline}
@@ -36,7 +36,7 @@ const NoticeHeader = (): ReactNode => {
           router.push("/notification/guideline")
         }
       >
-        Guidelines
+        요강
       </span>
     </nav>
   );
