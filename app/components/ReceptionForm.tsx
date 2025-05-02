@@ -136,7 +136,7 @@ const ReceptionForm = (): ReactNode => {
   };
 
   const receptionStartDate = new Date(2025, 3, 14);
-  const receptionEndDate = new Date(2025, 4, 3);
+  const receptionEndDate = new Date(2025, 4, 7);
   const now = new Date();
   const receptionAvailable =
     receptionStartDate.getTime() <= now.getTime() && now.getTime() < receptionEndDate.getTime();
