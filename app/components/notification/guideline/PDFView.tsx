@@ -4,15 +4,11 @@ import { useRouter } from "next/navigation";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/esm/Page/TextLayer.css";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
-// firebase
-import { downloadPDf } from "@/lib/firebase/downloadFile";
 // context
 import useLoginStore from "@/lib/zustand/loginStore";
 import {
   getPDF,
-  getPDFPath,
   updatePDF,
-  uploadStorageFile,
 } from "@/lib/firebase/firebaseCRUD";
 // icons * image
 import Button from "@mui/material/Button";
@@ -85,15 +81,43 @@ const PDFView = (): ReactNode => {
 
     const fetchAndSetURL = async () => {
       const url = await fetchPDF();
-      setURL(url); // 프로미스 대신 실제 URL 값을 설정
+      setURL(url);
+
+      // 브라우저가 PDF를 미리 캐시하도록 prefetch
+      if (url) {
+        const link = document.createElement("link");
+        link.rel = "prefetch";
+        link.href = url;
+        link.as = "fetch";
+        link.crossOrigin = "anonymous";
+        document.head.appendChild(link);
+      }
     };
 
     fetchAndSetURL();
   }, []);
-  const downloadHandler = async () => {
-    const pdfPath = await getPDFPath();
+  const [downloading, setDownloading] = useState<boolean>(false);
 
-    downloadPDf(pdfPath, "SKKU_콩쿨_요강.pdf");
+  const downloadHandler = async () => {
+    if (!url) return;
+    setDownloading(true);
+    try {
+      // 이미 fetch된 url을 재사용하여 브라우저 캐시에서 바로 다운로드
+      const res = await fetch(url);
+      const blob = await res.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = blobUrl;
+      a.download = "SKKU_콩쿨_요강.pdf";
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(blobUrl);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setDownloading(false);
+    }
   };
   return (
     <>
@@ -112,11 +136,20 @@ const PDFView = (): ReactNode => {
       ) : null}
 
       <button
-        className="h-[2.5rem] w-60 border-[0.8px] border-solid border-gray-700 hover:bg-gray-100"
-        // onClick={() => downloadPDF("요강/24_요강.pdf", "24년도_콩쿨요강.pdf")}
+        className="flex h-[2.5rem] w-60 items-center justify-center border-[0.8px] border-solid border-gray-700 hover:bg-gray-100 disabled:opacity-50"
         onClick={downloadHandler}
+        disabled={downloading}
       >
-        요강 다운로드
+        {downloading ? (
+          <div className="relative h-5 w-5 animate-loading">
+            <div className="absolute left-0 top-0 h-1.5 w-1.5 rounded-full bg-gray-800" />
+            <div className="absolute right-0 top-0 h-1.5 w-1.5 rounded-full bg-gray-800" />
+            <div className="absolute bottom-0 left-0 h-1.5 w-1.5 rounded-full bg-gray-800" />
+            <div className="absolute bottom-0 right-0 h-1.5 w-1.5 rounded-full bg-gray-800" />
+          </div>
+        ) : (
+          "요강 다운로드"
+        )}
       </button>
       {loginState === "admin" ? (
         <Button
