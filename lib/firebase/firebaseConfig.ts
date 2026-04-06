@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection } from "firebase/firestore";
-// import { getAnalytics } from "firebase/analytics";
+import { getAnalytics, isSupported } from "firebase/analytics";
 
 // Origin Firebase
 const firebaseConfig = {
@@ -27,6 +27,9 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// # Used Functions
-// const analytics = getAnalytics(app);
+// Analytics (클라이언트 환경에서만 초기화)
+isSupported().then((supported) => {
+  if (supported) getAnalytics(app);
+});
+
 export const db = getFirestore(app);
