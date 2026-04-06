@@ -5,6 +5,7 @@ import { gender, grade, individualOrGroup, major, musicOrPose } from "@/template
 import Selection from "./UI/nextUI/Selection";
 import TextInput from "./UI/nextUI/TextInput";
 import { quicksand } from "@/public/fonts/font";
+import { formatPhone, formatDate } from "@/lib/functions/formatters";
 import { genderOption, gradeOption1, gradeOption2, majorOption, musicOrPoseOption } from "@/template/selectOptions";
 import MusicInput from "./MusicInput";
 import { Button } from "@nextui-org/react";
@@ -26,6 +27,9 @@ const ReceptionForm = (): ReactNode => {
   const [musicFile, setMusicFile] = useState<File | null>(null);
   const [privacyConfirm, setPrivacyConfirm] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [birthValue, setBirthValue] = useState<string>("");
+  const [contactValue, setContactValue] = useState<string>("");
+  const [instructorContactValue, setInstructorContactValue] = useState<string>("");
   //useState_errors_textInputs
   const [nameError, setNameError] = useState<boolean>(false);
   const [birthError, setBirthError] = useState<boolean>(false);
@@ -165,14 +169,14 @@ const ReceptionForm = (): ReactNode => {
       // individualOrGroup: individualOrGroup,
       name: nameRef.current!.value.trim(),
       gender: gender,
-      birth: birthRef.current!.value.trim(),
-      contact: contactRef.current!.value.trim(),
+      birth: birthValue.trim(),
+      contact: contactValue.trim(),
       email: emailRef.current!.value.trim(),
       school: schoolRef.current!.value.trim(),
       // leaderGrade: leaderGradeRef.current ? leaderGradeRef.current.value.trim() : null,
       academy: academyRef.current!.value.trim(),
       instructorName: instructorNameRef.current!.value.trim(),
-      instructorContact: instructorContactRef.current!.value.trim(),
+      instructorContact: instructorContactValue.trim(),
       major: major,
       grade: grade,
       // category: category,
@@ -232,14 +236,18 @@ const ReceptionForm = (): ReactNode => {
                 label="생년월일"
                 error={birthError}
                 ref={birthRef}
-                onChange={() => setBirthError(false)}
+                value={birthValue}
+                onChange={(e) => { setBirthValue(formatDate(e?.target.value ?? "")); setBirthError(false); }}
+                clearable={false}
                 description="*예) 2024-01-01"
               />
               <TextInput
                 label="참가자 연락처"
                 error={contactError}
                 ref={contactRef}
-                onChange={() => setContactError(false)}
+                value={contactValue}
+                onChange={(e) => { setContactValue(formatPhone(e?.target.value ?? "")); setContactError(false); }}
+                clearable={false}
                 description="*예) 010-1234-5678"
               />
               <TextInput label="이메일" error={emailError} ref={emailRef} onChange={() => setEmailError(false)} />
@@ -271,7 +279,9 @@ const ReceptionForm = (): ReactNode => {
                 label="지도자 연락처"
                 error={instructorContactError}
                 ref={instructorContactRef}
-                onChange={() => setInstructorContactError(false)}
+                value={instructorContactValue}
+                onChange={(e) => { setInstructorContactValue(formatPhone(e?.target.value ?? "")); setInstructorContactError(false); }}
+                clearable={false}
                 description="*예) 010-1234-5678"
               />
             </div>

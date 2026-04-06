@@ -11,7 +11,7 @@ type TextInputProps = {
   clearable?: boolean
   autoFocus?: boolean
   password?: boolean
-  onChange?: () => void
+  onChange?: (e?: React.ChangeEvent<HTMLInputElement>) => void
 };
 
 const NextTextInput = React.forwardRef<HTMLInputElement, TextInputProps>(({ className, label, error, description, disabled, value, clearable, autoFocus, password, onChange }: TextInputProps, ref: ForwardedRef<HTMLInputElement>): ReactNode => {
