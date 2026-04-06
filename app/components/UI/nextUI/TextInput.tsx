@@ -15,6 +15,19 @@ type TextInputProps = {
 };
 
 const NextTextInput = React.forwardRef<HTMLInputElement, TextInputProps>(({ className, label, error, description, disabled, value, clearable, autoFocus, password, onChange }: TextInputProps, ref: ForwardedRef<HTMLInputElement>): ReactNode => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const form = (e.target as HTMLElement).closest("form");
+      if (!form) return;
+      const inputs = Array.from(form.querySelectorAll<HTMLInputElement>("input:not([type=hidden]):not([tabindex='-1'])"));
+      const currentIndex = inputs.indexOf(e.target as HTMLInputElement);
+      if (currentIndex >= 0 && currentIndex < inputs.length - 1) {
+        inputs[currentIndex + 1].focus();
+      }
+    }
+  };
+
   return (
     <div className={`${className} w-52 h-20 my-6`}>
       <Input
@@ -28,9 +41,10 @@ const NextTextInput = React.forwardRef<HTMLInputElement, TextInputProps>(({ clas
         isInvalid = {value ? false : error}
         isDisabled = {disabled}
         onChange={onChange}
+        onKeyDown={handleKeyDown}
         ref={ref}
         autoFocus={autoFocus}
-        
+
     />
     </div>
   );
