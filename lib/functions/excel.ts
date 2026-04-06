@@ -2,8 +2,8 @@ import { Reception2024, Reception2025, Reception2026 } from "@/template/receptio
 import * as Excel from "exceljs/dist/exceljs.min.js";
 import { saveAs } from "file-saver";
 
-const formatTimestamp = (timestamp: string): string => {
-  const date = new Date(timestamp);
+const formatTimestamp = (timestamp: string | Date): string => {
+  const date = timestamp instanceof Date ? timestamp : new Date(timestamp);
   const pad = (n: number) => String(n).padStart(2, "0");
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
 };
