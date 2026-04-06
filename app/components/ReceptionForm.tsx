@@ -293,6 +293,10 @@ const ReceptionForm = (): ReactNode => {
             onChange={(value: string) => {
               setMajor(value as major);
               setMajorError(false);
+              setGrade("");
+              setMusicOrPose("");
+              setMusicFile(null);
+              if (artTitleRef.current) artTitleRef.current.value = "";
             }}
             label={"전공 선택"}
             placeholder="전공 선택"
