@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection } from "firebase/firestore";
-import { getAnalytics, isSupported } from "firebase/analytics";
+import { Analytics, getAnalytics, isSupported, logEvent } from "firebase/analytics";
 
 // Origin Firebase
 const firebaseConfig = {
@@ -28,8 +28,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 // Analytics (클라이언트 환경에서만 초기화)
+let analytics: Analytics | null = null;
 isSupported().then((supported) => {
-  if (supported) getAnalytics(app);
+  if (supported) analytics = getAnalytics(app);
 });
+
+export const trackEvent = (eventName: string, params?: Record<string, string | number | boolean>) => {
+  if (analytics) logEvent(analytics, eventName, params);
+};
 
 export const db = getFirestore(app);

@@ -12,6 +12,8 @@ import { Button } from "@nextui-org/react";
 import { Reception2026 } from "@/template/reception";
 import PrivacyPolicy from "./PrivacyPolicy";
 import { submitReception, submitTest, uploadMP3File } from "@/lib/firebase/firebaseCRUD";
+import { trackEvent } from "@/lib/firebase/firebaseConfig";
+import { logError } from "@/lib/firebase/errorLog";
 import { useRouter } from "next/navigation";
 import { Path } from "@/template/paths";
 
@@ -158,14 +160,18 @@ const ReceptionForm = (): ReactNode => {
 
   const onSubmit = async () => {
     if (!receptionAvailable) return;
+
+    trackEvent("reception_submit_attempt", { major: major || "미선택" });
+
     if (checkError()) {
+      trackEvent("reception_validation_error", { major: major || "미선택" });
       return;
     }
     if (privacyConfirm === false) {
+      trackEvent("reception_privacy_not_agreed");
       setPrivacyConfirmError(true);
       return;
     }
-    console.log("no error");
     setLoading(true);
 
     const currentTime: Date = new Date();
@@ -173,6 +179,15 @@ const ReceptionForm = (): ReactNode => {
       `${nameRef.current!.value.trim()}${currentTime.toString()}`,
       musicFile,
     );
+
+    if (selectMusic && musicFile && !fileURL) {
+      logError({
+        type: "upload_failed",
+        message: "음원 파일 업로드 실패",
+        userName: nameRef.current?.value.trim(),
+        major,
+      });
+    }
 
     const newReception: Reception2026 = {
       timestamp: currentTime,
@@ -197,9 +212,16 @@ const ReceptionForm = (): ReactNode => {
     };
     const docId = await submitReception(newReception);
     if (docId) {
+      trackEvent("reception_submit_success", { major, grade });
       router.replace("/reception/submit" as Path);
     } else {
-      console.log("submission failed");
+      trackEvent("reception_submit_failed", { major, grade });
+      logError({
+        type: "submit_failed",
+        message: "Firestore 접수 저장 실패",
+        userName: nameRef.current?.value.trim(),
+        major,
+      });
     }
     setLoading(false);
   };
