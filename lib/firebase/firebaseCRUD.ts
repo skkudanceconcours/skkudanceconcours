@@ -1,4 +1,4 @@
-import { Reception2024, Reception2025 } from "@/template/reception";
+import { Reception2024, Reception2025, Reception2026 } from "@/template/reception";
 import { db } from "../firebase/firebaseConfig";
 import { revalidateTag } from "next/cache";
 // type
@@ -80,9 +80,9 @@ export const uploadStorageFile = async (file: File | null, folder: string): Prom
   return null;
 };
 
-export const submitReception = async (reception: Reception2025): Promise<string | null> => {
+export const submitReception = async (reception: Reception2026): Promise<string | null> => {
   try {
-    const res = await addDoc(getCollection("reception2025"), { reception });
+    const res = await addDoc(getCollection("reception2026"), { reception });
     return res.id;
   } catch (error) {
     console.log(error);
@@ -133,10 +133,11 @@ export const getAllNotices = async () => {
   }
 };
 
-export const getAllReception = async (year: YearOption): Promise<Reception2025[] | Reception2024[]> => {
+export const getAllReception = async (year: YearOption): Promise<Reception2026[] | Reception2025[] | Reception2024[]> => {
   try {
-    const res = await getDocs(getCollection(year == "2024" ? "reception" : "reception2025"));
-    const data: Reception2025[] | Reception2024[] = res.docs.map(doc => {
+    const collectionName = year === "2024" ? "reception" : year === "2025" ? "reception2025" : "reception2026";
+    const res = await getDocs(getCollection(collectionName));
+    const data: Reception2026[] | Reception2025[] | Reception2024[] = res.docs.map(doc => {
       const { timestamp } = doc.data().reception;
       return {
         ...doc.data().reception,

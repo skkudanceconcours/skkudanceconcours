@@ -8,7 +8,7 @@ import { quicksand } from "@/public/fonts/font";
 import { genderOption, gradeOption1, gradeOption2, majorOption, musicOrPoseOption } from "@/template/selectOptions";
 import MusicInput from "./MusicInput";
 import { Button } from "@nextui-org/react";
-import { Reception2025 } from "@/template/reception";
+import { Reception2026 } from "@/template/reception";
 import PrivacyPolicy from "./PrivacyPolicy";
 import { submitReception, submitTest, uploadMP3File } from "@/lib/firebase/firebaseCRUD";
 import { useRouter } from "next/navigation";
@@ -135,8 +135,8 @@ const ReceptionForm = (): ReactNode => {
     return error;
   };
 
-  const receptionStartDate = new Date(2025, 3, 14);
-  const receptionEndDate = new Date(2025, 4, 7);
+  const receptionStartDate = new Date("2026-04-06T00:00:00+09:00");
+  const receptionEndDate = new Date("2026-05-04T23:59:59+09:00");
   const now = new Date();
   const receptionAvailable =
     receptionStartDate.getTime() <= now.getTime() && now.getTime() < receptionEndDate.getTime();
@@ -160,7 +160,7 @@ const ReceptionForm = (): ReactNode => {
       musicFile,
     );
 
-    const newReception: Reception2025 = {
+    const newReception: Reception2026 = {
       timestamp: currentTime,
       // individualOrGroup: individualOrGroup,
       name: nameRef.current!.value.trim(),

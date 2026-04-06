@@ -2,19 +2,21 @@
 import ExcelButton from "@/app/components/ExcelButton";
 import NextTable2024 from "@/app/components/UI/nextUI/table/2024Table";
 import { baseUrl } from "@/lib/functions/dynamicURL";
-import { Reception2024, Reception2025 } from "@/template/reception";
+import { Reception2024, Reception2025, Reception2026 } from "@/template/reception";
 import { ReactNode, useCallback, useEffect, useState } from "react";
 import NextSelection from "@/app/components/UI/nextUI/Selection";
 import NextTable2025 from "@/app/components/UI/nextUI/table/2025Table";
+import NextTable2026 from "@/app/components/UI/nextUI/table/2026Table";
 import Spinner from "@/app/components/UI/Spinner";
 export const dynamic = "force-dynamic";
 
 const ReceptionAdmin = (): ReactNode => {
   // const receptionData = await fetchReceptionData();
-  const [selectedYear, setSelectedYear] = useState<YearOption>("2025");
-  const yearOption: YearOption[] = ["2024", "2025"];
+  const [selectedYear, setSelectedYear] = useState<YearOption>("2026");
+  const yearOption: YearOption[] = ["2024", "2025", "2026"];
   const [receptionData2024, set2024Data] = useState<Reception2024[] | null>(null);
   const [receptionData2025, set2025Data] = useState<Reception2025[] | null>(null);
+  const [receptionData2026, set2026Data] = useState<Reception2026[] | null>(null);
 
   const fetch2024Data = useCallback(async () => {
     const data2024 = await fetchReceptionData("2024");
@@ -26,9 +28,15 @@ const ReceptionAdmin = (): ReactNode => {
     set2025Data(data2025 as Reception2025[]);
   }, []);
 
+  const fetch2026Data = useCallback(async () => {
+    const data2026 = await fetchReceptionData("2026");
+    set2026Data(data2026 as Reception2026[]);
+  }, []);
+
   useEffect(() => {
     if (selectedYear == "2024" && receptionData2024 == null) fetch2024Data();
     else if (selectedYear == "2025" && receptionData2025 == null) fetch2025Data();
+    else if (selectedYear == "2026" && receptionData2026 == null) fetch2026Data();
   }, [selectedYear]);
 
   return (
@@ -46,26 +54,29 @@ const ReceptionAdmin = (): ReactNode => {
         />
       </div>
       {(selectedYear == "2024" && receptionData2024 == null) ||
-      (selectedYear == "2025" && receptionData2025 == null) ? (
+      (selectedYear == "2025" && receptionData2025 == null) ||
+      (selectedYear == "2026" && receptionData2026 == null) ? (
         <Spinner />
       ) : selectedYear === "2024" ? (
         <NextTable2024 receptions={receptionData2024!} />
-      ) : (
+      ) : selectedYear === "2025" ? (
         <NextTable2025 receptions={receptionData2025!} />
+      ) : (
+        <NextTable2026 receptions={receptionData2026!} />
       )}
 
       <div className="relative z-10 flex w-full justify-between p-4 px-8">
-        <div className="">총 {((selectedYear === "2024" ? receptionData2024 : receptionData2025) ?? []).length}개의 접수</div>
+        <div className="">총 {((selectedYear === "2024" ? receptionData2024 : selectedYear === "2025" ? receptionData2025 : receptionData2026) ?? []).length}개의 접수</div>
         <ExcelButton
           year={selectedYear}
-          receptions={selectedYear === "2024" ? receptionData2024! : receptionData2025!}
+          receptions={selectedYear === "2024" ? receptionData2024! : selectedYear === "2025" ? receptionData2025! : receptionData2026!}
         />
       </div>
     </main>
   );
 };
 
-const fetchReceptionData = async (year: YearOption): Promise<Reception2025[] | Reception2024[]> => {
+const fetchReceptionData = async (year: YearOption): Promise<Reception2026[] | Reception2025[] | Reception2024[]> => {
   try {
     const res = await fetch(`${baseUrl}/api/getReception?year=${year}`, {
       next: { revalidate: 10, tags: ["reception"] },

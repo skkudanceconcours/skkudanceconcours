@@ -1,1 +1,1 @@
-type Collection = 'notices' | 'reception' | 'reception2025' | 'test';
+type Collection = 'notices' | 'reception' | 'reception2025' | 'reception2026' | 'test';

@@ -1,4 +1,4 @@
-import { Reception2024, Reception2025 } from "@/template/reception";
+import { Reception2024, Reception2025, Reception2026 } from "@/template/reception";
 import * as Excel from "exceljs/dist/exceljs.min.js";
 import { saveAs } from "file-saver";
 
@@ -88,6 +88,44 @@ const headerWidths2025 = [
   15, //musicURL,
 ];
 
+const headers2026 = [
+  "번호",
+  "접수시각",
+  "이름",
+  "성별",
+  "생년월일",
+  "연락처",
+  "이메일",
+  "학교명",
+  "학원명",
+  "지도자 성명",
+  "지도자 연락처",
+  "전공",
+  "학년",
+  "작품 제목",
+  "음악/포즈",
+  "음악 다운로드",
+];
+
+const headerWidths2026 = [
+  5, //index
+  10, //timeStamp
+  8, //name
+  5, //gender
+  20, //birth
+  25, //contact
+  25, //email
+  20, //school
+  20, //academy
+  15, //instructor name
+  25, //instructor contact
+  20, //major
+  20, //grade
+  25, //artTitle,
+  10, //musicOrPose
+  15, //musicURL,
+];
+
 const styleHeaderCell = (cell: any) => {
   cell.fill = {
     type: "pattern",
@@ -133,7 +171,7 @@ const styleDataCell = (cell: any) => {
   };
 };
 
-export const downloadExcel = async (year: YearOption, data: Reception2024[] | Reception2025[]) => {
+export const downloadExcel = async (year: YearOption, data: Reception2024[] | Reception2025[] | Reception2026[]) => {
   try {
     // 여러 엑셀 시트를 포함하는 하나의 workbook(단위) 생성
     const wb = new Excel.Workbook();
@@ -142,13 +180,13 @@ export const downloadExcel = async (year: YearOption, data: Reception2024[] | Re
     const sheet = wb.addWorksheet("콩쿨 접수 명단");
 
     // 상단 헤더(TH) 추가
-    const headerRow = sheet.addRow(year === "2024" ? headers2024 : headers2025);
+    const headerRow = sheet.addRow(year === "2024" ? headers2024 : year === "2025" ? headers2025 : headers2026);
     // 헤더의 높이값 지정
     headerRow.height = 30.75;
     // 각 헤더 cell에 스타일 지정
     headerRow.eachCell((cell: any, colNum: number) => {
       styleHeaderCell(cell);
-      sheet.getColumn(colNum).width = year === "2024" ? headerWidths2024[colNum - 1] : headerWidths2025[colNum - 1];
+      sheet.getColumn(colNum).width = year === "2024" ? headerWidths2024[colNum - 1] : year === "2025" ? headerWidths2025[colNum - 1] : headerWidths2026[colNum - 1];
     });
     if (year == "2024") {
       // 각 Data cell에 데이터 삽입 및 스타일 지정
@@ -211,7 +249,7 @@ export const downloadExcel = async (year: YearOption, data: Reception2024[] | Re
           });
         },
       );
-    } else {
+    } else if (year == "2025") {
       (data as Reception2025[]).forEach(
         (
           {
@@ -249,6 +287,58 @@ export const downloadExcel = async (year: YearOption, data: Reception2024[] | Re
             major,
             grade,
             // category,
+            artTitle,
+            musicOrPose,
+            musicFileURL,
+          ];
+          const appendRow = sheet.addRow(rowDatas);
+          appendRow.height = 30.75;
+          appendRow.eachCell((cell: any, colNum: number) => {
+            styleDataCell(cell);
+            if (colNum === 1) {
+              cell.font = {
+                color: { argb: "ff1890ff" },
+              };
+            }
+          });
+        },
+      );
+    } else {
+      (data as Reception2026[]).forEach(
+        (
+          {
+            timestamp,
+            name,
+            gender,
+            birth,
+            contact,
+            email,
+            school,
+            academy,
+            instructorName,
+            instructorContact,
+            major,
+            grade,
+            artTitle,
+            musicFileURL,
+            musicOrPose,
+          }: Reception2026,
+          idx: number,
+        ) => {
+          const rowDatas = [
+            idx + 1,
+            timestamp,
+            name,
+            gender,
+            birth,
+            contact,
+            email,
+            school,
+            academy,
+            instructorName,
+            instructorContact,
+            major,
+            grade,
             artTitle,
             musicOrPose,
             musicFileURL,
