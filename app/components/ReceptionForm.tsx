@@ -93,6 +93,7 @@ const ReceptionForm = (): ReactNode => {
   //functions
   const checkError = (): boolean => {
     let error = false;
+    let firstErrorRef: RefObject<HTMLElement> | null = null;
 
     (
       [
@@ -104,9 +105,9 @@ const ReceptionForm = (): ReactNode => {
         [musicOrPoseRef, musicOrPose, setMusicOrPoseError],
       ] as [RefObject<HTMLInputElement>, string, Dispatch<SetStateAction<boolean>>][]
     ).forEach(([ref, element, setError]) => {
-      console.log(element);
       if (ref.current && !element) {
         setError(true);
+        if (!firstErrorRef) firstErrorRef = ref;
         error = true;
       }
     });
@@ -127,6 +128,7 @@ const ReceptionForm = (): ReactNode => {
     ).forEach(([ref, setError]) => {
       if (ref.current && !ref.current.value) {
         setError(true);
+        if (!firstErrorRef) firstErrorRef = ref;
         error = true;
       }
     });
@@ -134,8 +136,17 @@ const ReceptionForm = (): ReactNode => {
     //music file check
     if (musicFileRef.current && !musicFile) {
       setMusicFileError(true);
+      if (!firstErrorRef) firstErrorRef = musicFileRef;
       error = true;
     }
+
+    if (firstErrorRef && (firstErrorRef as RefObject<HTMLElement>).current) {
+      (firstErrorRef as RefObject<HTMLElement>).current!.scrollIntoView({ behavior: "smooth", block: "center" });
+      if ((firstErrorRef as RefObject<HTMLInputElement>).current?.focus) {
+        (firstErrorRef as RefObject<HTMLInputElement>).current!.focus();
+      }
+    }
+
     return error;
   };
 
@@ -148,7 +159,6 @@ const ReceptionForm = (): ReactNode => {
   const onSubmit = async () => {
     if (!receptionAvailable) return;
     if (checkError()) {
-      scrollRef.current?.scrollIntoView({ behavior: "smooth" });
       return;
     }
     if (privacyConfirm === false) {
@@ -237,18 +247,24 @@ const ReceptionForm = (): ReactNode => {
                 error={birthError}
                 ref={birthRef}
                 value={birthValue}
-                onChange={(e) => { setBirthValue(formatDate(e?.target.value ?? "")); setBirthError(false); }}
+                onChange={e => {
+                  setBirthValue(formatDate(e?.target.value ?? ""));
+                  setBirthError(false);
+                }}
                 clearable={false}
-                description="*예) 2024-01-01"
+                description="*숫자만 입력 (YYYYMMDD)"
               />
               <TextInput
                 label="참가자 연락처"
                 error={contactError}
                 ref={contactRef}
                 value={contactValue}
-                onChange={(e) => { setContactValue(formatPhone(e?.target.value ?? "")); setContactError(false); }}
+                onChange={e => {
+                  setContactValue(formatPhone(e?.target.value ?? ""));
+                  setContactError(false);
+                }}
                 clearable={false}
-                description="*예) 010-1234-5678"
+                description="*'-' 없이 숫자만 입력"
               />
               <TextInput label="이메일" error={emailError} ref={emailRef} onChange={() => setEmailError(false)} />
             </div>
@@ -280,9 +296,12 @@ const ReceptionForm = (): ReactNode => {
                 error={instructorContactError}
                 ref={instructorContactRef}
                 value={instructorContactValue}
-                onChange={(e) => { setInstructorContactValue(formatPhone(e?.target.value ?? "")); setInstructorContactError(false); }}
+                onChange={e => {
+                  setInstructorContactValue(formatPhone(e?.target.value ?? ""));
+                  setInstructorContactError(false);
+                }}
                 clearable={false}
-                description="*예) 010-1234-5678"
+                description="*'-' 없이 숫자만 입력"
               />
             </div>
           </div>
