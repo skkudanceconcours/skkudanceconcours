@@ -1,4 +1,4 @@
-import { ForwardedRef, ReactNode, forwardRef } from "react";
+import { ForwardedRef, ReactNode, forwardRef, useState } from "react";
 import * as React from "react";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
@@ -27,8 +27,35 @@ const MusicInput = forwardRef<HTMLDivElement, MusicInputProps>(
     { className, onChange, fileName, error }: MusicInputProps,
     ref: ForwardedRef<HTMLDivElement>
   ): ReactNode => {
+    const [isDragging, setIsDragging] = useState(false);
+
+    const handleDragOver = (e: React.DragEvent) => {
+      e.preventDefault();
+      setIsDragging(true);
+    };
+
+    const handleDragLeave = () => {
+      setIsDragging(false);
+    };
+
+    const handleDrop = (e: React.DragEvent) => {
+      e.preventDefault();
+      setIsDragging(false);
+      const file = e.dataTransfer.files[0];
+      if (file && file.type === "audio/mpeg") {
+        onChange(file);
+      }
+    };
+
     return (
-      <div className={`${className} w-fit my-8`} ref={ref}>
+      <div
+        className={`${className} w-fit my-8`}
+        ref={ref}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        style={{ outline: isDragging ? "2px dashed #1976D2" : "none", borderRadius: 8, padding: isDragging ? 8 : 0 }}
+      >
         <p className="text-[0.75rem] my-2 opacity-70">음원 제출</p>
         <Button
           component="label"
