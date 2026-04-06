@@ -1,4 +1,4 @@
-import { ChangeEvent, ForwardedRef,ReactNode, RefObject, forwardRef } from "react";
+import { ChangeEvent, ForwardedRef,ReactNode, RefObject, forwardRef, useState } from "react";
 
 import { Select, SelectItem } from "@nextui-org/react";
 import React from "react";
@@ -30,9 +30,14 @@ const NextSelection = forwardRef<HTMLInputElement, SelectionProps>(
     }: SelectionProps,
     ref: ForwardedRef<HTMLInputElement>
   ): ReactNode => {
+    const [isOpen, setIsOpen] = useState(false);
+
     return (
 
-    <div className={`${className} w-52 h-20 my-6`}>
+    <div
+      className={`${className} w-52 h-20 my-6 cursor-pointer`}
+      onClick={() => { if (!disabled) setIsOpen(true); }}
+    >
       <Select
         label={label}
         variant="underlined"
@@ -40,13 +45,15 @@ const NextSelection = forwardRef<HTMLInputElement, SelectionProps>(
         isInvalid = {error}
         value={value}
         placeholder={placeholder}
-        defaultSelectedKeys={["2025"]}
+        selectedKeys={value ? [value] : []}
         isDisabled={disabled}
+        isOpen={isOpen}
+        onOpenChange={setIsOpen}
         ref={ref as RefObject<HTMLSelectElement>}
         onChange={(e:ChangeEvent<HTMLSelectElement>) =>{
           onChange(e.target.value)
-        }}  
-        
+        }}
+
       >
         {options.map((option) => (
           <SelectItem key={option} value={option}>
