@@ -224,7 +224,7 @@ const ReceptionForm = (): ReactNode => {
   return (
     <div className="flex flex-col">
       <div ref={scrollRef}></div>
-      <form className={`flex flex-col lg:flex-row  lg:gap-20 ${quicksand.className}`}>
+      <form onSubmit={(e) => e.preventDefault()} className={`flex flex-col lg:flex-row  lg:gap-20 ${quicksand.className}`}>
         <div>
           <div className="flex flex-col lg:flex-row  lg:gap-10">
             <div className="flex flex-col p-8">
