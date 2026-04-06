@@ -11,8 +11,22 @@ const SubmitPage = (): ReactNode => {
       <h1 className="text-3xl font-bold pt-20 lg:pt-0">접수가 완료되었습니다.</h1>
 
       <p className="py-20 pt-32 text-sm lg:text-xl text-center leading-8">
-        참가비 입금 관련하여 공지사항을 꼭 확인해주시기 바랍니다.
-        <br /> 별도 문의사항은 dance0604@skku.edu로 보내주시길 바랍니다.
+        참가비 입금 관련하여{" "}
+        <span
+          className="text-blue-500 cursor-pointer underline underline-offset-4"
+          onClick={() => router.push("/notification" as Path)}
+        >
+          공지사항
+        </span>
+        을 꼭 확인해주시기 바랍니다.
+        <br /> 별도 문의사항은{" "}
+        <a
+          href="mailto:dance0604@skku.edu"
+          className="text-blue-500 underline underline-offset-4"
+        >
+          dance0604@skku.edu
+        </a>
+        로 보내주시길 바랍니다.
       </p>
 
       <p
