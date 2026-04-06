@@ -2,6 +2,12 @@ import { Reception2024, Reception2025, Reception2026 } from "@/template/receptio
 import * as Excel from "exceljs/dist/exceljs.min.js";
 import { saveAs } from "file-saver";
 
+const formatTimestamp = (timestamp: string): string => {
+  const date = new Date(timestamp);
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+};
+
 const headers2024 = [
   "번호",
   "접수시각",
@@ -21,7 +27,7 @@ const headers2024 = [
   "부문",
   "작품 제목",
   "음악/포즈",
-  "음악 다운로드",
+  "음원 링크",
   "참가자 명단",
 ];
 
@@ -65,7 +71,7 @@ const headers2025 = [
   // "부문",
   "작품 제목",
   "음악/포즈",
-  "음악 다운로드",
+  "음원 링크",
 ];
 
 const headerWidths2025 = [
@@ -104,7 +110,7 @@ const headers2026 = [
   "학년",
   "작품 제목",
   "음악/포즈",
-  "음악 다운로드",
+  "음원 링크",
 ];
 
 const headerWidths2026 = [
@@ -217,7 +223,7 @@ export const downloadExcel = async (year: YearOption, data: Reception2024[] | Re
         ) => {
           const rowDatas = [
             idx + 1,
-            timestamp,
+            formatTimestamp(timestamp),
             individualOrGroup,
             name,
             gender,
@@ -274,7 +280,7 @@ export const downloadExcel = async (year: YearOption, data: Reception2024[] | Re
         ) => {
           const rowDatas = [
             idx + 1,
-            timestamp,
+            formatTimestamp(timestamp),
             name,
             gender,
             birth,
@@ -327,7 +333,7 @@ export const downloadExcel = async (year: YearOption, data: Reception2024[] | Re
         ) => {
           const rowDatas = [
             idx + 1,
-            timestamp,
+            formatTimestamp(timestamp),
             name,
             gender,
             birth,
