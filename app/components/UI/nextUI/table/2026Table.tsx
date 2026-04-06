@@ -102,17 +102,29 @@ const NextTable2026 = ({ receptions }: TableProps): ReactNode => {
         case "music/pose":
           return reception.musicOrPose;
         case "musicURL":
-          return (
-            <div className="flex w-32 flex-wrap overflow-x-auto">
-              <a
-                className="cursor-pointer underline"
-                target="_blank"
-                href={reception.musicFileURL ?? undefined}
-              >
-                {reception.musicFileURL}
-              </a>
-            </div>
-          );
+          return reception.musicFileURL ? (
+            <button
+              className="cursor-pointer underline text-blue-500"
+              onClick={async () => {
+                try {
+                  const res = await fetch(reception.musicFileURL!);
+                  const blob = await res.blob();
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement("a");
+                  a.href = url;
+                  const majorShort = reception.major.replace(/[<>]/g, "").replace(/\s+/g, "");
+                  const title = reception.artTitle ?? "음원";
+                  a.download = `2026_${majorShort}_${reception.name}_${title}.mp3`;
+                  a.click();
+                  URL.revokeObjectURL(url);
+                } catch (e) {
+                  console.error("다운로드 실패", e);
+                }
+              }}
+            >
+              다운로드
+            </button>
+          ) : null;
       }
     },
     [],
@@ -126,7 +138,7 @@ const NextTable2026 = ({ receptions }: TableProps): ReactNode => {
       <TableHeader columns={columns}>
         {(column) => <TableColumn key={column.uid}>{column.name}</TableColumn>}
       </TableHeader>
-      <TableBody items={receptions}>
+      <TableBody items={receptions} emptyContent="아직 신청자가 없습니다.">
         {(item) => (
           <TableRow key={new Date(item.timestamp).toISOString()}>
             {(columnKey) => (
