@@ -1,6 +1,7 @@
 import { category, gender, grade, individualOrGroup, major, musicOrPose } from "./inputTypes"
 
 export type Reception2026 = {
+    docId?: string
     timestamp: Date
     name: string
     gender: gender
@@ -19,6 +20,7 @@ export type Reception2026 = {
 }
 
 export type Reception2025 = {
+    docId?: string
     timestamp: Date
     // individualOrGroup: individualOrGroup
     name: string
@@ -42,6 +44,7 @@ export type Reception2025 = {
 
 
 export type Reception2024 = {
+    docId?: string
     timestamp: Date
     individualOrGroup: individualOrGroup
     name: string

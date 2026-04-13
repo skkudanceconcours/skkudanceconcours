@@ -140,6 +140,7 @@ export const getAllReception = async (year: YearOption): Promise<Reception2026[]
     const data: Reception2026[] | Reception2025[] | Reception2024[] = res.docs.map(doc => {
       const { timestamp } = doc.data().reception;
       return {
+        docId: doc.id,
         ...doc.data().reception,
         timestamp: new Date(timestamp.toDate()),
       };
@@ -207,5 +208,32 @@ export const deleteNotice = async (id: string) => {
     await delayTimeout(4000);
   } catch (error) {
     console.log("Error is deleting notices", error);
+  }
+};
+
+export const deleteReception = async (year: YearOption, docId: string): Promise<boolean> => {
+  const collectionName = year === "2024" ? "reception" : year === "2025" ? "reception2025" : "reception2026";
+  try {
+    await deleteDoc(doc(db, collectionName, docId));
+    return true;
+  } catch (error) {
+    console.log("Error deleting reception", error);
+    return false;
+  }
+};
+
+export const updateReception = async (
+  year: YearOption,
+  docId: string,
+  data: Reception2026 | Reception2025 | Reception2024
+): Promise<boolean> => {
+  const collectionName = year === "2024" ? "reception" : year === "2025" ? "reception2025" : "reception2026";
+  const { docId: _docId, ...receptionData } = data as Reception2026 & { docId: string };
+  try {
+    await updateDoc(doc(db, collectionName, docId), { reception: receptionData });
+    return true;
+  } catch (error) {
+    console.log("Error updating reception", error);
+    return false;
   }
 };
