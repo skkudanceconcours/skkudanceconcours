@@ -8,6 +8,7 @@ import NextSelection from "@/app/components/UI/nextUI/Selection";
 import NextTable2025 from "@/app/components/UI/nextUI/table/2025Table";
 import NextTable2026 from "@/app/components/UI/nextUI/table/2026Table";
 import Spinner from "@/app/components/UI/Spinner";
+import { CURRENT_RECEPTION_YEAR } from "@/public/constants";
 export const dynamic = "force-dynamic";
 
 const ReceptionAdmin = (): ReactNode => {
@@ -60,20 +61,23 @@ const ReceptionAdmin = (): ReactNode => {
       ) : selectedYear === "2024" ? (
         <NextTable2024
           receptions={receptionData2024!}
-          onDelete={(docId) => set2024Data(prev => prev!.filter(r => r.docId !== docId))}
+          onDelete={(docIds) => set2024Data(prev => prev!.filter(r => !docIds.includes(r.docId!)))}
           onUpdate={(updated) => set2024Data(prev => prev!.map(r => r.docId === updated.docId ? updated : r))}
+          readonly={CURRENT_RECEPTION_YEAR !== "2024"}
         />
       ) : selectedYear === "2025" ? (
         <NextTable2025
           receptions={receptionData2025!}
-          onDelete={(docId) => set2025Data(prev => prev!.filter(r => r.docId !== docId))}
+          onDelete={(docIds) => set2025Data(prev => prev!.filter(r => !docIds.includes(r.docId!)))}
           onUpdate={(updated) => set2025Data(prev => prev!.map(r => r.docId === updated.docId ? updated : r))}
+          readonly={CURRENT_RECEPTION_YEAR !== "2025"}
         />
       ) : (
         <NextTable2026
           receptions={receptionData2026!}
-          onDelete={(docId) => set2026Data(prev => prev!.filter(r => r.docId !== docId))}
+          onDelete={(docIds) => set2026Data(prev => prev!.filter(r => !docIds.includes(r.docId!)))}
           onUpdate={(updated) => set2026Data(prev => prev!.map(r => r.docId === updated.docId ? updated : r))}
+          readonly={CURRENT_RECEPTION_YEAR !== "2026"}
         />
       )}
 

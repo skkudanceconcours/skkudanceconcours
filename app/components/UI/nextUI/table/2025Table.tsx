@@ -9,13 +9,15 @@ import {
   TableCell,
   User,
 } from "@nextui-org/react";
-import { ReactNode, useCallback, useState } from "react";
+import { ReactNode, useCallback, useMemo, useState } from "react";
 import { deleteReception, updateReception } from "@/lib/firebase/firebaseCRUD";
 import EditModal2026 from "@/app/components/reception/EditModal2026";
 
-const columns = [
+type Column = { name: string; uid: string };
+
+const BASE_COLUMNS: Column[] = [
+  { name: "", uid: "select" },
   { name: "날짜", uid: "time" },
-//   { name: "개인/단체", uid: "individualOrGroup" },
   { name: "참가자 정보", uid: "personalInfo" },
   { name: "학교명", uid: "schoolName" },
   { name: "학원명", uid: "academyName" },
@@ -24,13 +26,12 @@ const columns = [
   { name: "작품 제목", uid: "artTitle" },
   { name: "음악/포즈", uid: "music/pose" },
   { name: "음악 다운로드", uid: "musicURL" },
-  { name: "액션", uid: "actions" },
-//   { name: "참가자 명단", uid: "participants" },
+  { name: "수정", uid: "actions" },
 ];
 
 type Columnkey =
+  | "select"
   | "time"
-//   | "individualOrGroup"
   | "personalInfo"
   | "schoolName"
   | "academyName"
@@ -40,22 +41,46 @@ type Columnkey =
   | "music/pose"
   | "musicURL"
   | "actions";
-//   | "participants";
 
 type TableProps = {
   receptions: Reception2025[];
-  onDelete: (docId: string) => void;
+  onDelete: (docIds: string[]) => void;
   onUpdate: (updated: Reception2025) => void;
+  readonly?: boolean;
 };
 
-const NextTable2025 = ({ receptions, onDelete, onUpdate }: TableProps): ReactNode => {
+const NextTable2025 = ({ receptions, onDelete, onUpdate, readonly }: TableProps): ReactNode => {
   const [editTarget, setEditTarget] = useState<Reception2025 | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [deleting, setDeleting] = useState(false);
 
-  const handleDelete = async (reception: Reception2025) => {
-    if (!window.confirm(`"${reception.name}" 접수를 삭제하시겠습니까?`)) return;
-    const ok = await deleteReception("2025", reception.docId!);
-    if (ok) onDelete(reception.docId!);
-    else alert("삭제에 실패했습니다.");
+  const toggleSelect = (docId: string) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(docId)) next.delete(docId);
+      else next.add(docId);
+      return next;
+    });
+  };
+
+  const columns = useMemo(
+    () => readonly ? BASE_COLUMNS.filter(c => c.uid !== "select" && c.uid !== "actions") : BASE_COLUMNS,
+    [readonly],
+  );
+
+  const augmentedItems = useMemo(
+    () => receptions.map(r => ({ ...r, _selected: selectedIds.has(r.docId ?? "") })),
+    [receptions, selectedIds],
+  );
+
+  const handleBulkDelete = async () => {
+    if (!window.confirm(`선택한 ${selectedIds.size}개 접수를 삭제하시겠습니까?`)) return;
+    setDeleting(true);
+    const ids = Array.from(selectedIds);
+    await Promise.all(ids.map(id => deleteReception("2025", id)));
+    onDelete(ids);
+    setSelectedIds(new Set());
+    setDeleting(false);
   };
 
   const handleSave = async (updated: Reception2025) => {
@@ -69,31 +94,34 @@ const NextTable2025 = ({ receptions, onDelete, onUpdate }: TableProps): ReactNod
   };
 
   const renderCell = useCallback(
-    (reception: Reception2025, columnKey: Columnkey) => {
+    (reception: Reception2025 & { _selected: boolean }, columnKey: Columnkey) => {
       switch (columnKey) {
+        case "select":
+          return (
+            <input
+              type="checkbox"
+              className="h-4 w-4 cursor-pointer accent-red-500"
+              checked={reception._selected}
+              onChange={() => toggleSelect(reception.docId!)}
+            />
+          );
         case "time":
           return (
             <p className="w-12">
               {new Date(reception.timestamp).toDateString()+'\n'}
-
               {new Date(reception.timestamp).toTimeString().slice(0, 8)}
             </p>
           );
-        // case "individualOrGroup":
-        //   return reception.individualOrGroup;
         case "personalInfo":
           return (
             <User
               name
               description={
                 <div className="ml-1 flex flex-col gap-1">
-                  <p className="text-sm font-bold text-black">
-                    {reception.name}
-                  </p>
+                  <p className="text-sm font-bold text-black">{reception.name}</p>
                   <p>{reception.gender}</p>
                   <p>{reception.birth}</p>
                   <p>{reception.email}</p>
-                  {/* <p>{reception.grade || reception.leaderGrade}</p> */}
                   <p>{reception.contact}</p>
                 </div>
               }
@@ -112,9 +140,7 @@ const NextTable2025 = ({ receptions, onDelete, onUpdate }: TableProps): ReactNod
               name
               description={
                 <div className="ml-1 flex flex-col gap-1">
-                  <p className="text-sm font-bold text-black">
-                    {reception.instructorName}
-                  </p>
+                  <p className="text-sm font-bold text-black">{reception.instructorName}</p>
                   <p>{reception.instructorContact}</p>
                 </div>
               }
@@ -160,20 +186,12 @@ const NextTable2025 = ({ receptions, onDelete, onUpdate }: TableProps): ReactNod
           ) : null;
         case "actions":
           return (
-            <div className="flex flex-col gap-1">
-              <button
-                className="rounded bg-blue-500 px-2 py-1 text-xs text-white hover:bg-blue-600"
-                onClick={() => setEditTarget(reception)}
-              >
-                수정
-              </button>
-              <button
-                className="rounded bg-red-500 px-2 py-1 text-xs text-white hover:bg-red-600"
-                onClick={() => handleDelete(reception)}
-              >
-                삭제
-              </button>
-            </div>
+            <button
+              className="rounded bg-blue-500 px-2 py-1 text-xs text-white hover:bg-blue-600"
+              onClick={() => setEditTarget(reception)}
+            >
+              수정
+            </button>
           );
       }
     },
@@ -182,16 +200,39 @@ const NextTable2025 = ({ receptions, onDelete, onUpdate }: TableProps): ReactNod
 
   return (
     <>
+      {!readonly && selectedIds.size > 0 && (
+        <div className="flex w-full items-center gap-3 px-3 py-2 bg-red-50 border-b border-red-100">
+          <span className="text-sm text-red-600 font-medium">{selectedIds.size}개 선택됨</span>
+          <button
+            className="rounded bg-red-500 px-3 py-1 text-xs text-white hover:bg-red-600 disabled:opacity-50"
+            onClick={handleBulkDelete}
+            disabled={deleting}
+          >
+            {deleting ? "삭제 중..." : "선택 삭제"}
+          </button>
+          <button
+            className="text-xs text-gray-400 hover:text-gray-600"
+            onClick={() => setSelectedIds(new Set())}
+          >
+            선택 해제
+          </button>
+        </div>
+      )}
+
       <Table
         aria-label="receptions"
         className="h-full p-2 max-h-screen overflow-y-scroll"
       >
         <TableHeader columns={columns}>
-          {(column) => <TableColumn key={column.uid}>{column.name}</TableColumn>}
+          {(column) => (
+            <TableColumn key={column.uid}>
+              {column.name}
+            </TableColumn>
+          )}
         </TableHeader>
-        <TableBody items={receptions} emptyContent="아직 신청자가 없습니다.">
+        <TableBody items={augmentedItems} emptyContent="아직 신청자가 없습니다.">
           {(item) => (
-            <TableRow key={item.docId}>
+            <TableRow key={item.docId} className={item._selected ? "bg-red-50" : ""}>
               {(columnKey) => (
                 <TableCell>{renderCell(item, columnKey as Columnkey)}</TableCell>
               )}
@@ -200,7 +241,7 @@ const NextTable2025 = ({ receptions, onDelete, onUpdate }: TableProps): ReactNod
         </TableBody>
       </Table>
 
-      {editTarget && (
+      {!readonly && editTarget && (
         <EditModal2026
           isOpen={true}
           reception={editTarget}
