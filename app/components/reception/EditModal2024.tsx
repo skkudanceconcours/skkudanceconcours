@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import useBodyScrollLock from "@/lib/hooks/useBodyScrollLock";
 import { Reception2024 } from "@/template/reception";
 import { category, gender, grade, individualOrGroup, major, musicOrPose } from "@/template/inputTypes";
@@ -28,6 +28,14 @@ const EditModal2024 = ({ isOpen, reception, onClose, onSave }: Props): ReactNode
   const [participantsText, setParticipantsText] = useState(reception.participants?.join(", ") ?? "");
 
   useBodyScrollLock();
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
 
   if (!isOpen) return null;
 
@@ -81,6 +89,14 @@ const EditModal2024 = ({ isOpen, reception, onClose, onSave }: Props): ReactNode
         className="relative max-h-[90vh] w-full overflow-y-auto rounded-t-2xl bg-white p-6 shadow-2xl lg:max-w-3xl lg:rounded-xl"
         onClick={e => e.stopPropagation()}
       >
+        {/* 닫기 버튼 */}
+        <button
+          className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+          onClick={onClose}
+        >
+          ✕
+        </button>
+
         {/* 바텀 시트 핸들 (모바일) */}
         <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-gray-300 lg:hidden" />
 
