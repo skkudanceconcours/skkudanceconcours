@@ -12,7 +12,7 @@ type SelectionProps = {
   options: string[];
   error: boolean;
   disabled?: boolean;
-  width?:number;
+  width?: number | string;
 };
 
 const NextSelection = forwardRef<HTMLInputElement, SelectionProps>(
