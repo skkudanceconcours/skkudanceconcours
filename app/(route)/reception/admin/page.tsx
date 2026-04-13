@@ -58,11 +58,23 @@ const ReceptionAdmin = (): ReactNode => {
       (selectedYear == "2026" && receptionData2026 == null) ? (
         <Spinner />
       ) : selectedYear === "2024" ? (
-        <NextTable2024 receptions={receptionData2024!} />
+        <NextTable2024
+          receptions={receptionData2024!}
+          onDelete={(docId) => set2024Data(prev => prev!.filter(r => r.docId !== docId))}
+          onUpdate={(updated) => set2024Data(prev => prev!.map(r => r.docId === updated.docId ? updated : r))}
+        />
       ) : selectedYear === "2025" ? (
-        <NextTable2025 receptions={receptionData2025!} />
+        <NextTable2025
+          receptions={receptionData2025!}
+          onDelete={(docId) => set2025Data(prev => prev!.filter(r => r.docId !== docId))}
+          onUpdate={(updated) => set2025Data(prev => prev!.map(r => r.docId === updated.docId ? updated : r))}
+        />
       ) : (
-        <NextTable2026 receptions={receptionData2026!} />
+        <NextTable2026
+          receptions={receptionData2026!}
+          onDelete={(docId) => set2026Data(prev => prev!.filter(r => r.docId !== docId))}
+          onUpdate={(updated) => set2026Data(prev => prev!.map(r => r.docId === updated.docId ? updated : r))}
+        />
       )}
 
       <div className="relative z-10 flex w-full justify-between p-4 px-8">

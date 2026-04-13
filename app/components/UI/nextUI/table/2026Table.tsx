@@ -9,7 +9,9 @@ import {
   TableCell,
   User,
 } from "@nextui-org/react";
-import { ReactNode, useCallback } from "react";
+import { ReactNode, useCallback, useState } from "react";
+import { deleteReception, updateReception } from "@/lib/firebase/firebaseCRUD";
+import EditModal2026 from "@/app/components/reception/EditModal2026";
 
 const columns = [
   { name: "날짜", uid: "time" },
@@ -21,6 +23,7 @@ const columns = [
   { name: "작품 제목", uid: "artTitle" },
   { name: "음악/포즈", uid: "music/pose" },
   { name: "음악 다운로드", uid: "musicURL" },
+  { name: "액션", uid: "actions" },
 ];
 
 type Columnkey =
@@ -32,12 +35,35 @@ type Columnkey =
   | "part"
   | "artTitle"
   | "music/pose"
-  | "musicURL";
+  | "musicURL"
+  | "actions";
 
 type TableProps = {
   receptions: Reception2026[];
+  onDelete: (docId: string) => void;
+  onUpdate: (updated: Reception2026) => void;
 };
-const NextTable2026 = ({ receptions }: TableProps): ReactNode => {
+
+const NextTable2026 = ({ receptions, onDelete, onUpdate }: TableProps): ReactNode => {
+  const [editTarget, setEditTarget] = useState<Reception2026 | null>(null);
+
+  const handleDelete = async (reception: Reception2026) => {
+    if (!window.confirm(`"${reception.name}" 접수를 삭제하시겠습니까?`)) return;
+    const ok = await deleteReception("2026", reception.docId!);
+    if (ok) onDelete(reception.docId!);
+    else alert("삭제에 실패했습니다.");
+  };
+
+  const handleSave = async (updated: Reception2026) => {
+    const ok = await updateReception("2026", updated.docId!, updated);
+    if (ok) {
+      onUpdate(updated);
+      setEditTarget(null);
+    } else {
+      alert("수정에 실패했습니다.");
+    }
+  };
+
   const renderCell = useCallback(
     (reception: Reception2026, columnKey: Columnkey) => {
       switch (columnKey) {
@@ -125,29 +151,57 @@ const NextTable2026 = ({ receptions }: TableProps): ReactNode => {
               다운로드
             </button>
           ) : null;
+        case "actions":
+          return (
+            <div className="flex flex-col gap-1">
+              <button
+                className="rounded bg-blue-500 px-2 py-1 text-xs text-white hover:bg-blue-600"
+                onClick={() => setEditTarget(reception)}
+              >
+                수정
+              </button>
+              <button
+                className="rounded bg-red-500 px-2 py-1 text-xs text-white hover:bg-red-600"
+                onClick={() => handleDelete(reception)}
+              >
+                삭제
+              </button>
+            </div>
+          );
       }
     },
     [],
   );
 
   return (
-    <Table
-      aria-label="receptions"
-      className="h-full p-2 max-h-screen overflow-y-scroll"
-    >
-      <TableHeader columns={columns}>
-        {(column) => <TableColumn key={column.uid}>{column.name}</TableColumn>}
-      </TableHeader>
-      <TableBody items={receptions} emptyContent="아직 신청자가 없습니다.">
-        {(item) => (
-          <TableRow key={new Date(item.timestamp).toISOString()}>
-            {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey as Columnkey)}</TableCell>
-            )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <>
+      <Table
+        aria-label="receptions"
+        className="h-full p-2 max-h-screen overflow-y-scroll"
+      >
+        <TableHeader columns={columns}>
+          {(column) => <TableColumn key={column.uid}>{column.name}</TableColumn>}
+        </TableHeader>
+        <TableBody items={receptions} emptyContent="아직 신청자가 없습니다.">
+          {(item) => (
+            <TableRow key={item.docId}>
+              {(columnKey) => (
+                <TableCell>{renderCell(item, columnKey as Columnkey)}</TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+
+      {editTarget && (
+        <EditModal2026
+          isOpen={true}
+          reception={editTarget}
+          onClose={() => setEditTarget(null)}
+          onSave={updated => handleSave(updated as Reception2026)}
+        />
+      )}
+    </>
   );
 };
 export default NextTable2026;

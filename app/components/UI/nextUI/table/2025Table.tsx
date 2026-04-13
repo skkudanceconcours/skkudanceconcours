@@ -9,7 +9,9 @@ import {
   TableCell,
   User,
 } from "@nextui-org/react";
-import { ReactNode, useCallback } from "react";
+import { ReactNode, useCallback, useState } from "react";
+import { deleteReception, updateReception } from "@/lib/firebase/firebaseCRUD";
+import EditModal2026 from "@/app/components/reception/EditModal2026";
 
 const columns = [
   { name: "날짜", uid: "time" },
@@ -22,6 +24,7 @@ const columns = [
   { name: "작품 제목", uid: "artTitle" },
   { name: "음악/포즈", uid: "music/pose" },
   { name: "음악 다운로드", uid: "musicURL" },
+  { name: "액션", uid: "actions" },
 //   { name: "참가자 명단", uid: "participants" },
 ];
 
@@ -35,13 +38,36 @@ type Columnkey =
   | "part"
   | "artTitle"
   | "music/pose"
-  | "musicURL";
+  | "musicURL"
+  | "actions";
 //   | "participants";
 
 type TableProps = {
   receptions: Reception2025[];
+  onDelete: (docId: string) => void;
+  onUpdate: (updated: Reception2025) => void;
 };
-const NextTable2025 = ({ receptions }: TableProps): ReactNode => {
+
+const NextTable2025 = ({ receptions, onDelete, onUpdate }: TableProps): ReactNode => {
+  const [editTarget, setEditTarget] = useState<Reception2025 | null>(null);
+
+  const handleDelete = async (reception: Reception2025) => {
+    if (!window.confirm(`"${reception.name}" 접수를 삭제하시겠습니까?`)) return;
+    const ok = await deleteReception("2025", reception.docId!);
+    if (ok) onDelete(reception.docId!);
+    else alert("삭제에 실패했습니다.");
+  };
+
+  const handleSave = async (updated: Reception2025) => {
+    const ok = await updateReception("2025", updated.docId!, updated);
+    if (ok) {
+      onUpdate(updated);
+      setEditTarget(null);
+    } else {
+      alert("수정에 실패했습니다.");
+    }
+  };
+
   const renderCell = useCallback(
     (reception: Reception2025, columnKey: Columnkey) => {
       switch (columnKey) {
@@ -49,7 +75,7 @@ const NextTable2025 = ({ receptions }: TableProps): ReactNode => {
           return (
             <p className="w-12">
               {new Date(reception.timestamp).toDateString()+'\n'}
-              
+
               {new Date(reception.timestamp).toTimeString().slice(0, 8)}
             </p>
           );
@@ -132,29 +158,57 @@ const NextTable2025 = ({ receptions }: TableProps): ReactNode => {
               다운로드
             </button>
           ) : null;
+        case "actions":
+          return (
+            <div className="flex flex-col gap-1">
+              <button
+                className="rounded bg-blue-500 px-2 py-1 text-xs text-white hover:bg-blue-600"
+                onClick={() => setEditTarget(reception)}
+              >
+                수정
+              </button>
+              <button
+                className="rounded bg-red-500 px-2 py-1 text-xs text-white hover:bg-red-600"
+                onClick={() => handleDelete(reception)}
+              >
+                삭제
+              </button>
+            </div>
+          );
       }
     },
     [],
   );
 
   return (
-    <Table
-      aria-label="receptions"
-      className="h-full p-2 max-h-screen overflow-y-scroll"
-    >
-      <TableHeader columns={columns}>
-        {(column) => <TableColumn key={column.uid}>{column.name}</TableColumn>}
-      </TableHeader>
-      <TableBody items={receptions} emptyContent="아직 신청자가 없습니다.">
-        {(item) => (
-          <TableRow key={new Date(item.timestamp).toISOString()}>
-            {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey as Columnkey)}</TableCell>
-            )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <>
+      <Table
+        aria-label="receptions"
+        className="h-full p-2 max-h-screen overflow-y-scroll"
+      >
+        <TableHeader columns={columns}>
+          {(column) => <TableColumn key={column.uid}>{column.name}</TableColumn>}
+        </TableHeader>
+        <TableBody items={receptions} emptyContent="아직 신청자가 없습니다.">
+          {(item) => (
+            <TableRow key={item.docId}>
+              {(columnKey) => (
+                <TableCell>{renderCell(item, columnKey as Columnkey)}</TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+
+      {editTarget && (
+        <EditModal2026
+          isOpen={true}
+          reception={editTarget}
+          onClose={() => setEditTarget(null)}
+          onSave={updated => handleSave(updated as Reception2025)}
+        />
+      )}
+    </>
   );
 };
 export default NextTable2025;

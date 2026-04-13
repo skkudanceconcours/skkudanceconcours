@@ -9,6 +9,7 @@ type MusicInputProps = {
   onChange: (file: File) => void;
   fileName: string | null;
   error: boolean;
+  label?: string;
 };
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -24,7 +25,7 @@ const VisuallyHiddenInput = styled("input")({
 
 const MusicInput = forwardRef<HTMLDivElement, MusicInputProps>(
   (
-    { className, onChange, fileName, error }: MusicInputProps,
+    { className, onChange, fileName, error, label = "음원 제출" }: MusicInputProps,
     ref: ForwardedRef<HTMLDivElement>
   ): ReactNode => {
     const [isDragging, setIsDragging] = useState(false);
@@ -56,7 +57,7 @@ const MusicInput = forwardRef<HTMLDivElement, MusicInputProps>(
         onDrop={handleDrop}
         style={{ outline: isDragging ? "2px dashed #1976D2" : "none", borderRadius: 8, padding: isDragging ? 8 : 0 }}
       >
-        <p className="text-[0.75rem] my-2 opacity-70">음원 제출</p>
+        <p className="text-[0.75rem] my-2 opacity-70">{label}</p>
         <Button
           component="label"
           role={undefined}
