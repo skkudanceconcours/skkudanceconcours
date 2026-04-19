@@ -1,6 +1,11 @@
 const { onDocumentCreated } = require("firebase-functions/v2/firestore");
 const { defineSecret } = require("firebase-functions/params");
 const { Resend } = require("resend");
+const { initializeApp } = require("firebase-admin/app");
+const { getFirestore, FieldValue } = require("firebase-admin/firestore");
+
+initializeApp();
+const db = getFirestore();
 
 const discordWebhookUrl = defineSecret("DISCORD_WEBHOOK_URL");
 const resendApiKey = defineSecret("RESEND_API_KEY");
@@ -50,7 +55,7 @@ exports.sendErrorAlert = onDocumentCreated(
 exports.sendReceptionEmail = onDocumentCreated(
   {
     document: "reception2026/{docId}",
-    secrets: [resendApiKey],
+    secrets: [resendApiKey, discordWebhookUrl],
   },
   async (event) => {
     const data = event.data?.data()?.reception;
@@ -120,5 +125,44 @@ exports.sendReceptionEmail = onDocumentCreated(
         `,
       }),
     ]);
+
+    // 이메일 전송량 카운터 업데이트 및 threshold 모니터링
+    const today = new Date().toISOString().slice(0, 10);
+    const month = new Date().toISOString().slice(0, 7);
+
+    const dailyRef = db.collection("email_stats").doc(`daily_${today}`);
+    const monthlyRef = db.collection("email_stats").doc(`monthly_${month}`);
+
+    const [dailySnap, monthlySnap] = await Promise.all([
+      dailyRef.get(),
+      monthlyRef.get(),
+    ]);
+
+    const prevDaily = dailySnap.exists ? (dailySnap.data().count ?? 0) : 0;
+    const prevMonthly = monthlySnap.exists ? (monthlySnap.data().count ?? 0) : 0;
+
+    await Promise.all([
+      dailyRef.set({ count: FieldValue.increment(2) }, { merge: true }),
+      monthlyRef.set({ count: FieldValue.increment(2) }, { merge: true }),
+    ]);
+
+    const nextDaily = prevDaily + 2;
+    const nextMonthly = prevMonthly + 2;
+
+    const alerts = [];
+    if (prevDaily < 70 && nextDaily >= 70) {
+      alerts.push(`⚠️ [이메일 경보] 일별 발송량 70% 초과 — 오늘 ${nextDaily}/100건`);
+    }
+    if (prevMonthly < 2400 && nextMonthly >= 2400) {
+      alerts.push(`🚨 [이메일 경보] 월별 발송량 80% 초과 — 이번 달 ${nextMonthly}/3000건`);
+    }
+
+    for (const msg of alerts) {
+      await fetch(discordWebhookUrl.value(), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: "이메일 모니터", content: msg }),
+      });
+    }
   },
 );
