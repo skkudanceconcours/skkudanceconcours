@@ -61,36 +61,64 @@ exports.sendReceptionEmail = onDocumentCreated(
 
     const dateStr = new Date(timestamp).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
 
-    await resend.emails.send({
-      from: "성균관대 댄스콩쿠르 <noreply@skkudanceconcours.kr>",
-      to: email,
-      subject: "[성균관대 댄스콩쿠르] 접수가 완료되었습니다",
-      html: `
-        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 32px;">
-          <h2 style="margin-bottom: 8px;">접수 완료 안내</h2>
-          <p>${name}님, 접수가 정상적으로 완료되었습니다.</p>
-          <table style="border-collapse: collapse; width: 100%; margin-top: 16px;">
-            <tr>
-              <td style="padding: 8px 12px; border: 1px solid #ddd; background: #f9f9f9;"><b>전공</b></td>
-              <td style="padding: 8px 12px; border: 1px solid #ddd;">${major}</td>
-            </tr>
-            <tr>
-              <td style="padding: 8px 12px; border: 1px solid #ddd; background: #f9f9f9;"><b>학년</b></td>
-              <td style="padding: 8px 12px; border: 1px solid #ddd;">${grade}</td>
-            </tr>
-            ${artTitle ? `
-            <tr>
-              <td style="padding: 8px 12px; border: 1px solid #ddd; background: #f9f9f9;"><b>작품 제목</b></td>
-              <td style="padding: 8px 12px; border: 1px solid #ddd;">${artTitle}</td>
-            </tr>` : ""}
-            <tr>
-              <td style="padding: 8px 12px; border: 1px solid #ddd; background: #f9f9f9;"><b>접수 시각</b></td>
-              <td style="padding: 8px 12px; border: 1px solid #ddd;">${dateStr}</td>
-            </tr>
-          </table>
-          <p style="margin-top: 24px; color: #666; font-size: 14px;">문의사항이 있으시면 공식 홈페이지를 통해 연락해 주세요.</p>
-        </div>
-      `,
-    });
+    const ADMIN_EMAIL = "dance0604@skku.edu";
+
+    const infoTable = `
+      <table style="border-collapse: collapse; width: 100%; margin-top: 16px;">
+        <tr>
+          <td style="padding: 8px 12px; border: 1px solid #ddd; background: #f9f9f9;"><b>이름</b></td>
+          <td style="padding: 8px 12px; border: 1px solid #ddd;">${name}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 12px; border: 1px solid #ddd; background: #f9f9f9;"><b>이메일</b></td>
+          <td style="padding: 8px 12px; border: 1px solid #ddd;">${email}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 12px; border: 1px solid #ddd; background: #f9f9f9;"><b>전공</b></td>
+          <td style="padding: 8px 12px; border: 1px solid #ddd;">${major}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px 12px; border: 1px solid #ddd; background: #f9f9f9;"><b>학년</b></td>
+          <td style="padding: 8px 12px; border: 1px solid #ddd;">${grade}</td>
+        </tr>
+        ${artTitle ? `
+        <tr>
+          <td style="padding: 8px 12px; border: 1px solid #ddd; background: #f9f9f9;"><b>작품 제목</b></td>
+          <td style="padding: 8px 12px; border: 1px solid #ddd;">${artTitle}</td>
+        </tr>` : ""}
+        <tr>
+          <td style="padding: 8px 12px; border: 1px solid #ddd; background: #f9f9f9;"><b>접수 시각</b></td>
+          <td style="padding: 8px 12px; border: 1px solid #ddd;">${dateStr}</td>
+        </tr>
+      </table>
+    `;
+
+    await Promise.all([
+      resend.emails.send({
+        from: "성균관대학교 무용학과 <noreply@skkudanceconcours.kr>",
+        to: email,
+        subject: "[ 성균관대 무용학과 ] 콩쿨 접수가 완료되었습니다.",
+        html: `
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 32px;">
+            <h2 style="margin-bottom: 8px;">접수 완료 안내</h2>
+            <p>${name}님, 접수가 정상적으로 완료되었습니다.</p>
+            ${infoTable}
+            <p style="margin-top: 24px; color: #666; font-size: 14px;">참가비 입금 관련하여 공지사항을 꼭 확인해주시기 바랍니다.<br>별도 문의사항은 <a href="mailto:${ADMIN_EMAIL}">${ADMIN_EMAIL}</a>로 보내주시길 바랍니다.</p>
+          </div>
+        `,
+      }),
+      resend.emails.send({
+        from: "성균관대학교 무용학과 <noreply@skkudanceconcours.kr>",
+        to: ADMIN_EMAIL,
+        subject: `[ 관리자 ] 새 접수 알림 - ${name}`,
+        html: `
+          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 32px;">
+            <h2 style="margin-bottom: 8px;">새 접수가 도착했습니다</h2>
+            <p>새로운 콩쿨 접수가 완료되었습니다.</p>
+            ${infoTable}
+          </div>
+        `,
+      }),
+    ]);
   },
 );
