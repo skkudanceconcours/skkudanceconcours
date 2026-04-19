@@ -69,7 +69,12 @@ const EditModal2024 = ({ isOpen, reception, onClose, onSave }: Props): ReactNode
         `${form.name}_edit_${new Date().getTime()}`,
         musicFile,
       );
-      if (newURL) updatedForm = { ...updatedForm, musicFileURL: newURL };
+      if (!newURL) {
+        alert("음원 업로드에 실패했습니다. 다시 시도해 주세요.");
+        setSaving(false);
+        return;
+      }
+      updatedForm = { ...updatedForm, musicFileURL: newURL };
     }
 
     const participants = participantsText
@@ -186,6 +191,7 @@ const EditModal2024 = ({ isOpen, reception, onClose, onSave }: Props): ReactNode
 
         {/* 전공 상세 */}
         <p className="mb-1 mt-2 font-semibold text-gray-600">전공 상세</p>
+        <p className="mb-2 text-xs text-amber-600">※ 전공을 변경하면 학년·작품 제목 등 관련 항목이 초기화될 수 있습니다.</p>
         <div className="grid grid-cols-2 gap-x-3">
           <NextSelection
             className={W}

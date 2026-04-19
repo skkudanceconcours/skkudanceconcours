@@ -174,7 +174,7 @@ const NextTable2024 = ({ receptions, onDelete, onUpdate, readonly }: TableProps)
               className="cursor-pointer underline text-blue-500"
               onClick={async () => {
                 try {
-                  const res = await fetch(reception.musicFileURL!);
+                  const res = await fetch(reception.musicFileURL!, { cache: "no-store" });
                   const blob = await res.blob();
                   const url = URL.createObjectURL(blob);
                   const a = document.createElement("a");
