@@ -141,14 +141,16 @@ export const getAllReception = async (year: YearOption): Promise<Reception2026[]
   try {
     const collectionName = year === "2024" ? "reception" : year === "2025" ? "reception2025" : "reception2026";
     const res = await getDocs(getCollection(collectionName));
-    const data: Reception2026[] | Reception2025[] | Reception2024[] = res.docs.map(doc => {
-      const { timestamp } = doc.data().reception;
-      return {
-        docId: doc.id,
-        ...doc.data().reception,
-        timestamp: typeof timestamp?.toDate === "function" ? timestamp.toDate() : new Date(timestamp),
-      };
-    });
+    const data: Reception2026[] | Reception2025[] | Reception2024[] = res.docs
+      .filter(doc => !doc.data().reception?.deletedAt)
+      .map(doc => {
+        const { timestamp } = doc.data().reception;
+        return {
+          docId: doc.id,
+          ...doc.data().reception,
+          timestamp: typeof timestamp?.toDate === "function" ? timestamp.toDate() : new Date(timestamp),
+        };
+      });
 
     return data;
   } catch (error) {
@@ -218,7 +220,9 @@ export const deleteNotice = async (id: string) => {
 export const deleteReception = async (year: YearOption, docId: string): Promise<boolean> => {
   const collectionName = year === "2024" ? "reception" : year === "2025" ? "reception2025" : "reception2026";
   try {
-    await deleteDoc(doc(db, collectionName, docId));
+    await updateDoc(doc(db, collectionName, docId), {
+      "reception.deletedAt": Timestamp.now(),
+    });
     return true;
   } catch (error) {
     console.log("Error deleting reception", error);
