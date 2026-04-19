@@ -59,7 +59,7 @@ exports.sendReceptionEmail = onDocumentCreated(
     const { name, email, major, grade, artTitle, timestamp } = data;
     const resend = new Resend(resendApiKey.value());
 
-    const dateStr = new Date(timestamp).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
+    const dateStr = (typeof timestamp?.toDate === "function" ? timestamp.toDate() : new Date(timestamp)).toLocaleString("ko-KR", { timeZone: "Asia/Seoul" });
 
     const ADMIN_EMAIL = "dance0604@skku.edu";
 
