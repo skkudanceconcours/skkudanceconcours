@@ -1,16 +1,32 @@
 "use client";
 import { Path } from "@/template/paths";
 import { useRouter } from "next/navigation";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { FaArrowRight } from "react-icons/fa";
 
 const SubmitPage = (): ReactNode => {
   const router = useRouter();
+  const [email, setEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    const stored = sessionStorage.getItem("submitEmail");
+    if (stored) {
+      setEmail(stored);
+      sessionStorage.removeItem("submitEmail");
+    }
+  }, []);
+
   return (
     <main className="flex h-screen w-screen flex-col items-center">
       <h1 className="text-3xl font-bold pt-20 lg:pt-0">접수가 완료되었습니다.</h1>
 
-      <p className="py-20 pt-32 text-sm lg:text-xl text-center leading-8">
+      {email && (
+        <p className="mt-10 text-sm lg:text-base text-center text-gray-600">
+          <span className="font-semibold text-black">{email}</span>로 접수 확인 이메일을 발송했습니다.
+        </p>
+      )}
+
+      <p className="py-20 pt-12 text-sm lg:text-xl text-center leading-8">
         참가비 입금 관련하여{" "}
         <span
           className="text-blue-500 cursor-pointer underline underline-offset-4"

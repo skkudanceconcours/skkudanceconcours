@@ -213,6 +213,8 @@ const ReceptionForm = (): ReactNode => {
     const docId = await submitReception(newReception);
     if (docId) {
       trackEvent("reception_submit_success", { major, grade });
+      const email = emailRef.current!.value.trim();
+      sessionStorage.setItem("submitEmail", email);
       router.replace("/reception/submit" as Path);
     } else {
       trackEvent("reception_submit_failed", { major, grade });
