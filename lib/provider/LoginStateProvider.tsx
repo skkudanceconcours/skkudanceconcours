@@ -10,10 +10,10 @@ const LoginStateProvider = ({
   children: ReactNode;
 }): ReactNode => {
   const path = usePathname() as Path;
-  const { loginState } = useLoginStore();
+  const { loginState, _hasHydrated } = useLoginStore();
   useEffect(() => {
-    if(loginState === "anonymous" && path === "/reception/admin") redirect("/" as Path);
-  }, [loginState]);
+    if (_hasHydrated && loginState === "anonymous" && path === "/reception/admin") redirect("/" as Path);
+  }, [loginState, _hasHydrated]);
 
   return children;
 };
