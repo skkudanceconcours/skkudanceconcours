@@ -6,7 +6,7 @@ import { NoticeType } from "@/template/notice";
 import { v4 as uuidv4 } from "uuid";
 
 // firebase
-import { collection, getDocs, addDoc, updateDoc, doc, increment, deleteDoc } from "firebase/firestore";
+import { collection, getDocs, addDoc, updateDoc, doc, increment, deleteDoc, Timestamp } from "firebase/firestore";
 import { deleteObject, getDownloadURL, getStorage, listAll, ref, uploadBytes } from "firebase/storage";
 import delayTimeout from "../functions/asyncTimeout";
 import { FirebaseError } from "firebase/app";
@@ -82,7 +82,11 @@ export const uploadStorageFile = async (file: File | null, folder: string): Prom
 
 export const submitReception = async (reception: Reception2026): Promise<string | null> => {
   try {
-    const res = await addDoc(getCollection("reception2026"), { reception });
+    const data = {
+      ...reception,
+      timestamp: Timestamp.fromDate(reception.timestamp as Date),
+    };
+    const res = await addDoc(getCollection("reception2026"), { reception: data });
     return res.id;
   } catch (error) {
     console.log(error);
@@ -142,7 +146,7 @@ export const getAllReception = async (year: YearOption): Promise<Reception2026[]
       return {
         docId: doc.id,
         ...doc.data().reception,
-        timestamp: new Date(timestamp.toDate()),
+        timestamp: typeof timestamp?.toDate === "function" ? timestamp.toDate() : new Date(timestamp),
       };
     });
 
@@ -228,9 +232,14 @@ export const updateReception = async (
   data: Reception2026 | Reception2025 | Reception2024
 ): Promise<boolean> => {
   const collectionName = year === "2024" ? "reception" : year === "2025" ? "reception2025" : "reception2026";
-  const { docId: _docId, ...receptionData } = data as Reception2026 & { docId: string };
+  const { docId: _docId, timestamp, ...receptionData } = data as Reception2026 & { docId: string };
   try {
-    await updateDoc(doc(db, collectionName, docId), { reception: receptionData });
+    await updateDoc(doc(db, collectionName, docId), {
+      reception: {
+        ...receptionData,
+        timestamp: Timestamp.fromDate(timestamp instanceof Date ? timestamp : new Date(timestamp as unknown as string)),
+      },
+    });
     return true;
   } catch (error) {
     console.log("Error updating reception", error);
